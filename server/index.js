@@ -85,7 +85,7 @@ app.use('/signin',signInRouter)
 
 io.on('connection', (socket) => {
     socket.on('chat message', msg => {
-        console.log('message received')
+        console.log('message received:'+ msg)
       io.emit('chat message', msg);
     });
   });

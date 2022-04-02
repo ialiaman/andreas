@@ -2,8 +2,12 @@
 var body = document.getElementsByTagName("BODY")[0];
 var chatButton = document.createElement("BUTTON");
 var chatIcon=document.createElement('img')
-var head = document.getElementsByTagName('head')[0];
-
+var socket = io("http://localhost:3001", {
+  withCredentials: true,
+  extraHeaders: {
+    "my-custom-header": "abcd"
+  }
+});
 // socket io
 // var scriptsocket=document.createElement('script')
 
@@ -287,14 +291,13 @@ chatHeaderRightButton.addEventListener('click',()=>{
         chat.style.display = 'none'
         // chatButton.innerHTML = 'start chat'
 })
+sendButton.addEventListener('click',()=>{
+   socket.emit('chat message',messageField.value)
+   messageField.value=''
+})
 // socket client
-var socket = io("https://localhost:3001", {
-  withCredentials: true,
-  extraHeaders: {
-    "my-custom-header": "abcd"
-  }
-});
-socket.emit('chat message', 'hello ahad');
+
+// socket.emit('chat message', 'hello ahad');
 
 
 
