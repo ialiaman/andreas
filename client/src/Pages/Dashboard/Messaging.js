@@ -2,6 +2,7 @@ import React, { Fragment } from 'react'
 import { MdKeyboardArrowDown } from 'react-icons/md';
 import styles from './styles.module.css'
 import { DashboardHeader } from '../../Components/UI/MiniComponents/MiniComponent'
+
 function Messaging() {
     return (
         <Fragment>
@@ -23,7 +24,7 @@ function Messaging() {
                             </div>
                         </div>
 
-                        <div className="contianer-fluid mx-3">
+                        <div className="container-fluid mx-3">
                             <div className="row d-flex flex-wrap align-items-center my-3">
                                 <div className="col-md-6 d-flex flex-wrap align-items-center" style={{gap:40}}>
                                     <div className="d-flex  align-items-center" style={{gap:15}}>
@@ -59,333 +60,335 @@ function Messaging() {
                                   <button className="btn-white    font-12 "> <img className='mx-2' src={require('../../assets/Images/filter.png')} alt="" /> Filter Visitors</button>
                                 </div>
                             </div>
-                            <div className={`row  `} >
-                                <table className={`${styles.messageingTable} table `}>
-                                    <thead>
-                                    <tr >
-                                        <th>
-                                            <span className=" badge badge-curious-bold">
-                                                ID
-                                            </span>
-                                        </th>
-                                        <th>
-                                            User Name
-                                        </th>
-                                        <th>
-                                            Messages
-                                        </th>
-                                        <th>
-                                            Time
-                                        </th>
-                                        <th>
-                                            Agent
-                                        </th>
-                                        <th>
-                                            Date
-                                        </th>
-                                        <th>
-                                            Activity
-                                        </th>
-                                        <th>
-                                            Chat
-                                        </th>
-                                    </tr>
-                                    </thead>
-                                  
+                            <div className={`row `} >
+                                <div className="col-12 table-responsive-lg">
+                                    <table className={`${styles.messageingTable} table `} style={{maxWidth:'100%'}}>
+                                        <thead>
+                                        <tr >
+                                            <th>
+                                                <span className=" badge badge-curious-bold">
+                                                    ID
+                                                </span>
+                                            </th>
+                                            <th>
+                                                User Name
+                                            </th>
+                                            <th>
+                                                Messages
+                                            </th>
+                                            <th>
+                                                Time
+                                            </th>
+                                            <th>
+                                                Agent
+                                            </th>
+                                            <th>
+                                                Date
+                                            </th>
+                                            <th>
+                                                Activity
+                                            </th>
+                                            <th>
+                                                Chat
+                                            </th>
+                                        </tr>
+                                        </thead>
                                     
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                            <span class="badge badge-curious-bold">T</span>
-                                            </td>
-                                                <td>
-                                                V168495545544
-                                                </td>
-                                                <td>
-                                                2messages
-                                                </td>
-                                                <td>
-                                                9 min
-                                                </td>
-                                                <td>
-                                                <span class="badge badge-grey-light-bold ">Ahad Aman</span>
-                                                </td>
-                                                <td>
-                                                16 march 18:42
-                                                </td>
-                                                <td>
-                                                <span class="badge badge-grey-light-bold ">Closed</span>
-                                                </td>
-                                                <td>
-                                                    <img src={require('../../assets/Images/chatimg.png')} alt="" />
-                                                </td>
-                                                <td>
-                                                <input type="checkbox" />
-                                                </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                            <span class="badge badge-curious-bold">T</span>
-                                            </td>
-                                                <td>
-                                                V168495545544
-                                                </td>
-                                                <td>
-                                                2messages
-                                                </td>
-                                                <td>
-                                                9 min
-                                                </td>
-                                                <td>
-                                                <span class="badge badge-grey-light-bold ">Ahad Aman</span>
-                                                </td>
-                                                <td>
-                                                16 march 18:42
-                                                </td>
-                                                <td>
-                                                <span class="badge badge-grey-light-bold ">Closed</span>
-                                                </td>
-                                                <td>
-                                                    <img src={require('../../assets/Images/chatimg.png')} alt="" />
-                                                </td>
-                                                <td>
-                                                <input type="checkbox" />
-                                                </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                            <span class="badge badge-curious-bold">T</span>
-                                            </td>
-                                                <td>
-                                                V168495545544
-                                                </td>
-                                                <td>
-                                                2messages
-                                                </td>
-                                                <td>
-                                                9 min
-                                                </td>
-                                                <td>
-                                                <span class="badge badge-grey-light-bold ">Ahad Aman</span>
-                                                </td>
-                                                <td>
-                                                16 march 18:42
-                                                </td>
-                                                <td>
-                                                <span class="badge badge-grey-light-bold ">Closed</span>
-                                                </td>
-                                                <td>
-                                                    <img src={require('../../assets/Images/chatimg.png')} alt="" />
-                                                </td>
-                                                <td>
-                                                <input type="checkbox" />
-                                                </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                            <span class="badge badge-curious-bold">T</span>
-                                            </td>
-                                                <td>
-                                                V168495545544
-                                                </td>
-                                                <td>
-                                                2messages
-                                                </td>
-                                                <td>
-                                                9 min
-                                                </td>
-                                                <td>
-                                                <span class="badge badge-grey-light-bold ">Ahad Aman</span>
-                                                </td>
-                                                <td>
-                                                16 march 18:42
-                                                </td>
-                                                <td>
-                                                <span  class="badge badge-green-light-bold ">Open</span>
-                                                </td>
-                                                <td>
-                                                    <img src={require('../../assets/Images/chatimg.png')} alt="" />
-                                                </td>
-                                                <td>
-                                                <input type="checkbox" />
-                                                </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                            <span class="badge  badge-curious-bold">T</span>
-                                            </td>
-                                                <td>
-                                                V168495545544
-                                                </td>
-                                                <td>
-                                                2messages
-                                                </td>
-                                                <td>
-                                                9 min
-                                                </td>
-                                                <td>
-                                                <span class="badge badge-grey-light-bold ">Ahad Aman</span>
-                                                </td>
-                                                <td>
-                                                16 march 18:42
-                                                </td>
-                                                <td>
-                                                <span class="badge badge-grey-light-bold ">Closed</span>
-                                                </td>
-                                                <td>
-                                                    <img src={require('../../assets/Images/chatimg.png')} alt="" />
-                                                </td>
-                                                <td>
-                                                <input type="checkbox" />
-                                                </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                            <span class="badge badge-curious-bold">T</span>
-                                            </td>
-                                                <td>
-                                                V168495545544
-                                                </td>
-                                                <td>
-                                                2messages
-                                                </td>
-                                                <td>
-                                                9 min
-                                                </td>
-                                                <td>
-                                                <span class="badge badge-grey-light-bold ">Ahad Aman</span>
-                                                </td>
-                                                <td>
-                                                16 march 18:42
-                                                </td>
-                                                <td>
-                                                <span class="badge badge-green-light-bold ">Open</span>
-                                                </td>
-                                                <td>
-                                                    <img src={require('../../assets/Images/chatimg.png')} alt="" />
-                                                </td>
-                                                <td>
-                                                <input type="checkbox" />
-                                                </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                            <span class="badge badge-curious-bold">T</span>
-                                            </td>
-                                                <td>
-                                                V168495545544
-                                                </td>
-                                                <td>
-                                                2messages
-                                                </td>
-                                                <td>
-                                                9 min
-                                                </td>
-                                                <td>
-                                                <span class="badge badge-grey-light-bold ">Ahad Aman</span>
-                                                </td>
-                                                <td>
-                                                16 march 18:42
-                                                </td>
-                                                <td>
-                                                <span class="badge badge-grey-light-bold ">Closed</span>
-                                                </td>
-                                                <td>
-                                                    <img src={require('../../assets/Images/chatimg.png')} alt="" />
-                                                </td>
-                                                <td>
-                                                <input type="checkbox" />
-                                                </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                            <span class="badge badge-curious-bold">T</span>
-                                            </td>
-                                                <td>
-                                                V168495545544
-                                                </td>
-                                                <td>
-                                                2messages
-                                                </td>
-                                                <td>
-                                                9 min
-                                                </td>
-                                                <td>
-                                                <span class="badge badge-grey-light-bold ">Ahad Aman</span>
-                                                </td>
-                                                <td>
-                                                16 march 18:42
-                                                </td>
-                                                <td>
-                                                <span class="badge badge-green-light-bold ">Open</span>
-                                                </td>
-                                                <td>
-                                                    <img src={require('../../assets/Images/chatimg.png')} alt="" />
-                                                </td>
-                                                <td>
-                                                <input type="checkbox" />
-                                                </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                            <span class="badge badge-curious-bold">T</span>
-                                            </td>
-                                                <td>
-                                                V168495545544
-                                                </td>
-                                                <td>
-                                                2messages
-                                                </td>
-                                                <td>
-                                                9 min
-                                                </td>
-                                                <td>
-                                                <span class="badge badge-grey-light-bold ">Ahad Aman</span>
-                                                </td>
-                                                <td>
-                                                16 march 18:42
-                                                </td>
-                                                <td>
-                                                <span class="badge badge-grey-light-bold ">Closed</span>
-                                                </td>
-                                                <td>
-                                                    <img src={require('../../assets/Images/chatimg.png')} alt="" />
-                                                </td>
-                                                <td>
-                                                <input type="checkbox" />
-                                                </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                            <span class="badge badge-curious-bold">T</span>
-                                            </td>
-                                                <td>
-                                                V168495545544
-                                                </td>
-                                                <td>
-                                                2messages
-                                                </td>
-                                                <td>
-                                                9 min
-                                                </td>
-                                                <td>
-                                                <span class="badge badge-grey-light-bold ">Ahad Aman</span>
-                                                </td>
-                                                <td>
-                                                16 march 18:42
-                                                </td>
-                                                <td>
-                                                <span class="badge badge-grey-light-bold ">Closed</span>
-                                                </td>
-                                                <td>
-                                                    <img src={require('../../assets/Images/chatimg.png')} alt="" />
-                                                </td>
-                                                <td>
-                                                <input type="checkbox" />
-                                                </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                    
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                <span class="badge badge-curious-bold">T</span>
+                                                </td>
+                                                    <td>
+                                                    V168495545544
+                                                    </td>
+                                                    <td>
+                                                    2messages
+                                                    </td>
+                                                    <td>
+                                                    9 min
+                                                    </td>
+                                                    <td>
+                                                    <span class="badge badge-grey-light-bold ">Ahad Aman</span>
+                                                    </td>
+                                                    <td>
+                                                    16 march 18:42
+                                                    </td>
+                                                    <td>
+                                                    <span class="badge badge-grey-light-bold ">Closed</span>
+                                                    </td>
+                                                    <td>
+                                                        <img src={require('../../assets/Images/chatimg.png')} alt="" />
+                                                    </td>
+                                                    <td>
+                                                    <input type="checkbox" />
+                                                    </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                <span class="badge badge-curious-bold">T</span>
+                                                </td>
+                                                    <td>
+                                                    V168495545544
+                                                    </td>
+                                                    <td>
+                                                    2messages
+                                                    </td>
+                                                    <td>
+                                                    9 min
+                                                    </td>
+                                                    <td>
+                                                    <span class="badge badge-grey-light-bold ">Ahad Aman</span>
+                                                    </td>
+                                                    <td>
+                                                    16 march 18:42
+                                                    </td>
+                                                    <td>
+                                                    <span class="badge badge-grey-light-bold ">Closed</span>
+                                                    </td>
+                                                    <td>
+                                                        <img src={require('../../assets/Images/chatimg.png')} alt="" />
+                                                    </td>
+                                                    <td>
+                                                    <input type="checkbox" />
+                                                    </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                <span class="badge badge-curious-bold">T</span>
+                                                </td>
+                                                    <td>
+                                                    V168495545544
+                                                    </td>
+                                                    <td>
+                                                    2messages
+                                                    </td>
+                                                    <td>
+                                                    9 min
+                                                    </td>
+                                                    <td>
+                                                    <span class="badge badge-grey-light-bold ">Ahad Aman</span>
+                                                    </td>
+                                                    <td>
+                                                    16 march 18:42
+                                                    </td>
+                                                    <td>
+                                                    <span class="badge badge-grey-light-bold ">Closed</span>
+                                                    </td>
+                                                    <td>
+                                                        <img src={require('../../assets/Images/chatimg.png')} alt="" />
+                                                    </td>
+                                                    <td>
+                                                    <input type="checkbox" />
+                                                    </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                <span class="badge badge-curious-bold">T</span>
+                                                </td>
+                                                    <td>
+                                                    V168495545544
+                                                    </td>
+                                                    <td>
+                                                    2messages
+                                                    </td>
+                                                    <td>
+                                                    9 min
+                                                    </td>
+                                                    <td>
+                                                    <span class="badge badge-grey-light-bold ">Ahad Aman</span>
+                                                    </td>
+                                                    <td>
+                                                    16 march 18:42
+                                                    </td>
+                                                    <td>
+                                                    <span  class="badge badge-green-light-bold ">Open</span>
+                                                    </td>
+                                                    <td>
+                                                        <img src={require('../../assets/Images/chatimg.png')} alt="" />
+                                                    </td>
+                                                    <td>
+                                                    <input type="checkbox" />
+                                                    </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                <span class="badge  badge-curious-bold">T</span>
+                                                </td>
+                                                    <td>
+                                                    V168495545544
+                                                    </td>
+                                                    <td>
+                                                    2messages
+                                                    </td>
+                                                    <td>
+                                                    9 min
+                                                    </td>
+                                                    <td>
+                                                    <span class="badge badge-grey-light-bold ">Ahad Aman</span>
+                                                    </td>
+                                                    <td>
+                                                    16 march 18:42
+                                                    </td>
+                                                    <td>
+                                                    <span class="badge badge-grey-light-bold ">Closed</span>
+                                                    </td>
+                                                    <td>
+                                                        <img src={require('../../assets/Images/chatimg.png')} alt="" />
+                                                    </td>
+                                                    <td>
+                                                    <input type="checkbox" />
+                                                    </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                <span class="badge badge-curious-bold">T</span>
+                                                </td>
+                                                    <td>
+                                                    V168495545544
+                                                    </td>
+                                                    <td>
+                                                    2messages
+                                                    </td>
+                                                    <td>
+                                                    9 min
+                                                    </td>
+                                                    <td>
+                                                    <span class="badge badge-grey-light-bold ">Ahad Aman</span>
+                                                    </td>
+                                                    <td>
+                                                    16 march 18:42
+                                                    </td>
+                                                    <td>
+                                                    <span class="badge badge-green-light-bold ">Open</span>
+                                                    </td>
+                                                    <td>
+                                                        <img src={require('../../assets/Images/chatimg.png')} alt="" />
+                                                    </td>
+                                                    <td>
+                                                    <input type="checkbox" />
+                                                    </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                <span class="badge badge-curious-bold">T</span>
+                                                </td>
+                                                    <td>
+                                                    V168495545544
+                                                    </td>
+                                                    <td>
+                                                    2messages
+                                                    </td>
+                                                    <td>
+                                                    9 min
+                                                    </td>
+                                                    <td>
+                                                    <span class="badge badge-grey-light-bold ">Ahad Aman</span>
+                                                    </td>
+                                                    <td>
+                                                    16 march 18:42
+                                                    </td>
+                                                    <td>
+                                                    <span class="badge badge-grey-light-bold ">Closed</span>
+                                                    </td>
+                                                    <td>
+                                                        <img src={require('../../assets/Images/chatimg.png')} alt="" />
+                                                    </td>
+                                                    <td>
+                                                    <input type="checkbox" />
+                                                    </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                <span class="badge badge-curious-bold">T</span>
+                                                </td>
+                                                    <td>
+                                                    V168495545544
+                                                    </td>
+                                                    <td>
+                                                    2messages
+                                                    </td>
+                                                    <td>
+                                                    9 min
+                                                    </td>
+                                                    <td>
+                                                    <span class="badge badge-grey-light-bold ">Ahad Aman</span>
+                                                    </td>
+                                                    <td>
+                                                    16 march 18:42
+                                                    </td>
+                                                    <td>
+                                                    <span class="badge badge-green-light-bold ">Open</span>
+                                                    </td>
+                                                    <td>
+                                                        <img src={require('../../assets/Images/chatimg.png')} alt="" />
+                                                    </td>
+                                                    <td>
+                                                    <input type="checkbox" />
+                                                    </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                <span class="badge badge-curious-bold">T</span>
+                                                </td>
+                                                    <td>
+                                                    V168495545544
+                                                    </td>
+                                                    <td>
+                                                    2messages
+                                                    </td>
+                                                    <td>
+                                                    9 min
+                                                    </td>
+                                                    <td>
+                                                    <span class="badge badge-grey-light-bold ">Ahad Aman</span>
+                                                    </td>
+                                                    <td>
+                                                    16 march 18:42
+                                                    </td>
+                                                    <td>
+                                                    <span class="badge badge-grey-light-bold ">Closed</span>
+                                                    </td>
+                                                    <td>
+                                                        <img src={require('../../assets/Images/chatimg.png')} alt="" />
+                                                    </td>
+                                                    <td>
+                                                    <input type="checkbox" />
+                                                    </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                <span class="badge badge-curious-bold">T</span>
+                                                </td>
+                                                    <td>
+                                                    V168495545544
+                                                    </td>
+                                                    <td>
+                                                    2messages
+                                                    </td>
+                                                    <td>
+                                                    9 min
+                                                    </td>
+                                                    <td>
+                                                    <span class="badge badge-grey-light-bold ">Ahad Aman</span>
+                                                    </td>
+                                                    <td>
+                                                    16 march 18:42
+                                                    </td>
+                                                    <td>
+                                                    <span class="badge badge-grey-light-bold ">Closed</span>
+                                                    </td>
+                                                    <td>
+                                                        <img src={require('../../assets/Images/chatimg.png')} alt="" />
+                                                    </td>
+                                                    <td>
+                                                    <input type="checkbox" />
+                                                    </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>

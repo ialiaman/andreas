@@ -44,6 +44,7 @@ function SignIn() {
                         localStorage.setItem("accessToken", res.data.token)
                         console.log(res.data.userData)
                         setAuthState({ LoggedUserData: res.data.userData, status: true })
+                        
                         return navigate("/dashboard");
                     }
                 })

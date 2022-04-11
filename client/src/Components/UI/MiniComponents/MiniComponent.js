@@ -3,6 +3,7 @@ import main from './main.module.css'
 import { UserContext } from '../../../Pages/Dashboard/main'
 import { GiHamburgerMenu } from 'react-icons/gi';
 import {AuthContext} from '../../../App'
+import styles from './main.module.css'
 function RightShape() {
   return (
 
@@ -92,7 +93,7 @@ function SignUpNav(props) {
 
 function DashboardHeader(props) {
   const {authState, setAuthState } = useContext(AuthContext);
-console.log(authState.userData)
+
   return (
     <UserContext.Consumer>
       {
@@ -103,7 +104,9 @@ console.log(authState.userData)
               <div className="col col-md-11">
                 <div className="  d-flex  justify-content-between">
                   <div className='d-flex align-items-center'>
-                    <span className='me-3' onClick={value}  > <GiHamburgerMenu size={25} /> {props.title} </span>
+                    <span className='me-3' onClick={value}  > <GiHamburgerMenu
+                    className={`${styles.menuBtn}`}
+                    size={25} /> {props.title} </span>
                     <img className='align-middle me-2' src={require('../../../assets/Images/DashboardIcon.png')} />
                     <span className='align-middle fw-bold'></span>
                   </div>

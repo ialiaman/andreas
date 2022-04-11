@@ -1,18 +1,48 @@
 .navLink {
     text-align: left !important;
-    font-size: 18px;
+    font-size: 16px;
     color: white;
     line-height: 27px;
     text-decoration: none;
-    border-radius: 8px;
+    border-radius: 4px;
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    width: 85%;
+    width: 100%;
     align-self: center;
     font-weight: 600;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+.navLinkActive{
+    background-color: #5CB85C;
+    text-align: left !important;
+    font-size: 16px;
+    color: white;
+    line-height: 27px;
+    text-decoration: none;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
+    align-self: center;
+    font-weight: 600;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+.navLinkActive:hover span{
+    color: white;
+}
+.navLink:hover span{
+    color: #5CB85C;
+}
+.navLink:hover img{
+    fill: #5CB85C;
     
-    
+}
+.iconImg{
+    width: 50px;
 }
 .live_now_btn{
     background: #FFFFFF;
@@ -54,9 +84,15 @@ padding: 1.5rem;
     border-radius: 50%;
     /* border: 1px solid grey; */
 }
-
+.chatarea{
+   
+    max-height: 60vh;
+    min-height: 60vh;
+    overflow-y: scroll;
+}
 .sidebar{
-    max-width: 300px !important;
+    max-width: 250px !important;
+    background: #161C2D;
 }
 .status_header{
     border-bottom-right-radius: 0px;
@@ -132,5 +168,6 @@ gap:10px
         position: absolute;
         z-index: 100;
         height: 100vh;
+        display: none;
     }
 }

@@ -7,7 +7,9 @@
     /* transform: scale(.6); */
     /* transform: scale(.5); */
   }
-  
+  .menuBtn:hover{
+cursor: pointer;
+  }
   .first_shape{
     width: 60%;
     border-left: 3px solid #161C2D;

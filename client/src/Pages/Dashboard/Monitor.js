@@ -1,11 +1,32 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useContext, useState, useEffect } from 'react'
 import { DashboardHeader } from '../../Components/UI/MiniComponents/MiniComponent'
 import styles from './styles.module.css'
 import { MdOutlineKeyboardArrowDown, MdDisabledVisible } from 'react-icons/md';
 import { DiLinux } from 'react-icons/di';
 import { AiFillWindows } from 'react-icons/ai';
 import { BsFillEyeSlashFill } from 'react-icons/bs';
+import socket from '../../helpers/socket'
+import { useNavigate } from 'react-router-dom'
+
+import { AuthContext } from '../../App'
 function Monitor() {
+    const [Time, settime] = useState('')
+    const { authState, setAuthState } = useContext(AuthContext);
+    const navigate = useNavigate()
+    useEffect(() => {
+        socket.emit('agent active')
+    })
+    const [ActiveCustomer, setActiveCustomer] = useState([])
+    socket.on('NEW USER',  (data) => {
+        let time = new Date()
+        settime(time.getHours() + ':' + time.getMinutes())
+        setActiveCustomer([...ActiveCustomer, { id: data.id, message: data.msg,time:Time,ip:data.ip }])
+    })
+    const joinChat = (customer) => {
+        // socket.emit('join room', { id: customer.id, agent: (authState.LoggedUserData.f_name + ' ' + authState.LoggedUserData.l_name) })
+        localStorage.setItem('customerData', JSON.stringify(customer) )
+      navigate('/dashboard/activeChat')
+    }
     return (
 
         <Fragment>
@@ -20,7 +41,12 @@ function Monitor() {
                         <div className="container-fluid">'
                             <StatusCard statusTitle='Served' statusColor='#855CF8' />
                             <StatusCard statusTitle='Unanswered' statusColor='#F35454' />
-                            <StatusCard statusTitle='Active' statusColor='#5CB85C' />
+                            {
+                                ActiveCustomer.map((customer) => {
+                                    return <StatusCard clickHandler={() => joinChat(customer)} statusTitle='Active' statusColor='#5CB85C' id={customer.id} />
+                                })
+
+                            }
                         </div>
 
                     </div>
@@ -33,7 +59,7 @@ function Monitor() {
 export default Monitor
 const StatusCard = (props) => {
     return (
-        <div className="row mb-3">
+        <div className="row mb-3" onClick={props.clickHandler}>
             <div class={`card ${styles.status_header}`} >
                 <div className='d-flex align-items-center my-2' >
                     <div className="d-flex flex-grow-1" >
@@ -49,13 +75,13 @@ const StatusCard = (props) => {
             </div>
             <div class="card border-top-0 rounded-0">
                 <div className="d-flex py-2 flex-wrap  align-items-center justify-content-between"
-            style={{gap:10}}
+                    style={{ gap: 10 }}
                 >
                     <div className="btn-light-blue">
                         T
                     </div>
                     <span>
-                        V168495545544
+                        {props.id}
                     </span>
                     <span>
                         115.186.190.156
