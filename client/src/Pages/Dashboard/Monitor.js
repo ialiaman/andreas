@@ -1,34 +1,68 @@
-import React, { Fragment, useContext, useState, useEffect } from 'react'
-import { DashboardHeader } from '../../Components/UI/MiniComponents/MiniComponent'
-import styles from './styles.module.css'
+import React, { Fragment, useContext, useState, useEffect } from 'react';
+import { DashboardHeader } from '../../Components/UI/MiniComponents/MiniComponent';
+import styles from './styles.module.css';
 import { MdOutlineKeyboardArrowDown, MdDisabledVisible } from 'react-icons/md';
 import { DiLinux } from 'react-icons/di';
 import { AiFillWindows } from 'react-icons/ai';
 import { BsFillEyeSlashFill } from 'react-icons/bs';
-import socket from '../../helpers/socket'
-import { useNavigate } from 'react-router-dom'
+import socket from '../../helpers/socket';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../App';
+import axios from 'axios'
 
-import { AuthContext } from '../../App'
+
 function Monitor() {
-    const [Time, settime] = useState('')
+    
+    const [ActiveCustomer, setActiveCustomer] = useState([])
+    const [unAnsweredCustomer, setunAnsweredCustomer] = useState([])
     const { authState, setAuthState } = useContext(AuthContext);
+    // get all active users from database
+    const activeUsers=()=>{
+        axios.get('http://localhost:3001/chats/active').then(res => {
+            setActiveCustomer([...res.data])
+        })
+    }
+      // get all unanswered users from database
+      const unAnsweredUsers=()=>{
+        axios.get('http://localhost:3001/chats/unanswered').then(res => {
+            setunAnsweredCustomer([...res.data])
+        })
+    }
+    // get all active chats from database
+    useEffect(() => {
+        activeUsers()
+        unAnsweredUsers()
+    }, [])
     const navigate = useNavigate()
     useEffect(() => {
         socket.emit('agent active')
     })
-    const [ActiveCustomer, setActiveCustomer] = useState([])
-    socket.on('NEW USER',  (data) => {
+    socket.on('NEW USER', (data) => {
         let time = new Date()
-        settime(time.getHours() + ':' + time.getMinutes())
-        setActiveCustomer([...ActiveCustomer, { id: data.id, message: data.msg,time:Time,ip:data.ip }])
+        activeUsers()
     })
-    const joinChat = (customer) => {
-        // socket.emit('join room', { id: customer.id, agent: (authState.LoggedUserData.f_name + ' ' + authState.LoggedUserData.l_name) })
-        localStorage.setItem('customerData', JSON.stringify(customer) )
-      navigate('/dashboard/activeChat')
-    }
+   
+        // map all the active customers
+        const ActiveList = ActiveCustomer.map((customer) => {
+            return <ActiveListCard id={customer.customer_id} 
+            clickHandler={()=>{
+                localStorage.setItem('selected_customer',customer.customer_id)
+                // axios.post('http://localhost:3001/chats/status',{
+                //     id:customer.customer_id
+                // }
+                // )
+                navigate('/dashboard/activeChat')
+            }} />
+        })
+    
+        // map all the unanswered customers
+        const UnAnsweredList = unAnsweredCustomer.map((customer) => {
+            return <ActiveListCard id={customer.customer_id} clickHandler={()=>{
+                return
+            }} />
+        })
+    
     return (
-
         <Fragment>
             <DashboardHeader title='Monitor' />
             <div className="container-fluid  px-1 px-md-2 ps-lg-4 pe-lg-5 bg-grey ">
@@ -40,15 +74,9 @@ function Monitor() {
                         </div>
                         <div className="container-fluid">'
                             <StatusCard statusTitle='Served' statusColor='#855CF8' />
-                            <StatusCard statusTitle='Unanswered' statusColor='#F35454' />
-                            {
-                                ActiveCustomer.map((customer) => {
-                                    return <StatusCard clickHandler={() => joinChat(customer)} statusTitle='Active' statusColor='#5CB85C' id={customer.id} />
-                                })
-
-                            }
+                            <StatusCard statusTitle='Unanswered' statusColor='#F35454' list={UnAnsweredList} />
+                            <StatusCard statusTitle='Active' statusColor='#5CB85C' list={ActiveList} />
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -57,7 +85,9 @@ function Monitor() {
 }
 
 export default Monitor
+
 const StatusCard = (props) => {
+    const [listShow, setlistShow] = useState(false)
     return (
         <div className="row mb-3" onClick={props.clickHandler}>
             <div class={`card ${styles.status_header}`} >
@@ -68,46 +98,51 @@ const StatusCard = (props) => {
                         <span className=' ms-2 ms-md-4 ms-lg-5 font-14 '> (1-1/1)</span>
                     </div>
                     <div>
-                        <MdOutlineKeyboardArrowDown size={20} />
+                        <MdOutlineKeyboardArrowDown size={20} onClick={()=>setlistShow(!listShow)} />
                     </div>
                 </div>
 
             </div>
-            <div class="card border-top-0 rounded-0">
-                <div className="d-flex py-2 flex-wrap  align-items-center justify-content-between"
-                    style={{ gap: 10 }}
-                >
-                    <div className="btn-light-blue">
-                        T
-                    </div>
-                    <span>
-                        {props.id}
-                    </span>
-                    <span>
-                        115.186.190.156
-                    </span>
-                    <a className='text-primary text-decoration-none' href="">https://linke123here/chat/210402098</a>
-                    <a className='text-blue text-decoration-none' href="" >https://dashboard.jataq.tv</a>
-                    <span>
-                        00:03:55
-                    </span>
-                    <div className='flex-shrink-0'>
-                        <span className='me-2'>
-                            4
-                        </span>
-                        <span className='me-2'>
-                            0
-                        </span>
-                        <DiLinux size={20} className='me-2' />
-                        <AiFillWindows color='#878787' size={20} className='me-2' />
-                        <BsFillEyeSlashFill color='#5494F3' size={20} className='me-2' />
-                        <MdDisabledVisible color='red' size={20} className='me-2' />
-                        <img className='me-2' src={require('../../assets/Images/pak.png')} />
-                    </div>
-                </div>
 
-            </div>
+            { listShow && props.list}
         </div>
     )
 
+}
+const ActiveListCard = (props) => {
+    return (
+        <div class="card border-top-0 rounded-0" onClick={props.clickHandler}>
+            <div className="d-flex py-2 flex-wrap  align-items-center justify-content-between"
+                style={{ gap: 10 }}
+            >
+                <div className="btn-light-blue">
+                    T
+                </div>
+                <span>
+                    {props.id}
+                </span>
+                <span>
+                    115.186.190.156
+                </span>
+                <a className='text-primary text-decoration-none' href="">https://linke123here/chat/210402098</a>
+                <a className='text-blue text-decoration-none' href="" >https://dashboard.jataq.tv</a>
+                <span>
+                    00:03:55
+                </span>
+                <div className='flex-shrink-0'>
+                    <span className='me-2'>
+                        4
+                    </span>
+                    <span className='me-2'>
+                        0
+                    </span>
+                    <DiLinux size={20} className='me-2' />
+                    <AiFillWindows color='#878787' size={20} className='me-2' />
+                    <BsFillEyeSlashFill color='#5494F3' size={20} className='me-2' />
+                    <MdDisabledVisible color='red' size={20} className='me-2' />
+                    <img className='me-2' src={require('../../assets/Images/pak.png')} />
+                </div>
+            </div>
+        </div>
+    )
 }

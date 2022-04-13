@@ -13,34 +13,74 @@ import { AiFillWindows, AiFillPrinter } from 'react-icons/ai';
 import { useLocation } from 'react-router-dom'
 import socket from '../../helpers/socket'
 import { AuthContext } from '../../App'
+import axios from 'axios'
+const asyncLocalStorage = {
+    setItem: async function (key, value) {
+        await null;
+        return localStorage.setItem(key, value);
+    },
+    getItem: async function (key) {
+        await null;
+        return localStorage.getItem(key);
+    }
+};
 function ActiveChat() {
-    socket.on("disconnect", (reason) => {
-        alert('disconneccted')
-        if (reason === "io server disconnect") {
-            // the disconnection was initiated by the server, you need to reconnect manually
-        }
-        // else the socket will automatically try to reconnect
-    });
+    
+    
+    const [customerID, setcustomerID] = useState('')
+    const [allMessages, setallMessages] = useState([])
+    const { authState, setAuthState } = useContext(AuthContext);
+    const [currentAgentMessage, setcurrentAgentMessage] = useState('')
+    // fetch all messages handler
+    const LoadMessagesHandler = () => {
+        
+        axios.post('http://localhost:3001/chats/messages', {id: customerID}).then(response => {
+            const messages = response.data
+            // push all messages from database to all messages state
+            setallMessages([...messages])
+            console.log(allMessages)
+        })
+    }
+    const AgentMessageHandler = () => {
+        // setallMessages([...allMessages, { source: 'agent', message: currentAgentMessage, }])
+        console.log('agent handler called');
+       
+        socket.emit('NEW_MESSAGE', { id: customerID, message: currentAgentMessage })
+        axios.post('http://localhost:3001/chats/addmessage', {
+            id: customerID,
+            message: currentAgentMessage,
+        }).then(response => {
+            console.log('message added to datbase')
+            LoadMessagesHandler()
+        })
+        setcurrentAgentMessage('')
+    }
+  
+    useEffect(() => {
+        asyncLocalStorage.getItem('selected_customer').then(value=>{
+            setcustomerID(value)
+            socket.emit('join room', { id: value, agent: (authState.LoggedUserData.f_name + ' ' + authState.LoggedUserData.l_name) })
+        })
+        
+    }, [])
+
+    // get all messages from database on first render
+    useEffect(() => {
+        LoadMessagesHandler()
+    }, [customerID])
+
+
     useEffect(() => {
         chatarea.current.scrollTop = (chatarea.current.scrollHeight - chatarea.current.clientHeight)
     })
     const chatarea = useRef()
-
-    const { authState, setAuthState } = useContext(AuthContext);
-    const customerData = JSON.parse(localStorage.getItem('customerData'))
-    useEffect(() => {
-        socket.emit('join room', { id: customerData.id, agent: (authState.LoggedUserData.f_name + ' ' + authState.LoggedUserData.l_name) })
-    }, [socket])
-
-    const [currentAgentMessage, setcurrentAgentMessage] = useState('')
-    const [allMessages, setallMessages] = useState([])
-    socket.on('NEW MESSAGE', (msg) => {
-        let msgTime = new Date()
-
-        msgTime = msgTime.getHours() + ':' + msgTime.getMinutes() + ':' + msgTime.getSeconds();
-        setallMessages([...allMessages, { source: 'client', message: msg, msgTime: msgTime }])
+ 
+ 
+    socket.on('NEW MESSAGE', (msg) => {    
+      LoadMessagesHandler()
     })
-
+  
+  
     return (
         <Fragment>
             <DashboardHeader title='ActiveChat' />
@@ -51,7 +91,7 @@ function ActiveChat() {
                             <div className="d-flex  py-9 px-13 justify-content-between" >
                                 <div className='d-flex   flex-grow-1' style={{ gap: 10 }} >
                                     <span className='font-500 font-18'>Mr.DjterryxD</span>
-                                    <span className='font-18'>{customerData.ip}</span>
+                                    <span className='font-18'>123:34:23:56 </span>
                                 </div>
                                 <div className='d-flex flex-grow-1'>
                                     <span className='font-18'>
@@ -62,17 +102,15 @@ function ActiveChat() {
                         </div>
                         <div className="card pb-4 px-9 mt-0">
                             <div className={`${styles.chatarea}`} ref={chatarea} >
-                                <MessageBoxClient id={customerData.id} message={customerData.message} time={customerData.time} />
                                 {
                                     allMessages.map(message => {
-
-                                        if (message.source == 'client') {
-                                            return <MessageBoxClient id={customerData.id} message={message.message} time={message.msgTime} />
+                                        console.log(message.source)
+                                        if (message.source == 'customer') {
+                                            return <MessageBoxClient key={message.id} id={customerID} message={message.message} time={message.msgTime} />
                                         }
-                                        else {
+                                        else if(message.source == 'Agent') {
                                             return <MessageBoxAgent agentName='Hazrat Anas (ME)' message={message.message} />
                                         }
-
                                     })
 
                                 }
@@ -82,9 +120,7 @@ function ActiveChat() {
                                     <textarea
                                         onKeyPress={(event) => {
                                             if (event.key == 'Enter') {
-                                                setallMessages([...allMessages, { source: 'agent', message: currentAgentMessage }])
-                                                setcurrentAgentMessage('')
-                                                socket.emit('NEW_MESSAGE', { id: customerData.id, message: currentAgentMessage })
+                                                AgentMessageHandler()
                                             }
                                         }}
                                         value={currentAgentMessage}
@@ -97,14 +133,8 @@ function ActiveChat() {
                                 <div className=" d-flex  flex-column" style={{ gap: 10, flexGrow: 2 }}>
                                     <button className=' py-3 btn-grey-action'
                                         onClick={() => {
-
-                                            setallMessages([...allMessages, { source: 'agent', message: currentAgentMessage }])
-                                            setcurrentAgentMessage('')
-                                            socket.emit('NEW_MESSAGE', { id: customerData.id, message: currentAgentMessage })
-
-
+                                            AgentMessageHandler()
                                         }}
-
                                     >Message</button>
                                     <button className=' py-3 btn-grey-action'>Whisper</button>
                                 </div>
@@ -171,7 +201,7 @@ function ActiveChat() {
                                 <div className="d-flex flex-column" style={{ gap: 10 }}>
                                     <div className='d-flex align-items-center ' style={{ gap: 10 }}>
                                         <button className="btn-light-blue py-1">
-                                            {customerData.time}
+                                            45:34
                                         </button>
                                         <span>
                                             Chat Started

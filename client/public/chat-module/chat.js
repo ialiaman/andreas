@@ -230,8 +230,8 @@ css(RightMessageBody, {
     boxShadow: "0px 3px 15px rgba(0, 0, 0, 0.15)",
     borderRadius: "10px 10px 0px 10px",
     padding: "10px",
-    fontSize: "12px",
-    fontWeight: "300",
+    fontSize: "14px",
+    fontWeight: "400",
     marginTop: '10px',
     width: '80%',
     marginLeft: "auto",
@@ -253,8 +253,8 @@ css(LeftMessageBody, {
     borderRadius: "10px 10px 10px 0px",
     padding: "10px",
     color: "white",
-    fontSize: "12px",
-    fontWeight: "300",
+    fontSize: "14px",
+    fontWeight: "400",
     width: '80%',
     marginRight: "auto",
 });
@@ -287,23 +287,25 @@ chatButton.addEventListener("click", () => {
 chatHeaderRightButton.addEventListener("click", () => {
     chat.style.display = "none";
     socket.disconnect(true)
-    // chatButton.innerHTML = 'start chat'
+   
 });
 
 // keep the scroll to bottom
 
 
 // All Messages
-const Messages = []
+let Messages = []
 
 const sendMessageHandler = () => {
     if (!messageField.value)
         return
     if (firstMessage === true) {
+        console.log(socket.id)
         socket.emit("first message", { msg: messageField.value, id: socket.id });
 
         firstMessage = false;
     } else {
+        console.log(socket.id)
         socket.emit("new message", messageField.value);
         firstMessage = false;
 
@@ -344,16 +346,21 @@ function agentbox(name) {
     chatMessages.appendChild(AgentAvaliable)
 }
 
-
+let agentJoined=false
 
 socket.on('room joined', (data) => {
 
-    agentbox(data.agent)
+    if(!agentJoined){
+        agentJoined=true
+        agentbox(data.agent)
     chatHeaderLeftName.innerHTML = data.agent
+    }
+    
+    
 
 })
 socket.on('new Message', (data) => {
-
+    console.log('socket id:'+ socket.id)
     RightMessageBody.innerHTML = data.message
     RightMessage.appendChild(RightMessageBody);
     chatMessages.innerHTML += RightMessage.innerHTML
