@@ -45,9 +45,10 @@ function Monitor() {
         // map all the active customers
         const ActiveList = ActiveCustomer.map((customer) => {
             return <ListCard id={customer.customer_id} 
-            address={customer.customer.address}
-            origin={customer.customer.origin}
-            plateform={customer.cusotmer.plateform}
+            address={customer.address}
+            origin={customer.origin}
+            created_date={customer.created_date}
+            plateform={customer.plateform}
             clickHandler={()=>{
                 localStorage.setItem('selected_customer',customer.customer_id)
                 navigate('/dashboard/activeChat')
@@ -136,7 +137,7 @@ const StatusCard = (props) => {
 }
 const ListCard = (props) => {
     
-    
+    console.log( typeof props.created_date)
     return (
         <div class="card border-top-0 rounded-0" onClick={props.clickHandler}>
             <div className="d-flex py-2 flex-wrap  align-items-center justify-content-between"
@@ -164,7 +165,7 @@ const ListCard = (props) => {
                         0
                     </span>
                     
-                    {
+                    {  
                       props.plateform  
                     }
                     {/* <DiLinux size={20} className='me-2' /> */}

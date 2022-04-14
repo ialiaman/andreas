@@ -26,11 +26,18 @@ const asyncLocalStorage = {
     }
 };
 function ActiveChat() {
-    
+    const [ip, setIP] = useState('');
     const [customerID, setcustomerID] = useState('')
     const [allMessages, setallMessages] = useState([])
     const { authState, setAuthState } = useContext(AuthContext);
     const [currentAgentMessage, setcurrentAgentMessage] = useState('')
+    const agentName=(authState.LoggedUserData.f_name+ ' '+ authState.LoggedUserData.l_name).toUpperCase()
+    // get ip function
+    const getData = async () => {
+        const res = await axios.get('https://geolocation-db.com/json/')
+     
+        setIP(res.data.IPv4)
+      }
     // fetch all messages handler
     const LoadMessagesHandler = () => {
         
@@ -72,6 +79,7 @@ function ActiveChat() {
 
     useEffect(() => {
         chatarea.current.scrollTop = (chatarea.current.scrollHeight - chatarea.current.clientHeight)
+        getData()
     })
     const chatarea = useRef()
  
@@ -89,8 +97,8 @@ function ActiveChat() {
                         <div className="card mt-9 mb-9">
                             <div className="d-flex  py-9 px-13 justify-content-between" >
                                 <div className='d-flex   flex-grow-1' style={{ gap: 10 }} >
-                                    <span className='font-500 font-18'>Mr.DjterryxD</span>
-                                    <span className='font-18'>123:34:23:56 </span>
+                                    <span className='font-500 font-18'>{agentName}</span>
+                                    <span className='font-18'>{ip} </span>
                                 </div>
                                 <div className='d-flex flex-grow-1'>
                                     <span className='font-18'>
@@ -108,7 +116,7 @@ function ActiveChat() {
                                             return <MessageBoxClient key={message.id} id={customerID} message={message.message} time={message.msgTime} />
                                         }
                                         else if(message.source == 'Agent') {
-                                            return <MessageBoxAgent  key={message.id} agentName='Hazrat Anas (ME)' message={message.message} />
+                                            return <MessageBoxAgent  key={message.id} agentName={agentName} message={message.message} />
                                         }
                                     })
 
