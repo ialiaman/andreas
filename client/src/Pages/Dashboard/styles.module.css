@@ -78,6 +78,11 @@ border-radius: 8px;
 margin-bottom: 1.5rem;
 padding: 1.5rem;
 }
+.empty_list{
+    color: red;
+    font-size: 15px;
+    
+}
 .status_circle{
     width: 20px;
     height: 20px;

@@ -14,23 +14,24 @@ import axios from 'axios'
 function Monitor() {
     
     const [ActiveCustomer, setActiveCustomer] = useState([])
-    const [unAnsweredCustomer, setunAnsweredCustomer] = useState([])
+    const [UnAnsweredCustomer, setUnAnsweredCustomer] = useState([])
+    const [ServedCustomer, setServedCustomer] = useState([])
     const { authState, setAuthState } = useContext(AuthContext);
-    // get all active users from database
-    const activeUsers=()=>{
+    // get all unansered users from database
+    const unAnsweredUsers=()=>{
+        axios.get('http://localhost:3001/chats/unanswered').then(res => {
+            setUnAnsweredCustomer([...res.data])
+        })
+    }
+      // get all active users from database
+      const ActiveUsers=()=>{
         axios.get('http://localhost:3001/chats/active').then(res => {
             setActiveCustomer([...res.data])
         })
     }
-      // get all unanswered users from database
-      const unAnsweredUsers=()=>{
-        axios.get('http://localhost:3001/chats/unanswered').then(res => {
-            setunAnsweredCustomer([...res.data])
-        })
-    }
-    // get all active chats from database
+    
     useEffect(() => {
-        activeUsers()
+        ActiveUsers()
         unAnsweredUsers()
     }, [])
     const navigate = useNavigate()
@@ -38,29 +39,42 @@ function Monitor() {
         socket.emit('agent active')
     })
     socket.on('NEW USER', (data) => {
-        let time = new Date()
-        activeUsers()
+        unAnsweredUsers()
     })
    
         // map all the active customers
         const ActiveList = ActiveCustomer.map((customer) => {
-            return <ActiveListCard id={customer.customer_id} 
+            return <ListCard id={customer.customer_id} 
+            address={customer.customer.address}
+            origin={customer.customer.origin}
+            plateform={customer.cusotmer.plateform}
             clickHandler={()=>{
                 localStorage.setItem('selected_customer',customer.customer_id)
-                // axios.post('http://localhost:3001/chats/status',{
-                //     id:customer.customer_id
-                // }
-                // )
                 navigate('/dashboard/activeChat')
             }} />
         })
     
         // map all the unanswered customers
-        const UnAnsweredList = unAnsweredCustomer.map((customer) => {
-            return <ActiveListCard id={customer.customer_id} clickHandler={()=>{
-                return
+        const UnAnsweredList = UnAnsweredCustomer.map((customer) => {
+            return <ListCard id={customer.customer_id}
+            address={customer.address}
+            origin={customer.origin}
+            created_date={customer.created_date}
+            plateform={customer.plateform}
+            clickHandler={()=>{
+                axios.post('http://localhost:3001/chats/status1',{
+                    id:customer.customer_id
+                }
+                )
+                axios.post('http://localhost:3001/chats/servedby/',{
+                    chatID:customer.customer_id,
+                    agentID:authState.LoggedUserData.id      
+                })
+                localStorage.setItem('selected_customer',customer.customer_id)
+                navigate('/dashboard/activeChat')
             }} />
         })
+        console.log(socket)
     
     return (
         <Fragment>
@@ -73,9 +87,18 @@ function Monitor() {
                             <button className="btn-white  font-12 "> <img className='mx-2' src={require('../../assets/Images/filter.png')} alt="" /> Filter Visitors</button>
                         </div>
                         <div className="container-fluid">'
-                            <StatusCard statusTitle='Served' statusColor='#855CF8' />
-                            <StatusCard statusTitle='Unanswered' statusColor='#F35454' list={UnAnsweredList} />
-                            <StatusCard statusTitle='Active' statusColor='#5CB85C' list={ActiveList} />
+                            <StatusCard key={1} statusTitle='Served' statusColor='#855CF8'
+                            
+                            />
+                            <StatusCard key={2} statusTitle='Unanswered' statusColor='#F35454'
+                            list={UnAnsweredList.length?UnAnsweredList:<p className={`card ${styles.empty_list}`}
+                            >No UnAnswered Users</p>}
+                            
+                            />
+                            <StatusCard key={3} statusTitle='Active' statusColor='#5CB85C'
+                            list={ActiveList.length?ActiveList:
+                            <p className={`card ${styles.empty_list}`}
+                            >No Active Users</p>} />
                         </div>
                     </div>
                 </div>
@@ -88,7 +111,9 @@ export default Monitor
 
 const StatusCard = (props) => {
     const [listShow, setlistShow] = useState(false)
+    const LIST=props.list?props.list: <p>no users</p>
     return (
+        
         <div className="row mb-3" onClick={props.clickHandler}>
             <div class={`card ${styles.status_header}`} >
                 <div className='d-flex align-items-center my-2' >
@@ -103,13 +128,15 @@ const StatusCard = (props) => {
                 </div>
 
             </div>
-
-            { listShow && props.list}
+           
+            { listShow && LIST}
         </div>
     )
 
 }
-const ActiveListCard = (props) => {
+const ListCard = (props) => {
+    
+    
     return (
         <div class="card border-top-0 rounded-0" onClick={props.clickHandler}>
             <div className="d-flex py-2 flex-wrap  align-items-center justify-content-between"
@@ -122,12 +149,12 @@ const ActiveListCard = (props) => {
                     {props.id}
                 </span>
                 <span>
-                    115.186.190.156
+                   {props.address}
                 </span>
                 <a className='text-primary text-decoration-none' href="">https://linke123here/chat/210402098</a>
-                <a className='text-blue text-decoration-none' href="" >https://dashboard.jataq.tv</a>
+                <a className='text-blue text-decoration-none' href="" >{props.origin}</a>
                 <span>
-                    00:03:55
+                    {props.created_date}
                 </span>
                 <div className='flex-shrink-0'>
                     <span className='me-2'>
@@ -136,7 +163,11 @@ const ActiveListCard = (props) => {
                     <span className='me-2'>
                         0
                     </span>
-                    <DiLinux size={20} className='me-2' />
+                    
+                    {
+                      props.plateform  
+                    }
+                    {/* <DiLinux size={20} className='me-2' /> */}
                     <AiFillWindows color='#878787' size={20} className='me-2' />
                     <BsFillEyeSlashFill color='#5494F3' size={20} className='me-2' />
                     <MdDisabledVisible color='red' size={20} className='me-2' />

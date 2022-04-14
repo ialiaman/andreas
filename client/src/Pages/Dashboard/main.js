@@ -95,7 +95,7 @@ function MainDashboard() {
                             </li> */}
                         </ul>
                         <div className="grey-line mb-3"></div>
-                        <ul className='d-flex pe-3 flex-column border-bottom-grey justify-content-around pb-5 flex-row list-group'>
+                        <ul className='d-flex pe-3 flex-column border-bottom-grey justify-content-around pb-5 flex-grow-1 flex-row list-group'>
                             <NavLink
                             
                             className={({ isActive }) =>
@@ -116,9 +116,12 @@ function MainDashboard() {
                             >
                                 <img className={`${styles.iconImg} col-4 `} src={SVGS.Setting} /> <span className="col-8">Settings</span>
                             </NavLink>
-                            <button onClick={logoutHandler} className=' text-light' style={{ border: '0', boxShadow: '0px', backgroundColor: '#5CB85C' }}> Logout</button>
+                           
                         </ul>
+                        <div>
 
+                        <button onClick={logoutHandler} className=' text-light mt-auto' style={{ border: '0', boxShadow: '0px', backgroundColor: '#5CB85C' }}> Logout</button>
+                        </div>
                     </div>
                     <div className="col px-0 bg-grey ">
                         <Outlet toggler={() => alert('toggler presses')} />

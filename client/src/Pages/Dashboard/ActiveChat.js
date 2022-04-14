@@ -14,6 +14,7 @@ import { useLocation } from 'react-router-dom'
 import socket from '../../helpers/socket'
 import { AuthContext } from '../../App'
 import axios from 'axios'
+
 const asyncLocalStorage = {
     setItem: async function (key, value) {
         await null;
@@ -25,7 +26,6 @@ const asyncLocalStorage = {
     }
 };
 function ActiveChat() {
-    
     
     const [customerID, setcustomerID] = useState('')
     const [allMessages, setallMessages] = useState([])
@@ -80,7 +80,6 @@ function ActiveChat() {
       LoadMessagesHandler()
     })
   
-  
     return (
         <Fragment>
             <DashboardHeader title='ActiveChat' />
@@ -109,7 +108,7 @@ function ActiveChat() {
                                             return <MessageBoxClient key={message.id} id={customerID} message={message.message} time={message.msgTime} />
                                         }
                                         else if(message.source == 'Agent') {
-                                            return <MessageBoxAgent agentName='Hazrat Anas (ME)' message={message.message} />
+                                            return <MessageBoxAgent  key={message.id} agentName='Hazrat Anas (ME)' message={message.message} />
                                         }
                                     })
 
