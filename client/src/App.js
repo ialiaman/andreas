@@ -30,7 +30,7 @@ function App() {
   }, []);
   useEffect(() => {
     axios
-      .get("http://localhost:3001/signin/verifyToken", {
+      .get("http://192.163.206.200:3001/signin/verifyToken", {
         headers: {
           accessToken: localStorage.getItem("accessToken"),
         },

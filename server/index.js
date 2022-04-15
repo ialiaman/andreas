@@ -8,40 +8,31 @@ var cors = require("cors");
 var md5 = require("md5");
 const requestIp = require('request-ip');
 var geoip = require('geoip-lite');
-
-
 // middlewares
 app.use(cors());
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: false }));
 const io = require("socket.io")(http, {
   cors: {
-    origin: ["http://localhost", "http://localhost:3000",],
+    origin: ["http://192.163.206.200", "http://192.163.206.200:3000",],
     methods: ["GET", "POST"],
     allowedHeaders: ["my-custom-header"],
     credentials: true
   },
 });
-
-
-
-
 // import routes
 const signInRouter = require("./routes/signin");
 const { get } = require("./routes/signin");
-
 // constant and variables
 const port = 3001;
-
 // create connection to database####
 var con = mysql.createConnection({
-  host: "localhost",
+  host: "192.163.206.200",
   user: "root",
   database: "chat-service",
 });
 // get all agents from the database
 const getAgents = () => {
-
   const agents = `SELECT * FROM registered_users  WHERE account_type = 'agent';`;
   con.query(agents, (err, agentsResult) => {
     if (err) throw error;
@@ -49,13 +40,9 @@ const getAgents = () => {
       console.log(agentsResult)
     }
   })
-
 }
-
-
 // get form data from frontend
 // ( get from sign Up form)
-
 const usersArray = [];
 const agentsArray = [];
 // function to add agent to chat
@@ -97,13 +84,9 @@ const unAnswered = (ID) => {
     console.log('updated to 2')
   })
 }
-
 // function to  retrun all active chats
-
-
 app.post("/signup", (req, res) => {
   console.log("form received");
-
   const { fname, lname, email, password, company } = req.body;
   let md5Pasword = md5(password);
   // check if email exists
@@ -111,7 +94,6 @@ app.post("/signup", (req, res) => {
   con.query(search, function (err, result) {
     if (err) {
       throw err;
-
     } else {
       if (result.length > 0) {
         res.send("email already exists");
@@ -159,7 +141,6 @@ app.post('/chats/status1', (req, res) => {
 })
 // Get All messages from the database for a given socket id
 app.post('/chats/messages', (req, res) => {
-
   const query = `SELECT * from all_messages WHERE sender = '${req.body.id}' `;
   con.query(query, (error, result) => {
     if (error) throw error;
@@ -175,33 +156,40 @@ app.post('/chats/addmessage', (req, res) => {
 app.post('/chats/servedby', (req, res) => {
   const chatID = req.body.chatID;
   const agentID = req.body.agentID;
-
   ServedBy(chatID, agentID)
   res.json('served by')
 })
-
-
-
+// api for get chat record for a given ID
+app.post('/chats/chat', (req, res) => {
+  const ID = req.body.id
+  const query = `SELECT * FROM all_chats WHERE customer_id = '${ID}'`;
+  con.query(query, (error, result) => {
+    if (error) throw error;
+    res.json(result)
+  })
+})
+// api for get agent info for a given chat ID
+// app.post('/chats/agent', (req, res) => {
+//   const ID=req.body.id
+//   const query = `SELECT f_name, l_name FROM registered_users WHERE id = '${ID}'`;
+// })
 // code for socket io
-
 let agents = []
 io.on("connection", (socket) => {
-
   socket.on('agent active', () => {
     agents.indexOf(socket.id) === -1 ? agents.push(socket.id) : null;
   })
   // First Message From Customer
   socket.on('first message', (data) => {
-    const origin=socket.handshake.headers.origin
-    const address=socket.handshake.address
-    const plateform=socket.handshake.headers['sec-ch-ua-platform']
-    insertChat(data.id,origin,address,plateform)
+    const origin = socket.handshake.headers.origin
+    const address = socket.handshake.address
+    const plateform = socket.handshake.headers['sec-ch-ua-platform']
+    insertChat(data.id, origin, address, plateform)
     insertMessage(data.msg, data.id)
     agents.map(agent => {
       socket.to(agent).emit('NEW USER', { id: data.id, msg: data.msg, ip: '::1' })
     })
   })
- 
   socket.on('join room', (data) => {
     console.log('room joined in server')
     console.log('data.id: ' + data.id)
@@ -209,7 +197,6 @@ io.on("connection", (socket) => {
     io.to(data.id).emit('room joined', data)
   })
   socket.on('new message', (msg) => {
-
     insertMessage(msg, socket.id)
     console.log('emitting ')
     console.log('socket id: ' + socket.id)
@@ -228,10 +215,8 @@ io.on("connection", (socket) => {
     // socket.disconnect()
     // deleteChat(socket.id)
     // socket.emit('disconnect',('customer ended this chat'))
-
   })
 });
-
 //   listen on port
 http.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

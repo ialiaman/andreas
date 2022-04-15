@@ -44,7 +44,7 @@ CREATE TABLE `all_chats` (
 --
 
 INSERT INTO `all_chats` (`id`, `status`, `served_by`, `created_date`, `is_end`, `origin`, `customer_id`, `address`, `plateform`) VALUES
-(102, 0, '', '2022-04-15 00:49:40', NULL, 'http://localhost:3000', 'Rq66lb-dey4b_rx_AAAN', '::1', '\"Windows\"');
+(102, 0, '', '2022-04-15 00:49:40', NULL, 'http://192.163.206.200:3000', 'Rq66lb-dey4b_rx_AAAN', '::1', '\"Windows\"');
 
 -- --------------------------------------------------------
 

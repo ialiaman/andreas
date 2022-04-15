@@ -25,23 +25,27 @@ const asyncLocalStorage = {
         return localStorage.getItem(key);
     }
 };
+
+
 function ActiveChat() {
     const [ip, setIP] = useState('');
     const [customerID, setcustomerID] = useState('')
     const [allMessages, setallMessages] = useState([])
     const { authState, setAuthState } = useContext(AuthContext);
     const [currentAgentMessage, setcurrentAgentMessage] = useState('')
-    const agentName=(authState.LoggedUserData.f_name+ ' '+ authState.LoggedUserData.l_name).toUpperCase()
+    const agentName = (authState.LoggedUserData.f_name + ' ' + authState.LoggedUserData.l_name).toUpperCase()
+
+
     // get ip function
     const getData = async () => {
         const res = await axios.get('https://geolocation-db.com/json/')
-     
+
         setIP(res.data.IPv4)
-      }
+    }
     // fetch all messages handler
     const LoadMessagesHandler = () => {
-        
-        axios.post('http://localhost:3001/chats/messages', {id: customerID}).then(response => {
+
+        axios.post('http://192.163.206.200:3001/chats/messages', { id: customerID }).then(response => {
             const messages = response.data
             // push all messages from database to all messages state
             setallMessages([...messages])
@@ -51,9 +55,9 @@ function ActiveChat() {
     const AgentMessageHandler = () => {
         // setallMessages([...allMessages, { source: 'agent', message: currentAgentMessage, }])
         console.log('agent handler called');
-       
+
         socket.emit('NEW_MESSAGE', { id: customerID, message: currentAgentMessage })
-        axios.post('http://localhost:3001/chats/addmessage', {
+        axios.post('http://192.163.206.200:3001/chats/addmessage', {
             id: customerID,
             message: currentAgentMessage,
         }).then(response => {
@@ -62,13 +66,20 @@ function ActiveChat() {
         })
         setcurrentAgentMessage('')
     }
-  
+
     useEffect(() => {
-        asyncLocalStorage.getItem('selected_customer').then(value=>{
+        asyncLocalStorage.getItem('selected_customer').then(value => {
             setcustomerID(value)
+            // Get record for   about the chat
+            axios.post('http://192.163.206.200:3001/chats/chat',{id:value}).then(response=>{
+                console.log(response.data)
+
+                // get agent info for this active chat
+                
+            })
             socket.emit('join room', { id: value, agent: (authState.LoggedUserData.f_name + ' ' + authState.LoggedUserData.l_name) })
         })
-        
+
     }, [])
 
     // get all messages from database on first render
@@ -82,12 +93,12 @@ function ActiveChat() {
         getData()
     })
     const chatarea = useRef()
- 
- 
-    socket.on('NEW MESSAGE', (msg) => {    
-      LoadMessagesHandler()
+
+
+    socket.on('NEW MESSAGE', (msg) => {
+        LoadMessagesHandler()
     })
-  
+
     return (
         <Fragment>
             <DashboardHeader title='ActiveChat' />
@@ -115,8 +126,8 @@ function ActiveChat() {
                                         if (message.source == 'customer') {
                                             return <MessageBoxClient key={message.id} id={customerID} message={message.message} time={message.msgTime} />
                                         }
-                                        else if(message.source == 'Agent') {
-                                            return <MessageBoxAgent  key={message.id} agentName={agentName} message={message.message} />
+                                        else if (message.source == 'Agent') {
+                                            return <MessageBoxAgent key={message.id} agentName={agentName} message={message.message} />
                                         }
                                     })
 
