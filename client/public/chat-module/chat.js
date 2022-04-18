@@ -2,12 +2,26 @@
 var body = document.getElementsByTagName("BODY")[0];
 var chatButton = document.createElement("BUTTON");
 var chatIcon = document.createElement('img')
-var socket = io("http://192.163.206.200:3001", {
-    withCredentials: true,
-    extraHeaders: {
-        "my-custom-header": "abcd"
-    }
-});
+try{
+    var socket = io("http://localhost:3001", {
+        withCredentials: true,
+        extraHeaders: {
+            "my-custom-header": "abcd"
+        }
+    });
+}
+catch(error){
+    console.log(error)
+}
+
+socket.on("connect_error", () => {
+    // revert to classic upgrade
+   alert('Cant connect to socket io')
+   socket.disconnect()
+  });
+  socket.on('connect_failed', err => {
+      alert('hello')
+  })
 var chatIcon = document.createElement("img");
 var firstMessage = true;
 

@@ -14,7 +14,7 @@ app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: false }));
 const io = require("socket.io")(http, {
   cors: {
-    origin: ["http://192.163.206.200", "http://192.163.206.200:3000",],
+    origin: ["http://localhost", "http://localhost:3000",],
     methods: ["GET", "POST"],
     allowedHeaders: ["my-custom-header"],
     credentials: true
@@ -23,11 +23,12 @@ const io = require("socket.io")(http, {
 // import routes
 const signInRouter = require("./routes/signin");
 const { get } = require("./routes/signin");
+const { json } = require("body-parser");
 // constant and variables
 const port = 3001;
 // create connection to database####
 var con = mysql.createConnection({
-  host: "192.163.206.200",
+  host: "localhost",
   user: "root",
   database: "chat-service",
 });
@@ -169,13 +170,20 @@ app.post('/chats/chat', (req, res) => {
   })
 })
 // api for get agent info for a given chat ID
-// app.post('/chats/agent', (req, res) => {
-//   const ID=req.body.id
-//   const query = `SELECT f_name, l_name FROM registered_users WHERE id = '${ID}'`;
-// })
+app.post('/chats/agent', (req, res) => {
+  const ID=req.body.id
+  console.log(ID)
+  const query = `SELECT f_name,l_name FROM registered_users WHERE id = '${ID}' LIMIT 1`;
+  con.query(query,(error, result)=>{
+      if(error) throw error;
+      console.log(result[0])
+      res.json(result[0])
+  })
+})
 // code for socket io
 let agents = []
 io.on("connection", (socket) => {
+
   socket.on('agent active', () => {
     agents.indexOf(socket.id) === -1 ? agents.push(socket.id) : null;
   })

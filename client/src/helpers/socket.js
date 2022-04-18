@@ -1,5 +1,5 @@
 import { io } from "socket.io-client";
-var socket = io("http://192.163.206.200:3001", {
+var socket = io("http://localhost:3001", {
     withCredentials: true,
     extraHeaders: {
         "my-custom-header": "abcd"

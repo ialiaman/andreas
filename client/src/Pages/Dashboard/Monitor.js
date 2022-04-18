@@ -16,13 +16,13 @@ function Monitor() {
     const { authState, setAuthState } = useContext(AuthContext);
     // get all unansered users from database
     const unAnsweredUsers=()=>{
-        axios.get('http://192.163.206.200:3001/chats/unanswered').then(res => {
+        axios.get('http://localhost:3001/chats/unanswered').then(res => {
             setUnAnsweredCustomer([...res.data])
         })
     }
       // get all active users from database
       const ActiveUsers=()=>{
-        axios.get('http://192.163.206.200:3001/chats/active').then(res => {
+        axios.get('http://localhost:3001/chats/active').then(res => {
             setActiveCustomer([...res.data])
         })
     }
@@ -57,11 +57,11 @@ function Monitor() {
             created_date={customer.created_date}
             plateform={customer.plateform}
             clickHandler={()=>{
-                axios.post('http://192.163.206.200:3001/chats/status1',{
+                axios.post('http://localhost:3001/chats/status1',{
                     id:customer.customer_id
                 }
                 )
-                axios.post('http://192.163.206.200:3001/chats/servedby/',{
+                axios.post('http://localhost:3001/chats/servedby/',{
                     chatID:customer.customer_id,
                     agentID:authState.LoggedUserData.id      
                 })

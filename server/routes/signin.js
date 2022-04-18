@@ -5,10 +5,11 @@ const mysql = require('mysql');
 const { sign } = require("jsonwebtoken");
 const { validateToken } = require("../Middlewares/AuthMiddleware");
 var con = mysql.createConnection({
-    host: "192.163.206.200",
+    host: "localhost",
     user: "root",
     database: "chat-service"
 });
+
 router.post('/',  (req, res) => {
   
     const { email, password } = req.body
@@ -16,8 +17,9 @@ router.post('/',  (req, res) => {
     const search = `SELECT * FROM registered_users  WHERE email = '${email}';`;
     con.query(search, (err, result) => {
         if (err) {
-            if (err) throw err;
-            //    res.json({error:`database query error:${err}`})
+            if (err)
+
+               res.json({error:`${err}`})
         }
         else {
             if (result.length == 0) {

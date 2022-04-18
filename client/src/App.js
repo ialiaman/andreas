@@ -30,23 +30,45 @@ function App() {
   }, []);
   useEffect(() => {
     axios
-      .get("http://192.163.206.200:3001/signin/verifyToken", {
+      .get("http://localhost:3001/signin/verifyToken", {
         headers: {
           accessToken: localStorage.getItem("accessToken"),
         },
+      }).catch(function (error) {
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+          // http.ClientRequest in node.js
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log('Error', error.message);
+        }
+        console.log(error.config);
       })
       .then((response) => {
-        setloading(false);
-        if (response.data.error) {
-          setAuthState(false);
-        } else {
-          console.log(response.data.userData);
-          setAuthState({
-            LoggedUserData: response.data.userData,
-            status: true,
-          });
-          console.log(authState);
+        
+        if(response)
+        {
+          setloading(false);
+          if (response.data.error) {
+            setAuthState(false);
+          } else {
+            console.log(response.data.userData);
+            setAuthState({
+              LoggedUserData: response.data.userData,
+              status: true,
+            });
+           
+          }
         }
+        
       });
   }, []);
   return (

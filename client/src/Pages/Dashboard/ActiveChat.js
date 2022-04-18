@@ -26,26 +26,43 @@ const asyncLocalStorage = {
     }
 };
 
-
 function ActiveChat() {
     const [ip, setIP] = useState('');
+    const [othersChat, setothersChat] = useState(false)
     const [customerID, setcustomerID] = useState('')
+    const [chatData, setchatData] = useState('')
     const [allMessages, setallMessages] = useState([])
     const { authState, setAuthState } = useContext(AuthContext);
     const [currentAgentMessage, setcurrentAgentMessage] = useState('')
-    const agentName = (authState.LoggedUserData.f_name + ' ' + authState.LoggedUserData.l_name).toUpperCase()
-
+    const [agentName, setagentName] = useState('')
 
     // get ip function
     const getData = async () => {
         const res = await axios.get('https://geolocation-db.com/json/')
-
         setIP(res.data.IPv4)
     }
+    // match agent to show message area
+    useEffect(()=>{
+        if(authState.LoggedUserData.f_name.toUpperCase()&& authState.LoggedUserData.l_name.toUpperCase()){
+
+            const curretUser= authState.LoggedUserData.f_name.toUpperCase()+' '+authState.LoggedUserData.l_name.toUpperCase()
+            if(curretUser!==agentName)
+            {
+                console.log('not qural')
+                setothersChat(true)
+            }
+            
+            else
+            {
+                console.log('equal')
+                setothersChat(false)
+            }
+        }
+       
+    })
     // fetch all messages handler
     const LoadMessagesHandler = () => {
-
-        axios.post('http://192.163.206.200:3001/chats/messages', { id: customerID }).then(response => {
+        axios.post('http://localhost:3001/chats/messages', { id: customerID }).then(response => {
             const messages = response.data
             // push all messages from database to all messages state
             setallMessages([...messages])
@@ -57,13 +74,14 @@ function ActiveChat() {
         console.log('agent handler called');
 
         socket.emit('NEW_MESSAGE', { id: customerID, message: currentAgentMessage })
-        axios.post('http://192.163.206.200:3001/chats/addmessage', {
+        axios.post('http://localhost:3001/chats/addmessage', {
             id: customerID,
             message: currentAgentMessage,
         }).then(response => {
             console.log('message added to datbase')
             LoadMessagesHandler()
         })
+        console.log('current message:'+currentAgentMessage)
         setcurrentAgentMessage('')
     }
 
@@ -71,27 +89,46 @@ function ActiveChat() {
         asyncLocalStorage.getItem('selected_customer').then(value => {
             setcustomerID(value)
             // Get record for   about the chat
-            axios.post('http://192.163.206.200:3001/chats/chat',{id:value}).then(response=>{
-                console.log(response.data)
-
-                // get agent info for this active chat
+            axios.post('http://localhost:3001/chats/chat',{id:value}).then(response=>{
+                setchatData(response.data[0])                
                 
+                // get agent info for this active chat
+                              
             })
+            
             socket.emit('join room', { id: value, agent: (authState.LoggedUserData.f_name + ' ' + authState.LoggedUserData.l_name) })
         })
 
     }, [])
+     useEffect(()=>{
+        chatData&&axios.post('http://localhost:3001/chats/agent',{id:chatData.served_by}).then(res=>{
+               
+                setagentName(res.data.f_name.toUpperCase()+' ' + res.data.l_name.toUpperCase())
+                
+            }).catch(error=>{
+                console.log("error:" +error)
+            })
+    },[chatData])
 
     // get all messages from database on first render
     useEffect(() => {
         LoadMessagesHandler()
+        console.log('message loadinggggggggg')
     }, [customerID])
 
 
     useEffect(() => {
         chatarea.current.scrollTop = (chatarea.current.scrollHeight - chatarea.current.clientHeight)
         getData()
+        
     })
+    useEffect(()=>{
+        
+        return ()=>{
+            // Store All Messages on UnMounting
+
+        }
+    },[])
     const chatarea = useRef()
 
 
@@ -109,11 +146,11 @@ function ActiveChat() {
                             <div className="d-flex  py-9 px-13 justify-content-between" >
                                 <div className='d-flex   flex-grow-1' style={{ gap: 10 }} >
                                     <span className='font-500 font-18'>{agentName}</span>
-                                    <span className='font-18'>{ip} </span>
+                                   
                                 </div>
                                 <div className='d-flex flex-grow-1'>
                                     <span className='font-18'>
-                                        Monday 01:12 AM
+                                        {/* {chatData.created_date.slice(11,-5)} */}
                                     </span>
                                 </div>
                             </div>
@@ -133,7 +170,8 @@ function ActiveChat() {
 
                                 }
                             </div>
-                            <div className="msg_area flex-wrap d-flex mt-3" style={{ gap: 20 }}>
+                            {
+                                !othersChat ? <div className="msg_area flex-wrap d-flex mt-3" style={{ gap: 20 }}>
                                 <div className="d-flex " style={{ flexGrow: 10 }} >
                                     <textarea
                                         onKeyPress={(event) => {
@@ -156,7 +194,9 @@ function ActiveChat() {
                                     >Message</button>
                                     <button className=' py-3 btn-grey-action'>Whisper</button>
                                 </div>
-                            </div>
+                            </div>:null
+                            }
+                           
                         </div>
                     </div>
                     <div className="col-md-4">
@@ -179,7 +219,7 @@ function ActiveChat() {
                             <div className={`${styles.details_body}`}>
                                 <div className={`${styles.details_field_card} bg-grey`}>
                                     <span>
-                                        V10396849659
+                                        {chatData.customer_id}
                                     </span>
                                     <span color={colors.colors.green}>
                                         <AiFillSave />
@@ -198,7 +238,7 @@ function ActiveChat() {
                                         Islamabad,Pakistan
                                     </span>
                                     <span color={colors.colors.green}>
-                                        115.168.174.112
+                                        {chatData.address}
                                     </span>
                                 </div>
                                 <div className={`${styles.details_field_card} bg-grey`}>
