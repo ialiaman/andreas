@@ -8,6 +8,8 @@ import PageViewsChart from "../../Components/UI/Charts/PageView/PageView";
 import ChatChart from "../../Components/UI/Charts/Chat/ChatChart";
 import { DashboardHeader } from "../../Components/UI/MiniComponents/MiniComponent";
 import { AuthContext } from "../../App";
+import editIcon from "../../assets/Images/edit_icon.png";
+import cancelIcon from "../../assets/Images/cancel.png";
 
 const AgentDashboard = () => {
   const { authState, setAuthState } = useContext(AuthContext);
@@ -276,7 +278,7 @@ const ClientDashboard = () => {
               </div>
             </div>
           </div>
-          <div className="col-md-8">
+          <div className="col-12">
             <div className={`${styles.live_now} p-3`}>
               <div className="d-flex justify-content-between">
                 <h1 className="h4 fw-bold">Live now</h1>
@@ -290,178 +292,50 @@ const ClientDashboard = () => {
               </div>
               <LiveVisitorsChart />
             </div>
+            <h1 className="h4 fw-bold px-4 pt-4">Chat History</h1>
             <div className={`${styles.live_now} mt-3 p-3`}>
               <div className="">
-                <h1 className="h4 fw-bold">Chat History</h1>
                 <table className={`table text-center ${styles.table}`}>
                   <thead>
                     <tr>
-                      <th scope="col">Visitor ID</th>
+                      <th scope="col badge badge-curious-bold">
+                        <span className="badge badge-curious-bold">ID</span>
+                      </th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Email</th>
+                      <th scope="col">Phone Number</th>
                       <th scope="col">Agent</th>
-                      <th scope="col">Time</th>
+                      <th scope="col">Date</th>
+                      <th scope="col">1</th>
+                      <th scope="col">2</th>
+                      <th scope="col">3</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>Visitor ID</td>
+                    <tr className="pt-2">
                       <td>
-                        <button
-                          className="px-3 py-0"
-                          style={{
-                            backgroundColor: "#3498DB",
-                            border: "none",
-                            borderRadius: 4,
-                          }}
-                        >
-                          Ali A.
-                        </button>
+                        <span className="badge badge-curious-bold">ID</span>
                       </td>
-                      <td>26/Feb 17:42</td>
-                    </tr>
-                    <tr>
-                      <td>Visitor ID</td>
                       <td>
-                        <button
-                          className="px-3 py-0"
-                          style={{
-                            backgroundColor: "#3498DB",
-                            border: "none",
-                            borderRadius: 4,
-                          }}
-                        >
-                          Ali A.
-                        </button>
+                        <p className="px-3 py-0">Ahad Aman</p>
                       </td>
-                      <td>26/Feb 17:42</td>
-                    </tr>{" "}
-                    <tr>
-                      <td>Visitor ID</td>
+                      <td>ahadaman@gmail.com</td>
+                      <td>+923312099944</td>
+                      <td>Ali Aman</td>
+                      <td>16 March 18:42</td>
                       <td>
-                        <button
-                          className="px-3 py-0"
-                          style={{
-                            backgroundColor: "#3498DB",
-                            border: "none",
-                            borderRadius: 4,
-                          }}
-                        >
-                          Ali A.
-                        </button>
+                        <img src={editIcon} />
                       </td>
-                      <td>26/Feb 17:42</td>
-                    </tr>{" "}
-                    <tr>
-                      <td>Visitor ID</td>
                       <td>
-                        <button
-                          className="px-3 py-0"
-                          style={{
-                            backgroundColor: "#3498DB",
-                            border: "none",
-                            borderRadius: 4,
-                          }}
-                        >
-                          Ali A.
-                        </button>
+                        <img src={cancelIcon} />
                       </td>
-                      <td>26/Feb 17:42</td>
-                    </tr>
-                    <tr>
-                      <td>Visitor ID</td>
                       <td>
-                        <button
-                          className="px-3 py-0"
-                          style={{
-                            backgroundColor: "#3498DB",
-                            border: "none",
-                            borderRadius: 4,
-                          }}
-                        >
-                          Ali A.
-                        </button>
+                        <input type="checkbox" />
                       </td>
-                      <td>26/Feb 17:42</td>
-                    </tr>
-                    <tr>
-                      <td>Visitor ID</td>
-                      <td>
-                        <button
-                          className="px-3 py-0"
-                          style={{
-                            backgroundColor: "#3498DB",
-                            border: "none",
-                            borderRadius: 4,
-                          }}
-                        >
-                          Ali A.
-                        </button>
-                      </td>
-                      <td>26/Feb 17:42</td>
-                    </tr>
-                    <tr>
-                      <td>Visitor ID</td>
-                      <td>
-                        <button
-                          className="px-3 py-0"
-                          style={{
-                            backgroundColor: "#3498DB",
-                            border: "none",
-                            borderRadius: 4,
-                          }}
-                        >
-                          Ali A.
-                        </button>
-                      </td>
-                      <td>26/Feb 17:42</td>
                     </tr>
                   </tbody>
                 </table>
               </div>
-            </div>
-          </div>
-          <div className="col-md-4">
-            <div className={`${styles.visitor} p-3 ${styles.rightBoxes}`}>
-              <div className="d-flex justify-content-between">
-                <h1 className="h4 fw-bold">Visitors</h1>
-
-                <span>
-                  {" "}
-                  <span className="me-1" style={{ fontWeight: 500 }}>
-                    128
-                  </span>{" "}
-                  <BiStats size={30} />
-                </span>
-              </div>
-
-              <VisitorsChart />
-            </div>
-            <div className={`${styles.visitor} p-3 ${styles.rightBoxes}`}>
-              <div className="d-flex justify-content-between">
-                <h1 className="h4 fw-bold">Page View</h1>
-
-                <span>
-                  {" "}
-                  <span className="me-1" style={{ fontWeight: 500 }}>
-                    140
-                  </span>{" "}
-                  <BiStats size={30} />
-                </span>
-              </div>
-              <PageViewsChart />
-            </div>
-            <div className={`${styles.visitor} p-3 ${styles.rightBoxes}`}>
-              <div className="d-flex justify-content-between">
-                <h1 className="h4 fw-bold">Chat</h1>
-
-                <span>
-                  {" "}
-                  <span className="me-1" style={{ fontWeight: 500 }}>
-                    110
-                  </span>{" "}
-                  <BiStats size={30} />
-                </span>
-              </div>
-              <ChatChart />
             </div>
           </div>
         </div>
