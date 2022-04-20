@@ -1,3 +1,71 @@
+/* Client Dashboard START */
+.clientNameContainer {
+    font-size: 18px;
+    text-transform: uppercase;
+}
+.clientCardButtonsContainer > button:nth-child(1) {
+    background-color: #5CB85C;
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.clientCardButtonsContainer>button:nth-child(2) {
+    background-color: #E5E5E5;
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+@media (min-width: 760px) {
+    .clientNameContainer {
+        text-align: right;
+    }
+    .subAndLeadRow {
+        display: flex;
+        font-weight: 500;
+    }
+    .subAndLeadRow > p:nth-child(1) {
+        margin-right: 10px;
+    }
+    .clientCardButtonsContainer {
+        display: flex;
+        justify-content: flex-end;
+        flex-direction: row;
+    }
+    .clientCardButtonsContainer > button:nth-child(1) {
+        height: 45px;
+        margin-right: 10px;
+    }
+    .clientCardButtonsContainer>button:nth-child(2) {
+        height: 46px;
+    }
+}
+@media (max-width: 760px) {
+    .clientCompanyNameContainer {
+        text-align: center;
+    }
+    .clientNameContainer {
+        text-align: center;
+    }
+    .subAndLeadRow {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .clientSiteLink {
+        text-align: center;
+    }
+    .clientCardButtonsContainer {
+        display: flex;
+        justify-content: center;
+    }
+    .clientCardButtonsContainer>button:nth-child(1) {
+        margin-right: 10px;
+    }
+}
+/* Client Dashboard End */
 .navLink {
     text-align: left !important;
     font-size: 16px;

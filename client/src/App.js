@@ -18,7 +18,7 @@ function App() {
     status: false,
   });
   const [loading, setloading] = useState(true);
-
+  console.log(authState.LoggedUserData);
   useEffect(() => {
     const script = document.createElement("script");
     script.src = "../../chat-module/chat.js";
@@ -34,7 +34,8 @@ function App() {
         headers: {
           accessToken: localStorage.getItem("accessToken"),
         },
-      }).catch(function (error) {
+      })
+      .catch(function (error) {
         if (error.response) {
           // The request was made and the server responded with a status code
           // that falls out of the range of 2xx
@@ -48,14 +49,12 @@ function App() {
           console.log(error.request);
         } else {
           // Something happened in setting up the request that triggered an Error
-          console.log('Error', error.message);
+          console.log("Error", error.message);
         }
         console.log(error.config);
       })
       .then((response) => {
-        
-        if(response)
-        {
+        if (response) {
           setloading(false);
           if (response.data.error) {
             setAuthState(false);
@@ -65,10 +64,8 @@ function App() {
               LoggedUserData: response.data.userData,
               status: true,
             });
-           
           }
         }
-        
       });
   }, []);
   return (
