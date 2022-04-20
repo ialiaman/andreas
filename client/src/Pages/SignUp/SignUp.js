@@ -84,10 +84,10 @@ function SignUp() {
                                     </button>
                                 </div>
                             </div>
-                            <form class="row g-3 px-3 py-4" onSubmit={formik.handleSubmit} method='post' >
-                                <div class="col-lg-6">
-                                    <label for="fname" class={`form-label ${styles.inputLable_text}`}>First Name</label>
-                                    <input type="text" class={`form-control ${styles.input}`}
+                            <form className="row g-3 px-3 py-4" onSubmit={formik.handleSubmit} method='post' >
+                                <div className="col-lg-6">
+                                    <label for="fname" className={`form-label ${styles.inputLable_text}`}>First Name</label>
+                                    <input type="text" className={`form-control ${styles.input}`}
                                         id="fname"
                                         name="fname"
                                         onChange={formik.handleChange}
@@ -97,9 +97,9 @@ function SignUp() {
                                         <div className={`${styles.formError}`}>{formik.errors.fname}</div>
                                     ) : null}
                                 </div>
-                                <div class="col-lg-6">
-                                    <label for="lname" class={`form-label ${styles.inputLable_text}`}>Last Name</label>
-                                    <input type="text" class="form-control"
+                                <div className="col-lg-6">
+                                    <label for="lname" className={`form-label ${styles.inputLable_text}`}>Last Name</label>
+                                    <input type="text" className="form-control"
                                         id="lname"
                                         name="lname"
                                         onChange={formik.handleChange}
@@ -109,9 +109,9 @@ function SignUp() {
                                         <div className={`${styles.formError}`}>{formik.errors.lname}</div>
                                     ) : null}
                                 </div>
-                                <div class="col-12">
-                                    <label for="email" class={`form-label ${styles.inputLable_text}`}>Business Email</label>
-                                    <input type="email" class="form-control" placeholder=""
+                                <div className="col-12">
+                                    <label for="email" className={`form-label ${styles.inputLable_text}`}>Business Email</label>
+                                    <input type="email" className="form-control" placeholder=""
                                         id="email"
                                         name="email"
                                         onChange={formik.handleChange}
@@ -121,9 +121,9 @@ function SignUp() {
                                         <div className={`${styles.formError}`} >{formik.errors.email}</div>
                                     ) : null}
                                 </div>
-                                <div class="col-lg-6">
-                                    <label for="password" class={`form-label ${styles.inputLable_text}`}>password</label>
-                                    <input type="password" class={`form-control ${styles.input}`}
+                                <div className="col-lg-6">
+                                    <label for="password" className={`form-label ${styles.inputLable_text}`}>password</label>
+                                    <input type="password" className={`form-control ${styles.input}`}
                                         id="password"
                                         name="password"
                                         onChange={formik.handleChange}
@@ -133,9 +133,9 @@ function SignUp() {
                                         <div className={`${styles.formError}`}>{formik.errors.password}</div>
                                     ) : null}
                                 </div>
-                                <div class="col-lg-6">
-                                    <label for="confirmPassword" class={`form-label ${styles.inputLable_text}`}>Confirm Password</label>
-                                    <input type="password" class="form-control"
+                                <div className="col-lg-6">
+                                    <label for="confirmPassword" className={`form-label ${styles.inputLable_text}`}>Confirm Password</label>
+                                    <input type="password" className="form-control"
                                         id="confirmPassword"
                                         name="confirmPassword"
                                         onChange={formik.handleChange}
@@ -145,22 +145,22 @@ function SignUp() {
                                         <div className={`${styles.formError}`} >{formik.errors.confirmPassword}</div>
                                     ) : null}
                                 </div>
-                                <div class="col-12">
-                                    <label for="compnay" class={`form-label ${styles.inputLable_text}`}>Company Name</label>
-                                    <input type="text" class="form-control" placeholder=""
+                                <div className="col-12">
+                                    <label for="compnay" className={`form-label ${styles.inputLable_text}`}>Company Name</label>
+                                    <input type="text" className="form-control" placeholder=""
                                         id="compnay"
                                         name="company"
                                         onChange={formik.handleChange}
                                         value={formik.values.company}
                                     />
                                 </div>
-                                <div class="col-12">
-                                    <div class="form-check">
-                                        <input  class="form-check-input" type="checkbox" id="terms"
+                                <div className="col-12">
+                                    <div className="form-check">
+                                        <input  className="form-check-input" type="checkbox" id="terms"
                                          onChange={formik.handleChange}
                                          value={formik.values.terms}
                                         />
-                                        <label class="form-check-label" for="terms">
+                                        <label className="form-check-label" for="terms">
                                             I accept that this site stores my submitted information so that it can respond to my request
                                         </label>
                                     </div>
@@ -168,9 +168,9 @@ function SignUp() {
                                         <div className={`${styles.formError}`} >{formik.errors.terms}</div>
                                     ) : null}
                                 </div>
-                                <div class="col-12 text-center d-flex justify-content-center">
+                                <div className="col-12 text-center d-flex justify-content-center">
                                     <button
-                                        type="submit" class={`btn w-100 mx-auto bg-primary  btn-primary ${styles.createBtn}`}>Create for FREE</button>
+                                        type="submit" className={`btn w-100 mx-auto bg-primary  btn-primary ${styles.createBtn}`}>Create for FREE</button>
                                 </div>
                                 {serverError&& <div className={`${styles.formError}`} >
                                     {serverError}

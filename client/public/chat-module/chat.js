@@ -14,6 +14,7 @@ catch(error){
     console.log(error)
 }
 
+
 socket.on("connect_error", () => {
     // revert to classic upgrade
    alert('Cant connect to socket io')
@@ -309,14 +310,19 @@ chatHeaderRightButton.addEventListener("click", () => {
 
 // All Messages
 let Messages = []
-
+window.addEventListener('popstate', function (event) {
+	console.log('changed')
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+    console.log('dom')
+})
 const sendMessageHandler = () => {
     if (!messageField.value)
         return
     if (firstMessage === true) {
         console.log(socket.id)
         socket.emit("first message", { msg: messageField.value, id: socket.id });
-
+        console.log(window.location.href)
         firstMessage = false;
     } else {
         console.log(socket.id)

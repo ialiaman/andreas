@@ -31,9 +31,9 @@ function Messaging() {
                                         <button className="btn-light-blue" >
                                             All
                                         </button>
-                                        <input style={{height:33}} type="search" class="form-control   rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-                                        <span style={{height:33}} class="input-group-text px-4  bgMountainMeadow  border-0" id="search-addon">
-                                            <i class="fas text-white fa-search"></i>
+                                        <input style={{height:33}} type="search" className="form-control   rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+                                        <span style={{height:33}} className="input-group-text px-4  bgMountainMeadow  border-0" id="search-addon">
+                                            <i className="fas text-white fa-search"></i>
                                         </span>
                                     </div>
                                     <div className="d-flex mx-auto flex-wrap" style={{gap:40}} >
@@ -98,7 +98,7 @@ function Messaging() {
                                         <tbody>
                                             <tr>
                                                 <td>
-                                                <span class="badge badge-curious-bold">T</span>
+                                                <span className="badge badge-curious-bold">T</span>
                                                 </td>
                                                     <td>
                                                     V168495545544
@@ -110,13 +110,13 @@ function Messaging() {
                                                     9 min
                                                     </td>
                                                     <td>
-                                                    <span class="badge badge-grey-light-bold ">Ahad Aman</span>
+                                                    <span className="badge badge-grey-light-bold ">Ahad Aman</span>
                                                     </td>
                                                     <td>
                                                     16 march 18:42
                                                     </td>
                                                     <td>
-                                                    <span class="badge badge-grey-light-bold ">Closed</span>
+                                                    <span className="badge badge-grey-light-bold ">Closed</span>
                                                     </td>
                                                     <td>
                                                         <img src={require('../../assets/Images/chatimg.png')} alt="" />
@@ -127,7 +127,7 @@ function Messaging() {
                                             </tr>
                                             <tr>
                                                 <td>
-                                                <span class="badge badge-curious-bold">T</span>
+                                                <span className="badge badge-curious-bold">T</span>
                                                 </td>
                                                     <td>
                                                     V168495545544
@@ -139,13 +139,13 @@ function Messaging() {
                                                     9 min
                                                     </td>
                                                     <td>
-                                                    <span class="badge badge-grey-light-bold ">Ahad Aman</span>
+                                                    <span className="badge badge-grey-light-bold ">Ahad Aman</span>
                                                     </td>
                                                     <td>
                                                     16 march 18:42
                                                     </td>
                                                     <td>
-                                                    <span class="badge badge-grey-light-bold ">Closed</span>
+                                                    <span className="badge badge-grey-light-bold ">Closed</span>
                                                     </td>
                                                     <td>
                                                         <img src={require('../../assets/Images/chatimg.png')} alt="" />
@@ -156,7 +156,7 @@ function Messaging() {
                                             </tr>
                                             <tr>
                                                 <td>
-                                                <span class="badge badge-curious-bold">T</span>
+                                                <span className="badge badge-curious-bold">T</span>
                                                 </td>
                                                     <td>
                                                     V168495545544
@@ -168,13 +168,13 @@ function Messaging() {
                                                     9 min
                                                     </td>
                                                     <td>
-                                                    <span class="badge badge-grey-light-bold ">Ahad Aman</span>
+                                                    <span className="badge badge-grey-light-bold ">Ahad Aman</span>
                                                     </td>
                                                     <td>
                                                     16 march 18:42
                                                     </td>
                                                     <td>
-                                                    <span class="badge badge-grey-light-bold ">Closed</span>
+                                                    <span className="badge badge-grey-light-bold ">Closed</span>
                                                     </td>
                                                     <td>
                                                         <img src={require('../../assets/Images/chatimg.png')} alt="" />
@@ -185,7 +185,7 @@ function Messaging() {
                                             </tr>
                                             <tr>
                                                 <td>
-                                                <span class="badge badge-curious-bold">T</span>
+                                                <span className="badge badge-curious-bold">T</span>
                                                 </td>
                                                     <td>
                                                     V168495545544
@@ -197,13 +197,13 @@ function Messaging() {
                                                     9 min
                                                     </td>
                                                     <td>
-                                                    <span class="badge badge-grey-light-bold ">Ahad Aman</span>
+                                                    <span className="badge badge-grey-light-bold ">Ahad Aman</span>
                                                     </td>
                                                     <td>
                                                     16 march 18:42
                                                     </td>
                                                     <td>
-                                                    <span  class="badge badge-green-light-bold ">Open</span>
+                                                    <span  className="badge badge-green-light-bold ">Open</span>
                                                     </td>
                                                     <td>
                                                         <img src={require('../../assets/Images/chatimg.png')} alt="" />
@@ -214,7 +214,7 @@ function Messaging() {
                                             </tr>
                                             <tr>
                                                 <td>
-                                                <span class="badge  badge-curious-bold">T</span>
+                                                <span className="badge  badge-curious-bold">T</span>
                                                 </td>
                                                     <td>
                                                     V168495545544
@@ -226,13 +226,13 @@ function Messaging() {
                                                     9 min
                                                     </td>
                                                     <td>
-                                                    <span class="badge badge-grey-light-bold ">Ahad Aman</span>
+                                                    <span className="badge badge-grey-light-bold ">Ahad Aman</span>
                                                     </td>
                                                     <td>
                                                     16 march 18:42
                                                     </td>
                                                     <td>
-                                                    <span class="badge badge-grey-light-bold ">Closed</span>
+                                                    <span className="badge badge-grey-light-bold ">Closed</span>
                                                     </td>
                                                     <td>
                                                         <img src={require('../../assets/Images/chatimg.png')} alt="" />
@@ -243,7 +243,7 @@ function Messaging() {
                                             </tr>
                                             <tr>
                                                 <td>
-                                                <span class="badge badge-curious-bold">T</span>
+                                                <span className="badge badge-curious-bold">T</span>
                                                 </td>
                                                     <td>
                                                     V168495545544
@@ -255,13 +255,13 @@ function Messaging() {
                                                     9 min
                                                     </td>
                                                     <td>
-                                                    <span class="badge badge-grey-light-bold ">Ahad Aman</span>
+                                                    <span className="badge badge-grey-light-bold ">Ahad Aman</span>
                                                     </td>
                                                     <td>
                                                     16 march 18:42
                                                     </td>
                                                     <td>
-                                                    <span class="badge badge-green-light-bold ">Open</span>
+                                                    <span className="badge badge-green-light-bold ">Open</span>
                                                     </td>
                                                     <td>
                                                         <img src={require('../../assets/Images/chatimg.png')} alt="" />
@@ -272,7 +272,7 @@ function Messaging() {
                                             </tr>
                                             <tr>
                                                 <td>
-                                                <span class="badge badge-curious-bold">T</span>
+                                                <span className="badge badge-curious-bold">T</span>
                                                 </td>
                                                     <td>
                                                     V168495545544
@@ -284,13 +284,13 @@ function Messaging() {
                                                     9 min
                                                     </td>
                                                     <td>
-                                                    <span class="badge badge-grey-light-bold ">Ahad Aman</span>
+                                                    <span className="badge badge-grey-light-bold ">Ahad Aman</span>
                                                     </td>
                                                     <td>
                                                     16 march 18:42
                                                     </td>
                                                     <td>
-                                                    <span class="badge badge-grey-light-bold ">Closed</span>
+                                                    <span className="badge badge-grey-light-bold ">Closed</span>
                                                     </td>
                                                     <td>
                                                         <img src={require('../../assets/Images/chatimg.png')} alt="" />
@@ -301,7 +301,7 @@ function Messaging() {
                                             </tr>
                                             <tr>
                                                 <td>
-                                                <span class="badge badge-curious-bold">T</span>
+                                                <span className="badge badge-curious-bold">T</span>
                                                 </td>
                                                     <td>
                                                     V168495545544
@@ -313,13 +313,13 @@ function Messaging() {
                                                     9 min
                                                     </td>
                                                     <td>
-                                                    <span class="badge badge-grey-light-bold ">Ahad Aman</span>
+                                                    <span className="badge badge-grey-light-bold ">Ahad Aman</span>
                                                     </td>
                                                     <td>
                                                     16 march 18:42
                                                     </td>
                                                     <td>
-                                                    <span class="badge badge-green-light-bold ">Open</span>
+                                                    <span className="badge badge-green-light-bold ">Open</span>
                                                     </td>
                                                     <td>
                                                         <img src={require('../../assets/Images/chatimg.png')} alt="" />
@@ -330,7 +330,7 @@ function Messaging() {
                                             </tr>
                                             <tr>
                                                 <td>
-                                                <span class="badge badge-curious-bold">T</span>
+                                                <span className="badge badge-curious-bold">T</span>
                                                 </td>
                                                     <td>
                                                     V168495545544
@@ -342,13 +342,13 @@ function Messaging() {
                                                     9 min
                                                     </td>
                                                     <td>
-                                                    <span class="badge badge-grey-light-bold ">Ahad Aman</span>
+                                                    <span className="badge badge-grey-light-bold ">Ahad Aman</span>
                                                     </td>
                                                     <td>
                                                     16 march 18:42
                                                     </td>
                                                     <td>
-                                                    <span class="badge badge-grey-light-bold ">Closed</span>
+                                                    <span className="badge badge-grey-light-bold ">Closed</span>
                                                     </td>
                                                     <td>
                                                         <img src={require('../../assets/Images/chatimg.png')} alt="" />
@@ -359,7 +359,7 @@ function Messaging() {
                                             </tr>
                                             <tr>
                                                 <td>
-                                                <span class="badge badge-curious-bold">T</span>
+                                                <span className="badge badge-curious-bold">T</span>
                                                 </td>
                                                     <td>
                                                     V168495545544
@@ -371,13 +371,13 @@ function Messaging() {
                                                     9 min
                                                     </td>
                                                     <td>
-                                                    <span class="badge badge-grey-light-bold ">Ahad Aman</span>
+                                                    <span className="badge badge-grey-light-bold ">Ahad Aman</span>
                                                     </td>
                                                     <td>
                                                     16 march 18:42
                                                     </td>
                                                     <td>
-                                                    <span class="badge badge-grey-light-bold ">Closed</span>
+                                                    <span className="badge badge-grey-light-bold ">Closed</span>
                                                     </td>
                                                     <td>
                                                         <img src={require('../../assets/Images/chatimg.png')} alt="" />

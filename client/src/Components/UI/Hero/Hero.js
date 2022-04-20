@@ -15,7 +15,7 @@ function Dashboard() {
                         Everything your customers need to chat with you,  self serve and chat with your customers in real time and get more leads
                         </p>
                         <button className={`${styles.dashboard_left_btn}`}>
-                            Start free Trial <i class="fas fa-arrow-right"></i>
+                            Start free Trial <i className="fas fa-arrow-right"></i>
                         </button>
                        
                 </div>

@@ -9,7 +9,7 @@ import styles from './styles.module.css'
 import colors from '../../../src/assets/Constants/ui_constants'
 import { DiLinux } from 'react-icons/di';
 import { GrNote } from 'react-icons/gr';
-import { AiFillWindows, AiFillPrinter } from 'react-icons/ai';
+import { AiFillWindows, AiFillPrinter,AiFillAndroid } from 'react-icons/ai';
 import { useLocation } from 'react-router-dom'
 import socket from '../../helpers/socket'
 import { AuthContext } from '../../App'
@@ -27,23 +27,17 @@ const asyncLocalStorage = {
 };
 
 function ActiveChat() {
-    const [ip, setIP] = useState('');
+    const [customerLocation, setcustomerLocation] = useState('');
     const [othersChat, setothersChat] = useState(false)
     const [customerID, setcustomerID] = useState('')
     const [chatData, setchatData] = useState('')
     const [allMessages, setallMessages] = useState([])
     const { authState, setAuthState } = useContext(AuthContext);
     const [currentAgentMessage, setcurrentAgentMessage] = useState('')
-    const [agentName, setagentName] = useState('')
-
-    // get ip function
-    const getData = async () => {
-        const res = await axios.get('https://geolocation-db.com/json/')
-        setIP(res.data.IPv4)
-    }
+    const [agentName, setagentName] = useState('')   
     // match agent to show message area
     useEffect(()=>{
-        if(authState.LoggedUserData.f_name.toUpperCase()&& authState.LoggedUserData.l_name.toUpperCase()){
+        if(authState.LoggedUserData.f_name&& authState.LoggedUserData.l_name){
 
             const curretUser= authState.LoggedUserData.f_name.toUpperCase()+' '+authState.LoggedUserData.l_name.toUpperCase()
             if(curretUser!==agentName)
@@ -70,6 +64,7 @@ function ActiveChat() {
         })
     }
     const AgentMessageHandler = () => {
+        alert(new Date())
         // setallMessages([...allMessages, { source: 'agent', message: currentAgentMessage, }])
         console.log('agent handler called');
 
@@ -119,7 +114,7 @@ function ActiveChat() {
 
     useEffect(() => {
         chatarea.current.scrollTop = (chatarea.current.scrollHeight - chatarea.current.clientHeight)
-        getData()
+       
         
     })
     useEffect(()=>{
@@ -235,31 +230,24 @@ function ActiveChat() {
                                 </div>
                                 <div className={`${styles.details_field_card} bg-grey`}>
                                     <span>
-                                        Islamabad,Pakistan
+                                        {`${chatData.city} ${chatData.country}`}
                                     </span>
                                     <span color={colors.colors.green}>
                                         {chatData.address}
                                     </span>
                                 </div>
                                 <div className={`${styles.details_field_card} bg-grey`}>
+                                    <span>Plateform</span>
                                     <span>
-                                        00:03:55
-                                    </span>
-                                    <span color={colors.colors.green}>
-                                        4
-                                    </span>
-                                    <span>
-                                        0 chats
-                                    </span>
-                                    <span>
-                                        <DiLinux size={20} className='me-2' />
-                                        <AiFillWindows color='#878787' size={20} className='me-2' />
+                                        {(chatData.plateform==="\"Windows\"")?<AiFillWindows color='#878787' size={20} />:(chatData.plateform==="\"Android\"")?<AiFillAndroid size={20} />: <DiLinux size={20}  />}
+                                       
+                                        
                                     </span>
                                 </div>
                                 <div className="d-flex flex-column" style={{ gap: 10 }}>
                                     <div className='d-flex align-items-center ' style={{ gap: 10 }}>
                                         <button className="btn-light-blue py-1">
-                                            45:34
+                                        {chatData.created_date&&chatData.created_date.slice(11,-5)}
                                         </button>
                                         <span>
                                             Chat Started
@@ -267,7 +255,7 @@ function ActiveChat() {
                                     </div>
                                     <div className='d-flex flex-wrap align-items-center ' style={{ gap: 10 }}>
                                         <button className="btn-light-blue py-1">
-                                            18:36
+                                          
                                         </button>
                                         <span className='font-12'>
                                             Visitor navigated to <br />

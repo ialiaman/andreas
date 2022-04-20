@@ -104,7 +104,7 @@ const StatusCard = (props) => {
     const LIST=props.list?props.list: <p>no users</p>
     return (
         <div className="row mb-3" onClick={props.clickHandler}>
-            <div class={`card ${styles.status_header}`} >
+            <div className={`card ${styles.status_header}`} >
                 <div className='d-flex align-items-center my-2' >
                     <div className="d-flex flex-grow-1" >
                         <span className={`${styles.status_circle}`} style={{ backgroundColor: props.statusColor }}></span>
@@ -125,7 +125,7 @@ const StatusCard = (props) => {
 const ListCard = (props) => {
     console.log( typeof props.created_date)
     return (
-        <div class="card border-top-0 rounded-0" onClick={props.clickHandler}>
+        <div className="card border-top-0 rounded-0" onClick={props.clickHandler}>
             <div className="d-flex py-2 flex-wrap  align-items-center justify-content-between"
                 style={{ gap: 10 }}
             >

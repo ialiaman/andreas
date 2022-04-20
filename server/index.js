@@ -4,6 +4,10 @@ const mysql = require("mysql");
 const app = express();
 const http = require("http").Server(app);
 const bodyparser = require("body-parser");
+var geoip = require('geoip-lite');
+
+
+
 var cors = require("cors");
 var md5 = require("md5");
 const requestIp = require('request-ip');
@@ -56,7 +60,14 @@ const ServedBy = (chat_id, agent_id) => {
 }
 // function to add active chat to database
 const insertChat = (id, origin, address, plateform) => {
-  const chat_query = `INSERT INTO all_chats (customer_id,origin,address,plateform) VALUES ('${id}','${origin}','${address}','${plateform}')`;
+  ip='124.109.35.54'
+
+  // var geo = geoip.lookup(address); //for production
+  var geo = geoip.lookup(ip);//for development
+
+  const city=geo.city
+  const country=geo.country
+  const chat_query = `INSERT INTO all_chats (customer_id,origin,address,plateform,city,country) VALUES ('${id}','${origin}','${address}','${plateform}','${city}','${country}')`;
   con.query(chat_query, (error, result) => {
     if (error) throw error;
     console.log('inserted')
@@ -192,6 +203,7 @@ io.on("connection", (socket) => {
     const origin = socket.handshake.headers.origin
     const address = socket.handshake.address
     const plateform = socket.handshake.headers['sec-ch-ua-platform']
+    console.log('sdfsdf')
     insertChat(data.id, origin, address, plateform)
     insertMessage(data.msg, data.id)
     agents.map(agent => {
