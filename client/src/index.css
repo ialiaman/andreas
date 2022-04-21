@@ -219,6 +219,7 @@ font-size: 18px;
   border-bottom: 1px solid #E5E5E5;
 }
 .blue-link{
+  text-decoration: none;
   color:#5494F3 !important;
 }
 .btn-primary-light{

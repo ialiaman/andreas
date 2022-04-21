@@ -1,0 +1,14 @@
+.nav-tabs .nav-link{
+    color:green
+}
+
+.nav-link.active{
+    color: brown;
+}
+.nav-link .text{
+    display: none;
+
+}
+.nav-link.active .text{
+    display: inline-block;
+}

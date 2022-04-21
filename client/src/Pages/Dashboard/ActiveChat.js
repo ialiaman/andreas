@@ -4,16 +4,28 @@ import { FaUser } from 'react-icons/fa';
 import { BsFillInfoCircleFill } from 'react-icons/bs';
 import { HiOutlineScissors, HiClock, } from 'react-icons/hi';
 import { IoIosCloseCircleOutline, IoIosArrowForward } from 'react-icons/io';
-import { AiFillSave } from 'react-icons/ai';
+import { AiFillSave, AiFillInfoCircle } from 'react-icons/ai';
 import styles from './styles.module.css'
 import colors from '../../../src/assets/Constants/ui_constants'
 import { DiLinux } from 'react-icons/di';
 import { GrNote } from 'react-icons/gr';
-import { AiFillWindows, AiFillPrinter,AiFillAndroid } from 'react-icons/ai';
+import { AiFillWindows, AiFillPrinter, AiFillAndroid } from 'react-icons/ai';
+import { MdOutlineContentCut } from 'react-icons/md'
+import { BsClock } from 'react-icons/bs'
+import { FaUserPlus } from 'react-icons/fa'
 import { useLocation } from 'react-router-dom'
 import socket from '../../helpers/socket'
 import { AuthContext } from '../../App'
 import axios from 'axios'
+import Modal from 'react-bootstrap/Modal'
+import Button from 'react-bootstrap/Button'
+import Nav from 'react-bootstrap/Nav'
+import Tabs from 'react-bootstrap/Tabs'
+import Tab from 'react-bootstrap/Tab'
+import Card from 'react-bootstrap/Card'
+import './styles.css'
+
+
 
 const asyncLocalStorage = {
     setItem: async function (key, value) {
@@ -34,25 +46,27 @@ function ActiveChat() {
     const [allMessages, setallMessages] = useState([])
     const { authState, setAuthState } = useContext(AuthContext);
     const [currentAgentMessage, setcurrentAgentMessage] = useState('')
-    const [agentName, setagentName] = useState('')   
+    const [agentName, setagentName] = useState('')
+    const [show, setShow] = useState(false);
+    const [tabIcon, settabIcon] = useState({details:true,leads:false})
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
     // match agent to show message area
-    useEffect(()=>{
-        if(authState.LoggedUserData.f_name&& authState.LoggedUserData.l_name){
+    useEffect(() => {
+        if (authState.LoggedUserData.f_name && authState.LoggedUserData.l_name) {
 
-            const curretUser= authState.LoggedUserData.f_name.toUpperCase()+' '+authState.LoggedUserData.l_name.toUpperCase()
-            if(curretUser!==agentName)
-            {
+            const curretUser = authState.LoggedUserData.f_name.toUpperCase() + ' ' + authState.LoggedUserData.l_name.toUpperCase()
+            if (curretUser !== agentName) {
                 console.log('not qural')
                 setothersChat(true)
             }
-            
-            else
-            {
+
+            else {
                 console.log('equal')
                 setothersChat(false)
             }
         }
-       
+
     })
     // fetch all messages handler
     const LoadMessagesHandler = () => {
@@ -76,7 +90,7 @@ function ActiveChat() {
             console.log('message added to datbase')
             LoadMessagesHandler()
         })
-        console.log('current message:'+currentAgentMessage)
+        console.log('current message:' + currentAgentMessage)
         setcurrentAgentMessage('')
     }
 
@@ -84,26 +98,26 @@ function ActiveChat() {
         asyncLocalStorage.getItem('selected_customer').then(value => {
             setcustomerID(value)
             // Get record for   about the chat
-            axios.post('http://localhost:3001/chats/chat',{id:value}).then(response=>{
-                setchatData(response.data[0])                
-                
+            axios.post('http://localhost:3001/chats/chat', { id: value }).then(response => {
+                setchatData(response.data[0])
+
                 // get agent info for this active chat
-                              
+
             })
-            
+
             socket.emit('join room', { id: value, agent: (authState.LoggedUserData.f_name + ' ' + authState.LoggedUserData.l_name) })
         })
 
     }, [])
-     useEffect(()=>{
-        chatData&&axios.post('http://localhost:3001/chats/agent',{id:chatData.served_by}).then(res=>{
-               
-                setagentName(res.data.f_name.toUpperCase()+' ' + res.data.l_name.toUpperCase())
-                
-            }).catch(error=>{
-                console.log("error:" +error)
-            })
-    },[chatData])
+    useEffect(() => {
+        chatData && axios.post('http://localhost:3001/chats/agent', { id: chatData.served_by }).then(res => {
+
+            setagentName(res.data.f_name.toUpperCase() + ' ' + res.data.l_name.toUpperCase())
+
+        }).catch(error => {
+            console.log("error:" + error)
+        })
+    }, [chatData])
 
     // get all messages from database on first render
     useEffect(() => {
@@ -114,16 +128,16 @@ function ActiveChat() {
 
     useEffect(() => {
         chatarea.current.scrollTop = (chatarea.current.scrollHeight - chatarea.current.clientHeight)
-       
-        
+
+
     })
-    useEffect(()=>{
-        
-        return ()=>{
+    useEffect(() => {
+
+        return () => {
             // Store All Messages on UnMounting
 
         }
-    },[])
+    }, [])
     const chatarea = useRef()
 
 
@@ -141,7 +155,7 @@ function ActiveChat() {
                             <div className="d-flex  py-9 px-13 justify-content-between" >
                                 <div className='d-flex   flex-grow-1' style={{ gap: 10 }} >
                                     <span className='font-500 font-18'>{agentName}</span>
-                                   
+
                                 </div>
                                 <div className='d-flex flex-grow-1'>
                                     <span className='font-18'>
@@ -167,35 +181,155 @@ function ActiveChat() {
                             </div>
                             {
                                 !othersChat ? <div className="msg_area flex-wrap d-flex mt-3" style={{ gap: 20 }}>
-                                <div className="d-flex " style={{ flexGrow: 10 }} >
-                                    <textarea
-                                        onKeyPress={(event) => {
-                                            if (event.key == 'Enter') {
+                                    <div className="d-flex " style={{ flexGrow: 10 }} >
+                                        <textarea
+                                            onKeyPress={(event) => {
+                                                if (event.key == 'Enter') {
+                                                    AgentMessageHandler()
+                                                }
+                                            }}
+                                            value={currentAgentMessage}
+                                            placeholder='Type Here..' className='w-100 active-chat-msg-area'
+                                            onChange={(e) => {
+                                                setcurrentAgentMessage(e.target.value)
+                                            }}
+                                        />
+                                    </div>
+                                    <div className=" d-flex  flex-column" style={{ gap: 10, flexGrow: 2 }}>
+                                        <button className=' py-3 btn-grey-action'
+                                            onClick={() => {
                                                 AgentMessageHandler()
-                                            }
-                                        }}
-                                        value={currentAgentMessage}
-                                        placeholder='Type Here..' className='w-100 active-chat-msg-area'
-                                        onChange={(e) => {
-                                            setcurrentAgentMessage(e.target.value)
-                                        }}
-                                    />
-                                </div>
-                                <div className=" d-flex  flex-column" style={{ gap: 10, flexGrow: 2 }}>
-                                    <button className=' py-3 btn-grey-action'
-                                        onClick={() => {
-                                            AgentMessageHandler()
-                                        }}
-                                    >Message</button>
-                                    <button className=' py-3 btn-grey-action'>Whisper</button>
-                                </div>
-                            </div>:null
+                                            }}
+                                        >Message</button>
+                                        <button className=' py-3 btn-grey-action'>Whisper</button>
+                                    </div>
+                                </div> : null
                             }
-                           
+
                         </div>
                     </div>
                     <div className="col-md-4">
                         <div className="card  mt-9">
+                            <Tabs defaultActiveKey="details" id="uncontrolled-tab-example" className="mb-3" onSelect={(event,e)=>{
+                              
+                            }}>
+                                <Tab eventKey="details"  title={<> {
+                                   <BsFillInfoCircleFill className='icon' size={20} />
+                                } 
+                                    <span className='ms-2 text'> Details </span></>} >
+                                    <div className={`${styles.details_body}`}>
+                                        <div className={`${styles.details_field_card}  bg-grey`}>
+                                            <span>
+                                                {chatData.customer_id}
+                                            </span>
+                                            <span color={colors.colors.green}>
+                                                <AiFillSave />
+                                            </span>
+                                        </div>
+                                        <div className={`${styles.details_field_card} bg-grey`}>
+                                            <span>
+                                                Visiter Email
+                                            </span>
+                                            <span color={colors.colors.green}>
+                                                <AiFillSave />
+                                            </span>
+                                        </div>
+                                        <div className={`${styles.details_field_card} bg-grey`}>
+                                            <span>
+                                                {`${chatData.city} ${chatData.country}`}
+                                            </span>
+                                            <span color={colors.colors.green}>
+                                                {chatData.address}
+                                            </span>
+                                        </div>
+                                        <div className={`${styles.details_field_card} bg-grey`}>
+                                            <span>Plateform</span>
+                                            <span>
+                                                {(chatData.plateform === "\"Windows\"") ? <AiFillWindows color='#878787' size={20} /> : (chatData.plateform === "\"Android\"") ? <AiFillAndroid size={20} /> : <DiLinux size={20} />}
+                                            </span>
+                                        </div>
+                                        <div className="d-flex flex-column" style={{ gap: 10 }}>
+                                            <div className='d-flex align-items-center ' style={{ gap: 10 }}>
+                                                <button className="btn-light-blue py-1">
+                                                    {chatData.created_date && chatData.created_date.slice(11, -5)}
+                                                </button>
+                                                <span>
+                                                    Chat Started
+                                                </span>
+                                            </div>
+                                            <div className='d-flex flex-wrap align-items-center ' style={{ gap: 10 }}>
+                                                <button className="btn-light-blue py-1">
+                                                </button>
+                                                <span className='font-12'>
+                                                    Visitor navigated to <br />
+                                                    <a className='font-12 blue-link text-blue text-decoration-none' href="">
+                                                        https://linke123here/chat/
+                                                        210402098
+                                                    </a>
+                                                </span>
+                                            </div>
+                                            <div className='d-flex ' style={{ gap: 10 }}>
+                                                <IoIosArrowForward />
+                                                <a style={{ color: '#5494F3' }} className='font-12 blue-link text-blue text-decoration-none' href="">
+                                                    https://dashboard.jataq.tv
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </Tab>
+                              
+                                <Tab eventKey="leads"  title={ <> {
+                                  <FaUserPlus className='icon' />  
+                                } 
+                                <span className='text'>Leads</span> </> } >
+                                <div>
+                                            <Card show={show} onHide={handleClose}>
+                                               
+                                                <form>
+                                                <Card.Body>
+                                                   
+                                                        <div class="mb-3">
+                                                            <label for="exampleInputEmail1" class="form-label">Company Name</label>
+                                                            <input placeholder='Company Name' type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" />
+
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="exampleInputPassword1" class="form-label">Customer Email</label>
+                                                            <input type="email" placeholder='Customer Email' class="form-control" id="exampleInputPassword1" />
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="exampleInputPassword1" class="form-label">Customer Mobile Number</label>
+                                                            <input type="email" placeholder='Customer Mobile Number' class="form-control" id="exampleInputPassword1" />
+                                                        </div>
+                                                        <div className='mb-3'>
+                                                            <p className='mb-0'>Visitor navigated to</p>
+                                                            <a className='blue-link' href="">
+                                                                https://linke123here/chat/210402098
+                                                            </a>
+                                                        </div>
+                                                     
+                                                        
+                                                    
+                                                </Card.Body>
+                                                <Card.Footer className='d-flex justify-content-between'>
+                                                    
+                                            
+                                                   
+                                                    <Button style={{border:0}}  variant="secondary" onClick={handleClose}>
+                                                           Cancel
+                                                        </Button>    
+                                                    <Button style={{border:0,backgroundColor: '#5BC0DE'}} className='text-decoration-none'  variant="secondary" onClick={handleClose}>
+                                                           Done
+                                                        </Button>   
+                                                   
+                                                </Card.Footer>
+                                                </form>
+                                            </Card>
+                                        </div>
+                                </Tab>
+                            </Tabs>
+                        </div>
+                        {/* <div className="card  mt-9">
                             <div className={`d-flex   border-grey-bottom flex-wrap align-items-center justify-content-between ${styles.detail_header} `}>
                                 <div className="  flex-wrap d-flex flex-grow-1  align-items-center " style={{ gap: 20 }}>
                                     <button className=" px-2 py-2 btn-grey-action">
@@ -239,15 +373,15 @@ function ActiveChat() {
                                 <div className={`${styles.details_field_card} bg-grey`}>
                                     <span>Plateform</span>
                                     <span>
-                                        {(chatData.plateform==="\"Windows\"")?<AiFillWindows color='#878787' size={20} />:(chatData.plateform==="\"Android\"")?<AiFillAndroid size={20} />: <DiLinux size={20}  />}
-                                       
-                                        
+                                        {(chatData.plateform === "\"Windows\"") ? <AiFillWindows color='#878787' size={20} /> : (chatData.plateform === "\"Android\"") ? <AiFillAndroid size={20} /> : <DiLinux size={20} />}
+
+
                                     </span>
                                 </div>
                                 <div className="d-flex flex-column" style={{ gap: 10 }}>
                                     <div className='d-flex align-items-center ' style={{ gap: 10 }}>
                                         <button className="btn-light-blue py-1">
-                                        {chatData.created_date&&chatData.created_date.slice(11,-5)}
+                                            {chatData.created_date && chatData.created_date.slice(11, -5)}
                                         </button>
                                         <span>
                                             Chat Started
@@ -255,7 +389,7 @@ function ActiveChat() {
                                     </div>
                                     <div className='d-flex flex-wrap align-items-center ' style={{ gap: 10 }}>
                                         <button className="btn-light-blue py-1">
-                                          
+
                                         </button>
                                         <span className='font-12'>
                                             Visitor navigated to <br />
@@ -288,26 +422,89 @@ function ActiveChat() {
                                     </button>
                                 </div>
                                 <div className="d-flex justify-content-between mt-3" style={{ gap: 10 }}>
-                                    <div>
-                                        <span style={{ color: '#F00E0E' }} className='text-decoration-underline font-14'>Clear all</span>
-                                    </div>
+
                                     <div className='d-flex flex-wrap ' style={{ gap: 10 }}>
                                         <button disabled className='btn-grey-action px-2'>
                                             Cancel
                                         </button>
-                                        <button className='px-3  text-white ' style={{ backgroundColor: '#5BC0DE', border: '0px' }}>
-                                            Done
+                                        <button onClick={handleShow} className='px-3  text-white ' style={{ backgroundColor: '#5BC0DE', border: '0px' }}>
+                                            Add Lead
                                         </button>
+                                        <div>
+                                            <Modal show={show} onHide={handleClose}>
+                                                <Modal.Header closeButton>
+
+                                                    <div className="d-flex w-100 justify-content-around">
+                                                        <AiFillInfoCircle size={20} />
+                                                        <MdOutlineContentCut size={20} />
+                                                        <BsClock size={20} />
+                                                        <button className="btn-grey-action">
+                                                            <FaUserPlus /> Leads
+                                                        </button>
+                                                    </div>
+                                                </Modal.Header>
+                                                <form>
+                                                <Modal.Body>
+                                                   
+                                                        <div class="mb-3">
+                                                            <label for="exampleInputEmail1" class="form-label">Company Name</label>
+                                                            <input placeholder='Company Name' type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" />
+
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="exampleInputPassword1" class="form-label">Customer Email</label>
+                                                            <input type="email" placeholder='Customer Email' class="form-control" id="exampleInputPassword1" />
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="exampleInputPassword1" class="form-label">Customer Mobile Number</label>
+                                                            <input type="email" placeholder='Customer Mobile Number' class="form-control" id="exampleInputPassword1" />
+                                                        </div>
+                                                        <div className='mb-3'>
+                                                            <p className='mb-0'>Visitor navigated to</p>
+                                                            <a className='blue-link' href="">
+                                                                https://linke123here/chat/210402098
+                                                            </a>
+                                                        </div>
+                                                     
+                                                        
+                                                    
+                                                </Modal.Body>
+                                                <Modal.Footer className='d-flex'>
+                                                    <div className="d-flex w-100 px-2 mb-3 px-md-3" style={{gap:30}} >
+
+                                                        <Button className='w-50' style={{ backgroundColor: '#5BC0DE',border:0 }} variant="secondary">
+                                                            <AiFillPrinter className='me-2' size={25} />
+                                                            print
+                                                        </Button>
+                                                        <Button className='w-50' style={{ backgroundColor: '#5CB85C',border:0 }} variant="secondary" >
+                                                            <GrNote color='white' className='me-2' size={20} />
+                                                            Note
+                                                        </Button>
+                                                    </div>
+                                                    
+                                                    <div className='d-flex flex-end px-2  px-md-3' style={{gap:10}}>
+                                                    <Button style={{border:0}}  variant="secondary" onClick={handleClose}>
+                                                           Cancel
+                                                        </Button>    
+                                                    <Button style={{border:0,backgroundColor: '#5BC0DE'}} className='text-decoration-none'  variant="secondary" onClick={handleClose}>
+                                                           Done
+                                                        </Button>   
+                                                    </div>
+                                                </Modal.Footer>
+                                                </form>
+                                            </Modal>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>
         </Fragment>
     )
 }
+
 export default ActiveChat
 const MessageBoxClient = (props) => {
     return (
