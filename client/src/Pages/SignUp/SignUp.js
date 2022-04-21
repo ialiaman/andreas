@@ -1,18 +1,9 @@
-<<<<<<< HEAD
-import React, { Fragment,useState } from 'react'
-import { SignUpNav } from '../../Components/UI/MiniComponents/MiniComponent'
-import styles from './main.module.css'
-import axios from 'axios';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
-=======
 import React, { Fragment, useState } from "react";
 import { SignUpNav } from "../../Components/UI/MiniComponents/MiniComponent";
 import styles from "./main.module.css";
 import { useFormik } from "formik";
 import axios from "axios";
 import * as Yup from "yup";
->>>>>>> 31d7b946947179e1487f2d604d2ef121b762f46b
 function SignUp() {
   const [serverError, setserverError] = useState("");
   const SignupSchema = Yup.object().shape({
