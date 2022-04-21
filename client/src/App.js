@@ -10,6 +10,7 @@ import ActiveChat from "./Pages/Dashboard/ActiveChat";
 import Messaging from "./Pages/Dashboard/Messaging";
 import axios from "axios";
 import Loading from "../src/Pages/Loading/Loading";
+import Setting from "./Pages/Dashboard/Setting";
 const AuthContext = createContext("");
 
 function App() {
@@ -97,6 +98,7 @@ function App() {
             <Route path="monitor" element={<Monitor />} />
             <Route path="activechat" element={<ActiveChat />} />
             <Route path="messaging" element={<Messaging />} />
+            <Route path="setting" element={<Setting />} />
           </Route>
         ) : (
           <Route

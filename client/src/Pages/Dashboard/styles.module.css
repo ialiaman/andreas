@@ -66,6 +66,46 @@
     }
 }
 /* Client Dashboard End */
+/* SETTINGS PAGE START */
+.clientSetingsLeftSideContainer {
+    padding-top: 10px;
+    padding-left: 20px;
+    padding-bottom: 10px;
+    background-color: white;
+    height: 100%;
+    box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.114);
+}
+.SettingsLeftNavButton {
+    color: white;
+    background-color: #878787;
+    border: none;
+    width: 90%;
+    text-align: left;
+    padding-top: 15px;
+    padding-bottom:15px;
+    padding-right: 40px;
+    padding-left: 20px;
+    border-radius: 5px;
+    font-size: 20px;
+}
+.accountDetailsContainer > div {
+    display: flex;
+    flex-direction: column;
+}
+.settingsAccordions {
+    margin-right: 35px;
+    margin-top: 20px;
+}
+@media (min-width: 760px) {
+    .clientSetingsLeftSideContainer {
+            width: 90%;
+    }
+    .accountDetailsContainer {
+        display: flex;
+        align-items: center;
+    }
+}
+/* SETTINGS PAGE END */
 .navLink {
     text-align: left !important;
     font-size: 16px;
