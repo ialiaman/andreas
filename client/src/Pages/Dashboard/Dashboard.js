@@ -306,9 +306,9 @@ const ClientDashboard = () => {
                       <th scope="col">Phone Number</th>
                       <th scope="col">Agent</th>
                       <th scope="col">Date</th>
-                      <th scope="col">1</th>
-                      <th scope="col">2</th>
-                      <th scope="col">3</th>
+                      <th scope="col"></th>
+                      <th scope="col"></th>
+                      <th scope="col"></th>
                     </tr>
                   </thead>
                   <tbody>

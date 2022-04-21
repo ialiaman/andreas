@@ -1,33 +1,35 @@
-import React,{useContext} from 'react'
-import main from './main.module.css'
-import { UserContext } from '../../../Pages/Dashboard/main'
-import { GiHamburgerMenu } from 'react-icons/gi';
-import {AuthContext} from '../../../App'
-import styles from './main.module.css'
+import React, { useContext } from "react";
+import main from "./main.module.css";
+import { UserContext } from "../../../Pages/Dashboard/main";
+import { GiHamburgerMenu } from "react-icons/gi";
+import { AuthContext } from "../../../App";
+import styles from "./main.module.css";
 function RightShape() {
   return (
-
-    <div className={` ${main.right_shape}  float-end`} style={{ position: 'absolute', right: 0, top: 50, padding: 0 }}>
-      <div className={`${main.first_shape}`}>
-      </div>
-      <div className={`${main.second_shape}`}>
-      </div>
-      <div className={`${main.third_shape}`}>
-      </div>
+    <div
+      className={` ${main.right_shape}  float-end`}
+      style={{ position: "absolute", right: 0, top: 50, padding: 0 }}
+    >
+      <div className={`${main.first_shape}`}></div>
+      <div className={`${main.second_shape}`}></div>
+      <div className={`${main.third_shape}`}></div>
     </div>
-
-
-  )
+  );
 }
 function LinksNav(props) {
-  const { bgColor = 'red' } = props
+  const { bgColor = "red" } = props;
   return (
     <div className="container-fluid px-0" style={{ backgroundColor: bgColor }}>
       <div className="container-lg ">
         <div className="row g-1">
-          <nav className="navbar navbar-expand-md navbar-dark  " style={{ backgroundColor: bgColor }}>
+          <nav
+            className="navbar navbar-expand-md navbar-dark  "
+            style={{ backgroundColor: bgColor }}
+          >
             <div className="container-fluid">
-              <a className="navbar-brand" href="#">Comapny Logo</a>
+              <a className="navbar-brand" href="#">
+                Comapny Logo
+              </a>
               {/* <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon"></span>
               </button> */}
@@ -52,17 +54,22 @@ function LinksNav(props) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 function SignUpNav(props) {
-  const { bgColor = 'red' } = props
+  const { bgColor = "red" } = props;
   return (
     <div className="container-fluid px-0" style={{ backgroundColor: bgColor }}>
       <div className="container-lg ">
         <div className="row g-1">
-          <nav className="navbar navbar-expand-md navbar-dark" style={{ backgroundColor: bgColor }}>
+          <nav
+            className="navbar navbar-expand-md navbar-dark"
+            style={{ backgroundColor: bgColor }}
+          >
             <div className="container-fluid">
-              <a className="navbar-brand" href="#">Comapny Logo</a>
+              <a className="navbar-brand" href="#">
+                Comapny Logo
+              </a>
               {/* <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon"></span>
               </button> */}
@@ -87,47 +94,56 @@ function SignUpNav(props) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-
 function DashboardHeader(props) {
-  const {authState, setAuthState } = useContext(AuthContext);
+  const { authState, setAuthState } = useContext(AuthContext);
 
   return (
     <UserContext.Consumer>
-      {
-        (value) => {
-
-          return (<div className="container-fluid  px-md-2 px-lg-5 py-3 bg-white">
+      {(value) => {
+        return (
+          <div className="container-fluid  px-md-2 px-lg-5 py-3 bg-white">
             <div className="row">
-              <div className="col col-md-11">
+              <div className="col col-md-12">
                 <div className="  d-flex  justify-content-between">
-                  <div className='d-flex align-items-center'>
-                    <span className='me-3' onClick={value}  > <GiHamburgerMenu
-                    className={`${styles.menuBtn}`}
-                    size={25} /> {props.title} </span>
-                    <img className='align-middle me-2' src={require('../../../assets/Images/DashboardIcon.png')} />
-                    <span className='align-middle fw-bold'></span>
+                  <div className="d-flex align-items-center">
+                    <span className="me-3" onClick={value}>
+                      {" "}
+                      <GiHamburgerMenu
+                        className={`${styles.menuBtn}`}
+                        size={25}
+                      />{" "}
+                      {props.title}{" "}
+                    </span>
+                    <img
+                      className="align-middle me-2"
+                      src={require("../../../assets/Images/DashboardIcon.png")}
+                    />
+                    <span className="align-middle fw-bold"></span>
                   </div>
                   <div>
-                    <img className='align-middle me-2' src={require('../../../assets/Images/notify.png')} />
+                    <img
+                      className="align-middle me-2"
+                      src={require("../../../assets/Images/notify.png")}
+                    />
                     <span>
-                    {   
-                    `${authState.LoggedUserData.f_name} ${authState.LoggedUserData.l_name}` }
+                      {`${authState.LoggedUserData.f_name} ${authState.LoggedUserData.l_name}`}
                     </span>
-                    <img className='align-middle m-2' src={require('../../../assets/Images/dashboardimg.png')} />
+                    <img
+                      className="align-middle m-2"
+                      src={require("../../../assets/Images/dashboardimg.png")}
+                    />
                   </div>
                 </div>
               </div>
             </div>
-          </div>)
-        }
-      }
-
+          </div>
+        );
+      }}
     </UserContext.Consumer>
-
-  )
+  );
 }
 
 const DashboardRightContainer = (props) => {
@@ -135,7 +151,13 @@ const DashboardRightContainer = (props) => {
     <div className="container-fluid  px-1 px-md-2 ps-lg-4 pe-lg-5 bg-grey">
       {props.children}
     </div>
-  )
-}
+  );
+};
 
-export { RightShape, LinksNav, SignUpNav, DashboardHeader,DashboardRightContainer } 
+export {
+  RightShape,
+  LinksNav,
+  SignUpNav,
+  DashboardHeader,
+  DashboardRightContainer,
+};
