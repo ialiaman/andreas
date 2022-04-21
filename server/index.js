@@ -88,6 +88,8 @@ const insertMessage = (message, id, source = 'customer') => {
     console.log('message inserted new message')
   })
 }
+// function to store tha lead in database
+
 // function to change status to 1/unanswered
 const unAnswered = (ID) => {
   const query = `UPDATE all_chats SET status = '2' WHERE customer_id = '${ID}' AND status= '0' `
@@ -191,6 +193,29 @@ app.post('/chats/agent', (req, res) => {
       res.json(result[0])
   })
 })
+// api for getting all the comapnies name
+app.get('/chats/companies',(req,res)=>{
+
+  const query=`SELECT DISTINCT c_name from registered_users`;
+  con.query(query,(err,result)=>{
+    res.json(result)
+  })
+})
+const storeLead=(LeadData)=>{
+  const {customer_name,cusotmer_email,customer_phone,agent_name,company_url,company_name,}=LeadData
+  const query = `INSERT INTO leads (lead_name,lead_email,lead_phone,agent_name,compnay_url,c_name) VALUES ('${customer_name}', '${cusotmer_email}','${customer_phone}','${agent_name}','${company_url,company_name}' )`;
+  con.query(query, (error, result) => {
+    if (error) throw error;
+    console.log('message inserted new message')
+  })
+}
+// api to store the leads in database
+app.post('/chats/addleads',(req,res)=>{
+  const LeadData=req.body
+  console.log(LeadData)
+  // storeLead(LeadData)
+})
+// api to store the leads in database
 // code for socket io
 let agents = []
 io.on("connection", (socket) => {

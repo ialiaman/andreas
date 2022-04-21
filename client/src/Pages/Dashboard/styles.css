@@ -1,9 +1,11 @@
 .nav-tabs .nav-link{
-    color:green
+    color:black
 }
 
 .nav-link.active{
-    color: brown;
+    color: #000000 !important;
+    background-color: #EDEDED !important;
+    font-weight: 500 !important;
 }
 .nav-link .text{
     display: none;

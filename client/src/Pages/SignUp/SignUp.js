@@ -1,8 +1,8 @@
 import React, { Fragment,useState } from 'react'
 import { SignUpNav } from '../../Components/UI/MiniComponents/MiniComponent'
 import styles from './main.module.css'
-import { useFormik } from 'formik';
 import axios from 'axios';
+import { useFormik } from 'formik';
 import * as Yup from 'yup';
 function SignUp() {
     const [serverError, setserverError] = useState('')

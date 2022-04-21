@@ -23,7 +23,12 @@ import Nav from 'react-bootstrap/Nav'
 import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab'
 import Card from 'react-bootstrap/Card'
+import Dropdown from 'react-bootstrap/Dropdown'
 import './styles.css'
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import Select from 'react-select'
+
 
 
 
@@ -39,6 +44,27 @@ const asyncLocalStorage = {
 };
 
 function ActiveChat() {
+
+    const [companies, setCompanies] = useState([])
+    const formik = useFormik({
+        initialValues: {
+            c_name: '',
+            email: '',
+            phone: '',
+        },
+
+        onSubmit: values => {
+            alert('submitted')
+            console.log(JSON.stringify(values, null, 2));
+            axios.post(`http://localhost:3001/chats/addleads`, values)
+                .then(res => {
+                    alert('stroed')
+
+
+                })
+        }
+    },
+    );
     const [customerLocation, setcustomerLocation] = useState('');
     const [othersChat, setothersChat] = useState(false)
     const [customerID, setcustomerID] = useState('')
@@ -48,7 +74,7 @@ function ActiveChat() {
     const [currentAgentMessage, setcurrentAgentMessage] = useState('')
     const [agentName, setagentName] = useState('')
     const [show, setShow] = useState(false);
-    const [tabIcon, settabIcon] = useState({details:true,leads:false})
+    const [tabIcon, settabIcon] = useState({ details: true, leads: false })
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     // match agent to show message area
@@ -128,9 +154,16 @@ function ActiveChat() {
 
     useEffect(() => {
         chatarea.current.scrollTop = (chatarea.current.scrollHeight - chatarea.current.clientHeight)
+        const companyOptions = []
+        axios.get('http://localhost:3001/chats/companies').then(res => {
 
+            res.data.map(company => {
+                companyOptions.push({ value: company.c_name, label: company.c_name })
+            })
+            setCompanies([...companies, ...companyOptions])
+        })
 
-    })
+    }, [])
     useEffect(() => {
 
         return () => {
@@ -210,12 +243,12 @@ function ActiveChat() {
                     </div>
                     <div className="col-md-4">
                         <div className="card  mt-9">
-                            <Tabs defaultActiveKey="details" id="uncontrolled-tab-example" className="mb-3" onSelect={(event,e)=>{
-                              
+                            <Tabs defaultActiveKey="details" id="uncontrolled-tab-example" className="mb-3" onSelect={(event, e) => {
+
                             }}>
-                                <Tab eventKey="details"  title={<> {
-                                   <BsFillInfoCircleFill className='icon' size={20} />
-                                } 
+                                <Tab eventKey="details" title={<> {
+                                    <BsFillInfoCircleFill className='icon' size={20} />
+                                }
                                     <span className='ms-2 text'> Details </span></>} >
                                     <div className={`${styles.details_body}`}>
                                         <div className={`${styles.details_field_card}  bg-grey`}>
@@ -277,227 +310,75 @@ function ActiveChat() {
                                         </div>
                                     </div>
                                 </Tab>
-                              
-                                <Tab eventKey="leads"  title={ <> {
-                                  <FaUserPlus className='icon' />  
-                                } 
-                                <span className='text'>Leads</span> </> } >
-                                <div>
-                                            <Card show={show} onHide={handleClose}>
-                                               
-                                                <form>
-                                                <Card.Body>
-                                                   
-                                                        <div class="mb-3">
-                                                            <label for="exampleInputEmail1" class="form-label">Company Name</label>
-                                                            <input placeholder='Company Name' type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" />
 
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <label for="exampleInputPassword1" class="form-label">Customer Email</label>
-                                                            <input type="email" placeholder='Customer Email' class="form-control" id="exampleInputPassword1" />
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <label for="exampleInputPassword1" class="form-label">Customer Mobile Number</label>
-                                                            <input type="email" placeholder='Customer Mobile Number' class="form-control" id="exampleInputPassword1" />
-                                                        </div>
-                                                        <div className='mb-3'>
-                                                            <p className='mb-0'>Visitor navigated to</p>
-                                                            <a className='blue-link' href="">
-                                                                https://linke123here/chat/210402098
-                                                            </a>
-                                                        </div>
-                                                     
-                                                        
-                                                    
+                                <Tab eventKey="leads" title={<> {
+                                    <FaUserPlus className='me-2' />
+                                }
+                                    <span className='text m'>Leads</span> </>} >
+                                    <div>
+                                        <Card show={show} onHide={handleClose}>
+                                            <form onSubmit={formik.handleSubmit} method='post'>
+                                                <Card.Body>
+                                                    <select defaultValue='default' class="form-select" aria-label="Default select example">
+                                                        <option 
+                                                         id="c_name"
+                                                         name="c_name"
+                                                         onChange={formik.handleChange}
+                                                         value={formik.values.c_name}
+                                                       defaultValue='default'
+                                                       >Open this select menu</option>
+                                                       {companies.map(c=>{
+                                                           return  <option value={c.value}>{c.label}</option>
+                                                       })}
+                                                      
+                                                    </select>
+                                                    <div class="mb-3">
+                                                        <label for="exampleInputPassword1" class="form-label">Customer Email</label>
+                                                        <input type="email" placeholder='Customer Email' class="form-control"
+                                                            id="email"
+                                                            name="email"
+                                                            onChange={formik.handleChange}
+                                                            value={formik.values.email}
+                                                        />
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="exampleInputPassword1" class="form-label">Customer Mobile Number</label>
+                                                        <input type="phone" placeholder='Customer Mobile Number' class="form-control"
+                                                            id="phone"
+                                                            name="phone"
+                                                            onChange={formik.handleChange}
+                                                            value={formik.values.phone}
+                                                        />
+                                                    </div>
+                                                    <div className='mb-3'>
+                                                        <p className='mb-0'>Visitor navigated to</p>
+                                                        <a className='blue-link' href="">
+                                                            https://linke123here/chat/210402098
+                                                        </a>
+                                                    </div>
+
+
+
                                                 </Card.Body>
                                                 <Card.Footer className='d-flex justify-content-between'>
-                                                    
-                                            
-                                                   
-                                                    <Button style={{border:0}}  variant="secondary" onClick={handleClose}>
-                                                           Cancel
-                                                        </Button>    
-                                                    <Button style={{border:0,backgroundColor: '#5BC0DE'}} className='text-decoration-none'  variant="secondary" onClick={handleClose}>
-                                                           Done
-                                                        </Button>   
-                                                   
+
+
+
+                                                    <Button style={{ border: 0 }} variant="secondary" onClick={handleClose}>
+                                                        Cancel
+                                                    </Button>
+                                                    <button type='submit' style={{ border: 0, backgroundColor: '#5BC0DE' }} className='text-decoration-none' variant="secondary" >
+                                                        Done
+                                                    </button>
+
                                                 </Card.Footer>
-                                                </form>
-                                            </Card>
-                                        </div>
+                                            </form>
+                                        </Card>
+                                    </div>
                                 </Tab>
                             </Tabs>
                         </div>
-                        {/* <div className="card  mt-9">
-                            <div className={`d-flex   border-grey-bottom flex-wrap align-items-center justify-content-between ${styles.detail_header} `}>
-                                <div className="  flex-wrap d-flex flex-grow-1  align-items-center " style={{ gap: 20 }}>
-                                    <button className=" px-2 py-2 btn-grey-action">
-                                        <BsFillInfoCircleFill size={20} />
-                                        <span className='ms-2'> Details </span>
-                                    </button>
-                                    <span>
-                                        <HiOutlineScissors size={25} />
-                                    </span>
-                                    <span>
-                                        <HiClock size={25} />
-                                    </span>
-                                </div>
-                                <span><IoIosCloseCircleOutline size={20} color='red' /></span>
-                            </div>
-                            <div className={`${styles.details_body}`}>
-                                <div className={`${styles.details_field_card} bg-grey`}>
-                                    <span>
-                                        {chatData.customer_id}
-                                    </span>
-                                    <span color={colors.colors.green}>
-                                        <AiFillSave />
-                                    </span>
-                                </div>
-                                <div className={`${styles.details_field_card} bg-grey`}>
-                                    <span>
-                                        Visiter Email
-                                    </span>
-                                    <span color={colors.colors.green}>
-                                        <AiFillSave />
-                                    </span>
-                                </div>
-                                <div className={`${styles.details_field_card} bg-grey`}>
-                                    <span>
-                                        {`${chatData.city} ${chatData.country}`}
-                                    </span>
-                                    <span color={colors.colors.green}>
-                                        {chatData.address}
-                                    </span>
-                                </div>
-                                <div className={`${styles.details_field_card} bg-grey`}>
-                                    <span>Plateform</span>
-                                    <span>
-                                        {(chatData.plateform === "\"Windows\"") ? <AiFillWindows color='#878787' size={20} /> : (chatData.plateform === "\"Android\"") ? <AiFillAndroid size={20} /> : <DiLinux size={20} />}
 
-
-                                    </span>
-                                </div>
-                                <div className="d-flex flex-column" style={{ gap: 10 }}>
-                                    <div className='d-flex align-items-center ' style={{ gap: 10 }}>
-                                        <button className="btn-light-blue py-1">
-                                            {chatData.created_date && chatData.created_date.slice(11, -5)}
-                                        </button>
-                                        <span>
-                                            Chat Started
-                                        </span>
-                                    </div>
-                                    <div className='d-flex flex-wrap align-items-center ' style={{ gap: 10 }}>
-                                        <button className="btn-light-blue py-1">
-
-                                        </button>
-                                        <span className='font-12'>
-                                            Visitor navigated to <br />
-                                            <a className='font-12 blue-link text-blue text-decoration-none' href="">
-                                                https://linke123here/chat/
-                                                210402098
-                                            </a>
-
-                                        </span>
-                                    </div>
-                                    <div className='d-flex ' style={{ gap: 10 }}>
-                                        <IoIosArrowForward />
-                                        <a style={{ color: '#5494F3' }} className='font-12 blue-link text-blue text-decoration-none' href="">
-                                            https://dashboard.jataq.tv
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className={`${styles.details_card_footer}`}>
-                                <div className="d-flex justify-content-between" style={{ gap: 10 }}>
-                                    <button style={{ backgroundColor: '#5BC0DE' }} className="btn px-3">
-                                        <AiFillPrinter color='white' size={20} /> <span className='ms-2 font-12  text-white'>
-                                            Print
-                                        </span>
-                                    </button>
-                                    <button style={{ backgroundColor: '#5CB85C' }} className="btn px-3 bg-green">
-                                        <GrNote color='white' size={20} /> <span className='ms-2 font-12  text-white'>
-                                            Note
-                                        </span>
-                                    </button>
-                                </div>
-                                <div className="d-flex justify-content-between mt-3" style={{ gap: 10 }}>
-
-                                    <div className='d-flex flex-wrap ' style={{ gap: 10 }}>
-                                        <button disabled className='btn-grey-action px-2'>
-                                            Cancel
-                                        </button>
-                                        <button onClick={handleShow} className='px-3  text-white ' style={{ backgroundColor: '#5BC0DE', border: '0px' }}>
-                                            Add Lead
-                                        </button>
-                                        <div>
-                                            <Modal show={show} onHide={handleClose}>
-                                                <Modal.Header closeButton>
-
-                                                    <div className="d-flex w-100 justify-content-around">
-                                                        <AiFillInfoCircle size={20} />
-                                                        <MdOutlineContentCut size={20} />
-                                                        <BsClock size={20} />
-                                                        <button className="btn-grey-action">
-                                                            <FaUserPlus /> Leads
-                                                        </button>
-                                                    </div>
-                                                </Modal.Header>
-                                                <form>
-                                                <Modal.Body>
-                                                   
-                                                        <div class="mb-3">
-                                                            <label for="exampleInputEmail1" class="form-label">Company Name</label>
-                                                            <input placeholder='Company Name' type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" />
-
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <label for="exampleInputPassword1" class="form-label">Customer Email</label>
-                                                            <input type="email" placeholder='Customer Email' class="form-control" id="exampleInputPassword1" />
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <label for="exampleInputPassword1" class="form-label">Customer Mobile Number</label>
-                                                            <input type="email" placeholder='Customer Mobile Number' class="form-control" id="exampleInputPassword1" />
-                                                        </div>
-                                                        <div className='mb-3'>
-                                                            <p className='mb-0'>Visitor navigated to</p>
-                                                            <a className='blue-link' href="">
-                                                                https://linke123here/chat/210402098
-                                                            </a>
-                                                        </div>
-                                                     
-                                                        
-                                                    
-                                                </Modal.Body>
-                                                <Modal.Footer className='d-flex'>
-                                                    <div className="d-flex w-100 px-2 mb-3 px-md-3" style={{gap:30}} >
-
-                                                        <Button className='w-50' style={{ backgroundColor: '#5BC0DE',border:0 }} variant="secondary">
-                                                            <AiFillPrinter className='me-2' size={25} />
-                                                            print
-                                                        </Button>
-                                                        <Button className='w-50' style={{ backgroundColor: '#5CB85C',border:0 }} variant="secondary" >
-                                                            <GrNote color='white' className='me-2' size={20} />
-                                                            Note
-                                                        </Button>
-                                                    </div>
-                                                    
-                                                    <div className='d-flex flex-end px-2  px-md-3' style={{gap:10}}>
-                                                    <Button style={{border:0}}  variant="secondary" onClick={handleClose}>
-                                                           Cancel
-                                                        </Button>    
-                                                    <Button style={{border:0,backgroundColor: '#5BC0DE'}} className='text-decoration-none'  variant="secondary" onClick={handleClose}>
-                                                           Done
-                                                        </Button>   
-                                                    </div>
-                                                </Modal.Footer>
-                                                </form>
-                                            </Modal>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> */}
                     </div>
                 </div>
             </div>
