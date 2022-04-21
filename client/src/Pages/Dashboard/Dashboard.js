@@ -10,6 +10,7 @@ import { DashboardHeader } from "../../Components/UI/MiniComponents/MiniComponen
 import { AuthContext } from "../../App";
 import editIcon from "../../assets/Images/edit_icon.png";
 import cancelIcon from "../../assets/Images/cancel.png";
+import axios from "axios";
 
 const AgentDashboard = () => {
   const { authState, setAuthState } = useContext(AuthContext);
@@ -221,6 +222,20 @@ const AgentDashboard = () => {
 };
 const ClientDashboard = () => {
   const { authState, setAuthState } = useContext(AuthContext);
+  const [leads, setLeads] = useState([]);
+  const [leadsLoading, setLeadsLoading] = useState(true);
+  // GET ALL LEADS
+  useEffect(() => {
+    axios
+      .post(`http://localhost:3001/getleads`, {
+        c_name: authState.LoggedUserData.c_name,
+      })
+      .then((response) => {
+        setLeads((leads) => [...leads, response]);
+        setLeadsLoading(!leadsLoading);
+        console.log(leads);
+      });
+  }, []);
   return (
     <Fragment>
       <DashboardHeader title="Dashboard" />
@@ -265,7 +280,12 @@ const ClientDashboard = () => {
                       <p>Leads:15</p>
                     </div>
                     <p className={`${styles.clientSiteLink}`}>
-                      <a href="#">www.websitelinkhere.com</a>
+                      <a
+                        href={authState.LoggedUserData.company_url}
+                        target="_blank"
+                      >
+                        {authState.LoggedUserData.company_url}
+                      </a>
                     </p>
                   </div>
                   <div
@@ -312,27 +332,35 @@ const ClientDashboard = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr className="pt-2">
-                      <td>
-                        <span className="badge badge-curious-bold">ID</span>
-                      </td>
-                      <td>
-                        <p className="px-3 py-0">Ahad Aman</p>
-                      </td>
-                      <td>ahadaman@gmail.com</td>
-                      <td>+923312099944</td>
-                      <td>Ali Aman</td>
-                      <td>16 March 18:42</td>
-                      <td>
-                        <img src={editIcon} />
-                      </td>
-                      <td>
-                        <img src={cancelIcon} />
-                      </td>
-                      <td>
-                        <input type="checkbox" />
-                      </td>
-                    </tr>
+                    {leadsLoading === true
+                      ? "Loading"
+                      : leads[0].data.map((element) => {
+                          return (
+                            <tr className="pt-2">
+                              <td>
+                                <span className="badge badge-curious-bold">
+                                  ID
+                                </span>
+                              </td>
+                              <td>
+                                <p className="px-3 py-0">{element.lead_name}</p>
+                              </td>
+                              <td>{element.lead_email}</td>
+                              <td>{element.lead_phone}</td>
+                              <td>{element.agent_name}</td>
+                              <td>{element.date}</td>
+                              <td>
+                                <img src={editIcon} />
+                              </td>
+                              <td>
+                                <img src={cancelIcon} />
+                              </td>
+                              <td>
+                                <input type="checkbox" />
+                              </td>
+                            </tr>
+                          );
+                        })}
                   </tbody>
                 </table>
               </div>
