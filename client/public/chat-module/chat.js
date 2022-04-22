@@ -314,7 +314,7 @@ window.addEventListener('popstate', function (event) {
 	console.log('changed')
 });
 document.addEventListener("DOMContentLoaded", ()=>{
-    console.log('dom')
+    
 })
 const sendMessageHandler = () => {
     if (!messageField.value)

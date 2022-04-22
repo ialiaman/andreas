@@ -315,6 +315,54 @@ const ClientDashboard = () => {
                 </button>
               </div>
               <LiveVisitorsChart />
+
+            </div>
+            <div className="container-fluid my-3">
+              <div className=" d-flex justify-content-between" style={{ gap: 20 }} >
+                <div className=" p-3 card  flex-grow-1" style={{ flexBasis: 0 }}>
+                  <div className="d-flex align-items-center justify-content-between" >
+                    <div>
+                      <h5>Total Members
+                      </h5>
+                      <h1>
+                        1200
+                      </h1>
+                    </div>
+                    <div>
+                      imag
+                    </div>
+                  </div>
+
+                </div>
+                <div className=" p-3 card flex-grow-1" style={{ flexBasis: 0 }}>
+                <div className="d-flex align-items-center justify-content-between" >
+                    <div>
+                      <h5>Trial Accounts
+                      </h5>
+                      <h1>
+                        1200
+                      </h1>
+                    </div>
+                    <div>
+                      imag
+                    </div>
+                  </div>
+                </div>
+                <div className=" p-3 card flex-grow-1" style={{ flexBasis: 0 }}>
+                <div className="d-flex align-items-center justify-content-between" >
+                    <div>
+                      <h5>Pro Acconts
+                      </h5>
+                      <h1>
+                        1200
+                      </h1>
+                    </div>
+                    <div>
+                      imag
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
             <h1 className="h4 fw-bold px-4 pt-4">Leads</h1>
             <div className="d-flex align-items-center">

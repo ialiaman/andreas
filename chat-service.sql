@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 5.1.3
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 21, 2022 at 07:39 PM
+-- Generation Time: Apr 22, 2022 at 11:05 PM
 -- Server version: 10.4.22-MariaDB
--- PHP Version: 8.1.2
+-- PHP Version: 7.4.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -30,17 +30,29 @@ SET time_zone = "+00:00";
 CREATE TABLE `all_chats` (
   `id` int(11) NOT NULL,
   `status` int(11) NOT NULL DEFAULT 0,
+  `served_by` varchar(255) NOT NULL,
   `created_date` datetime DEFAULT current_timestamp(),
   `is_end` tinyint(1) DEFAULT NULL,
-  `customer_id` varchar(255) NOT NULL
+  `origin` varchar(255) NOT NULL,
+  `customer_id` varchar(255) NOT NULL,
+  `address` varchar(255) NOT NULL,
+  `plateform` varchar(255) NOT NULL,
+  `city` varchar(255) DEFAULT NULL,
+  `country` varchar(255) DEFAULT NULL,
+  `agent_name` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `all_chats`
 --
 
-INSERT INTO `all_chats` (`id`, `status`, `created_date`, `is_end`, `customer_id`) VALUES
-(36, 0, '2022-04-14 02:24:04', NULL, 'undefined');
+INSERT INTO `all_chats` (`id`, `status`, `served_by`, `created_date`, `is_end`, `origin`, `customer_id`, `address`, `plateform`, `city`, `country`, `agent_name`) VALUES
+(4, 1, '36', '2022-04-21 23:41:25', NULL, 'http://localhost:3000', 'EfKSBvEyLClFC87jAAAe', '::1', '\"Windows\"', 'Rawalpindi', 'PK', NULL),
+(5, 2, '', '2022-04-21 23:42:45', NULL, 'http://localhost:3000', 'bvvXtLveARmHr28AAAAh', '::ffff:127.0.0.1', 'undefined', 'Rawalpindi', 'PK', NULL),
+(6, 1, '38', '2022-04-21 23:44:14', NULL, 'http://localhost:3000', 'gE3c0PyWIB1Z_Us_AAAp', '::ffff:127.0.0.1', 'undefined', 'Rawalpindi', 'PK', NULL),
+(7, 1, '', '2022-04-22 23:10:32', NULL, 'http://localhost:3000', 'uvtQyFRXhMVLt13hAAAF', '::1', '\"Windows\"', 'Rawalpindi', 'PK', NULL),
+(8, 1, '36', '2022-04-22 23:12:09', NULL, 'http://localhost:3000', 'rwKxjLkSPPYyK3czAAAG', '::1', '\"Windows\"', 'Rawalpindi', 'PK', 'hazratAnas'),
+(9, 1, '36', '2022-04-22 23:14:21', NULL, 'http://localhost:3000', 'pfCKNz_QqP52xpLfAAAJ', '::1', '\"Windows\"', 'Rawalpindi', 'PK', 'hazrat Anas');
 
 -- --------------------------------------------------------
 
@@ -54,28 +66,43 @@ CREATE TABLE `all_messages` (
   `sender` varchar(255) NOT NULL,
   `receiver` int(255) NOT NULL,
   `delivery` tinyint(1) NOT NULL,
-  `date` datetime NOT NULL DEFAULT current_timestamp()
+  `date` datetime NOT NULL DEFAULT current_timestamp(),
+  `source` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `all_messages`
 --
 
-INSERT INTO `all_messages` (`id`, `message`, `sender`, `receiver`, `delivery`, `date`) VALUES
-(23, 'Hello', '_Mc43eoehXnjN0VyAAAy', 0, 0, '2022-04-12 01:39:22'),
-(24, 'Thank you.', '_Mc43eoehXnjN0VyAAAy', 0, 0, '2022-04-12 01:40:23'),
-(25, 'Hello', 'fmhAUj5YOtmp56LMAAAB', 0, 0, '2022-04-13 01:08:49'),
-(26, 'Hello Ali!!!!', 'fmhAUj5YOtmp56LMAAAB', 0, 0, '2022-04-13 01:09:19'),
-(27, 'sdfsdf', 'fv4iAhJ7qga8XBoPAAAD', 0, 0, '2022-04-13 01:10:27'),
-(28, 'Hi ', 'BKFL85hK27V8ScbfAAAG', 0, 0, '2022-04-14 02:20:26'),
-(29, 'Nizar', 'BKFL85hK27V8ScbfAAAG', 0, 0, '2022-04-14 02:20:28'),
-(30, 'ffff', 'BKFL85hK27V8ScbfAAAG', 0, 0, '2022-04-14 02:21:06'),
-(31, 'hi', 'tsZLIMyg__pCrfzuAAAT', 0, 0, '2022-04-14 02:22:03'),
-(32, 'new1', 'undefined', 0, 0, '2022-04-14 02:24:04'),
-(33, 'HIi', 'WnmXncJpuIei2TWaAAAV', 0, 0, '2022-04-14 12:04:52'),
-(34, 'Hi', 'cVp1uKahk78yQq6cAAAO', 0, 0, '2022-04-14 12:59:54'),
-(35, 'hi', 'obWJOo3ME1DIEODjAAAF', 0, 0, '2022-04-14 13:00:28'),
-(36, 'hey', 'obWJOo3ME1DIEODjAAAF', 0, 0, '2022-04-14 13:33:43');
+INSERT INTO `all_messages` (`id`, `message`, `sender`, `receiver`, `delivery`, `date`, `source`) VALUES
+(23, 'Hello', '_Mc43eoehXnjN0VyAAAy', 0, 0, '2022-04-12 01:39:22', NULL),
+(24, 'Thank you.', '_Mc43eoehXnjN0VyAAAy', 0, 0, '2022-04-12 01:40:23', NULL),
+(25, 'Hello', 'fmhAUj5YOtmp56LMAAAB', 0, 0, '2022-04-13 01:08:49', NULL),
+(26, 'Hello Ali!!!!', 'fmhAUj5YOtmp56LMAAAB', 0, 0, '2022-04-13 01:09:19', NULL),
+(27, 'sdfsdf', 'fv4iAhJ7qga8XBoPAAAD', 0, 0, '2022-04-13 01:10:27', NULL),
+(28, 'Hi ', 'BKFL85hK27V8ScbfAAAG', 0, 0, '2022-04-14 02:20:26', NULL),
+(29, 'Nizar', 'BKFL85hK27V8ScbfAAAG', 0, 0, '2022-04-14 02:20:28', NULL),
+(30, 'ffff', 'BKFL85hK27V8ScbfAAAG', 0, 0, '2022-04-14 02:21:06', NULL),
+(31, 'hi', 'tsZLIMyg__pCrfzuAAAT', 0, 0, '2022-04-14 02:22:03', NULL),
+(32, 'new1', 'undefined', 0, 0, '2022-04-14 02:24:04', NULL),
+(33, 'HIi', 'WnmXncJpuIei2TWaAAAV', 0, 0, '2022-04-14 12:04:52', NULL),
+(34, 'Hi', 'cVp1uKahk78yQq6cAAAO', 0, 0, '2022-04-14 12:59:54', NULL),
+(35, 'hi', 'obWJOo3ME1DIEODjAAAF', 0, 0, '2022-04-14 13:00:28', NULL),
+(36, 'hey', 'obWJOo3ME1DIEODjAAAF', 0, 0, '2022-04-14 13:33:43', NULL),
+(37, 'hello', 'gfuK0gTCqdc-b0g4AAAG', 0, 0, '2022-04-21 23:27:19', 'customer'),
+(38, 'hello', 'vLRuSAeYqfFe9-XJAAAT', 0, 0, '2022-04-21 23:37:26', 'customer'),
+(39, 'hello', 'EfKSBvEyLClFC87jAAAe', 0, 0, '2022-04-21 23:41:25', 'customer'),
+(40, 'hello', 'EfKSBvEyLClFC87jAAAe', 0, 0, '2022-04-21 23:41:34', 'Agent'),
+(41, 'yes', 'EfKSBvEyLClFC87jAAAe', 0, 0, '2022-04-21 23:41:37', 'customer'),
+(42, '\ngg', 'EfKSBvEyLClFC87jAAAe', 0, 0, '2022-04-21 23:41:43', 'Agent'),
+(43, 'hello', 'bvvXtLveARmHr28AAAAh', 0, 0, '2022-04-21 23:42:45', 'customer'),
+(44, 'helo', 'gE3c0PyWIB1Z_Us_AAAp', 0, 0, '2022-04-21 23:44:14', 'customer'),
+(45, 'g', 'gE3c0PyWIB1Z_Us_AAAp', 0, 0, '2022-04-21 23:44:58', 'Agent'),
+(46, 'hello', 'EfKSBvEyLClFC87jAAAe', 0, 0, '2022-04-22 21:58:38', 'Agent'),
+(47, 'hello', 'uvtQyFRXhMVLt13hAAAF', 0, 0, '2022-04-22 23:10:32', 'customer'),
+(48, 'dasdas', 'rwKxjLkSPPYyK3czAAAG', 0, 0, '2022-04-22 23:12:09', 'customer'),
+(49, 'sdfsdf', 'rwKxjLkSPPYyK3czAAAG', 0, 0, '2022-04-22 23:12:17', 'Agent'),
+(50, 'hello', 'pfCKNz_QqP52xpLfAAAJ', 0, 0, '2022-04-22 23:14:21', 'customer');
 
 -- --------------------------------------------------------
 
@@ -109,7 +136,7 @@ CREATE TABLE `leads` (
   `lead_email` varchar(500) NOT NULL,
   `lead_phone` varchar(500) NOT NULL,
   `agent_name` varchar(500) NOT NULL,
-  `date` date NOT NULL,
+  `date` date NOT NULL DEFAULT current_timestamp(),
   `company_url` varchar(500) NOT NULL,
   `c_name` varchar(500) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -120,7 +147,17 @@ CREATE TABLE `leads` (
 
 INSERT INTO `leads` (`id`, `lead_name`, `lead_email`, `lead_phone`, `agent_name`, `date`, `company_url`, `c_name`) VALUES
 (1, 'Ahad Aman', 'ahadaman757@gmail.com', '+923312099944', 'Ali Aman', '0000-00-00', 'https://jataq.com', 'jataq'),
-(2, 'Hazrat Anas', 'anas123@gmail.com', '+923312099944', 'Ahad Aman', '2022-04-01', 'https://google.com', 'jataq');
+(2, 'Hazrat Anas', 'anas123@gmail.com', '+923312099944', 'Ahad Aman', '2022-04-01', 'https://google.com', 'jataq'),
+(5, 'john', 'anas92949@gmail.com', '03158914711', 'HAZRAT ANAS', '2022-04-22', 'http://localhost:3000', 'jataq'),
+(6, 'anas', 'anas92949@gmail.com', '03158914711', 'HAZRAT ANAS', '2022-04-22', 'http://localhost:3000', 'jataq1'),
+(7, 'anas', 'anas92949@gmail.com', '03158914711', 'HAZRAT ANAS', '2022-04-22', 'http://localhost:3000', 'jataq1'),
+(9, 'john', 'hassan1234@gmail.com', '03158914711', 'HAZRAT ANAS', '2022-04-23', 'http://localhost:3000', '0'),
+(10, 'inayat', 'inayat@gmail.com', '0315684654', 'HAZRAT ANAS', '2022-04-23', 'http://localhost:3000', '0'),
+(11, 'finch', '17pwcse1537@uetpeshawar.edu.pk', '546541365465', 'HAZRAT ANAS', '2022-04-23', 'http://localhost:3000', '0'),
+(12, 'sherry', 'iamanhunzai@gmail.com', '015974564', 'HAZRAT ANAS', '2022-04-23', 'http://localhost:3000', '0'),
+(13, 'sherry', 'iamanhunzai@gmail.com', '015974564', 'HAZRAT ANAS', '2022-04-23', 'http://localhost:3000', 'abc'),
+(14, 'sherry', 'iamanhunzai@gmail.com', '015974564', 'HAZRAT ANAS', '2022-04-23', 'http://localhost:3000', '0'),
+(15, 'aman', 'iamanhunzai@gmail.com', '015684541645', 'HAZRAT ANAS', '2022-04-23', 'http://localhost:3000', '0');
 
 -- --------------------------------------------------------
 
@@ -198,13 +235,13 @@ ALTER TABLE `registered_users`
 -- AUTO_INCREMENT for table `all_chats`
 --
 ALTER TABLE `all_chats`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `all_messages`
 --
 ALTER TABLE `all_messages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT for table `domains`
@@ -216,23 +253,13 @@ ALTER TABLE `domains`
 -- AUTO_INCREMENT for table `leads`
 --
 ALTER TABLE `leads`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `registered_users`
 --
 ALTER TABLE `registered_users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `all_chats`
---
-ALTER TABLE `all_chats`
-  ADD CONSTRAINT `all_chats_ibfk_1` FOREIGN KEY (`id`) REFERENCES `registered_users` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

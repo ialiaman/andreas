@@ -263,6 +263,20 @@ con.query(query,(error,result)=>{
 // code for socket io
 let agents = [];
 io.on("connection", (socket) => {
+  const origin = socket.handshake.headers.origin;
+  const address = socket.handshake.address;
+
+    const sql = `INSERT INTO visitors (visited_url,address) VALUES ('${origin}', '${address}')`;
+    
+    con.query(sql, function (err, result) {
+      if (err) {
+        throw err;
+        //   console.log('err block')
+      } else {
+        console.log('added')
+      }
+    });
+  
   socket.on("agent active", () => {
     agents.indexOf(socket.id) === -1 ? agents.push(socket.id) : null;
   });
