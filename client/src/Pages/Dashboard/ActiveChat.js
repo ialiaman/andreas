@@ -45,26 +45,7 @@ const asyncLocalStorage = {
 
 function ActiveChat() {
 
-    const [companies, setCompanies] = useState([])
-    const formik = useFormik({
-        initialValues: {
-            c_name: '',
-            email: '',
-            phone: '',
-        },
 
-        onSubmit: values => {
-            alert('submitted')
-            console.log(JSON.stringify(values, null, 2));
-            axios.post(`http://localhost:3001/chats/addleads`, values)
-                .then(res => {
-                    alert('stroed')
-
-
-                })
-        }
-    },
-    );
     const [customerLocation, setcustomerLocation] = useState('');
     const [othersChat, setothersChat] = useState(false)
     const [customerID, setcustomerID] = useState('')
@@ -77,11 +58,40 @@ function ActiveChat() {
     const [tabIcon, settabIcon] = useState({ details: true, leads: false })
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const [companies, setCompanies] = useState([])
+    const [loggedAgent, setloggedAgent] = useState('')
+    // handle lead form
+
+    const formik = useFormik({
+        initialValues: {
+            agent: loggedAgent,
+            customer_name: '',
+            c_name: '',
+            email: '',
+            phone: '',
+            company_url: ''
+        },
+
+        onSubmit: values => {
+            values.agent = loggedAgent
+            values.company_url = chatData.origin
+            alert('submitted')
+            console.log(JSON.stringify(values, null, 2));
+            axios.post(`http://localhost:3001/chats/addleads`, values)
+                .then(res => {
+                    alert('stroed')
+
+
+                })
+        }
+    },
+    );
     // match agent to show message area
     useEffect(() => {
         if (authState.LoggedUserData.f_name && authState.LoggedUserData.l_name) {
 
             const curretUser = authState.LoggedUserData.f_name.toUpperCase() + ' ' + authState.LoggedUserData.l_name.toUpperCase()
+            setloggedAgent(curretUser)
             if (curretUser !== agentName) {
                 console.log('not qural')
                 setothersChat(true)
@@ -125,6 +135,7 @@ function ActiveChat() {
             setcustomerID(value)
             // Get record for   about the chat
             axios.post('http://localhost:3001/chats/chat', { id: value }).then(response => {
+                console.log(response.data[0])
                 setchatData(response.data[0])
 
                 // get agent info for this active chat
@@ -177,6 +188,7 @@ function ActiveChat() {
     socket.on('NEW MESSAGE', (msg) => {
         LoadMessagesHandler()
     })
+    console.log(chatData)
 
     return (
         <Fragment>
@@ -242,142 +254,160 @@ function ActiveChat() {
                         </div>
                     </div>
                     <div className="col-md-4">
-                        <div className="card  mt-9">
-                            <Tabs defaultActiveKey="details" id="uncontrolled-tab-example" className="mb-3" onSelect={(event, e) => {
+                        {
+                            !othersChat ? <div className="card  mt-9">
+                                <Tabs  defaultActiveKey="details" id="uncontrolled-tab-example" className="mb-3 active-chat-tabs" onSelect={(event, e) => {
 
-                            }}>
-                                <Tab eventKey="details" title={<> {
-                                    <BsFillInfoCircleFill className='icon' size={20} />
-                                }
-                                    <span className='ms-2 text'> Details </span></>} >
-                                    <div className={`${styles.details_body}`}>
-                                        <div className={`${styles.details_field_card}  bg-grey`}>
-                                            <span>
-                                                {chatData.customer_id}
-                                            </span>
-                                            <span color={colors.colors.green}>
-                                                <AiFillSave />
-                                            </span>
-                                        </div>
-                                        <div className={`${styles.details_field_card} bg-grey`}>
-                                            <span>
-                                                Visiter Email
-                                            </span>
-                                            <span color={colors.colors.green}>
-                                                <AiFillSave />
-                                            </span>
-                                        </div>
-                                        <div className={`${styles.details_field_card} bg-grey`}>
-                                            <span>
-                                                {`${chatData.city} ${chatData.country}`}
-                                            </span>
-                                            <span color={colors.colors.green}>
-                                                {chatData.address}
-                                            </span>
-                                        </div>
-                                        <div className={`${styles.details_field_card} bg-grey`}>
-                                            <span>Plateform</span>
-                                            <span>
-                                                {(chatData.plateform === "\"Windows\"") ? <AiFillWindows color='#878787' size={20} /> : (chatData.plateform === "\"Android\"") ? <AiFillAndroid size={20} /> : <DiLinux size={20} />}
-                                            </span>
-                                        </div>
-                                        <div className="d-flex flex-column" style={{ gap: 10 }}>
-                                            <div className='d-flex align-items-center ' style={{ gap: 10 }}>
-                                                <button className="btn-light-blue py-1">
-                                                    {chatData.created_date && chatData.created_date.slice(11, -5)}
-                                                </button>
+                                }}>
+                                    <Tab eventKey="details" title={<> {
+                                        <BsFillInfoCircleFill className='icon' size={20} />
+                                    }
+                                        <span className='ms-2 text'> Details </span></>} >
+                                        <div className={`${styles.details_body}`}>
+                                            <div className={`${styles.details_field_card}  bg-grey`}>
                                                 <span>
-                                                    Chat Started
+
+                                                    {chatData.customer_id}
+                                                </span>
+                                                <span color={colors.colors.green}>
+                                                    <AiFillSave />
                                                 </span>
                                             </div>
-                                            <div className='d-flex flex-wrap align-items-center ' style={{ gap: 10 }}>
-                                                <button className="btn-light-blue py-1">
-                                                </button>
-                                                <span className='font-12'>
-                                                    Visitor navigated to <br />
-                                                    <a className='font-12 blue-link text-blue text-decoration-none' href="">
-                                                        https://linke123here/chat/
-                                                        210402098
+                                            <div className={`${styles.details_field_card} bg-grey`}>
+                                                <span>
+                                                    Visiter Email
+                                                </span>
+                                                <span color={colors.colors.green}>
+                                                    <AiFillSave />
+                                                </span>
+                                            </div>
+                                            <div className={`${styles.details_field_card} bg-grey`}>
+                                                <span>
+                                                    {`${chatData.city} ${chatData.country}`}
+                                                </span>
+                                                <span color={colors.colors.green}>
+                                                    {chatData.address}
+                                                </span>
+                                            </div>
+                                            <div className={`${styles.details_field_card} bg-grey`}>
+                                                <span>Plateform</span>
+                                                <span>
+                                                    {(chatData.plateform === "\"Windows\"") ? <AiFillWindows color='#878787' size={20} /> : (chatData.plateform === "\"Android\"") ? <AiFillAndroid size={20} /> : <DiLinux size={20} />}
+                                                </span>
+                                            </div>
+                                            <div className="d-flex flex-column" style={{ gap: 10 }}>
+                                                <div className='d-flex align-items-center ' style={{ gap: 10 }}>
+                                                    <button className="btn-light-blue py-1">
+                                                        {chatData.created_date && chatData.created_date.slice(11, -5)}
+                                                    </button>
+                                                    <span>
+                                                        Chat Started
+                                                    </span>
+                                                </div>
+                                                <div className='d-flex flex-wrap align-items-center ' style={{ gap: 10 }}>
+                                                    <button className="btn-light-blue py-1">
+                                                    </button>
+                                                    <span className='font-12'>
+                                                        Visitor navigated to <br />
+                                                        <a className='font-12 blue-link text-blue text-decoration-none' href="">
+                                                            https://linke123here/chat/
+                                                            210402098
+                                                        </a>
+                                                    </span>
+                                                </div>
+                                                <div className='d-flex ' style={{ gap: 10 }}>
+                                                    <IoIosArrowForward />
+                                                    <a style={{ color: '#5494F3' }} className='font-12 blue-link text-blue text-decoration-none' href="">
+                                                        https://dashboard.jataq.tv
                                                     </a>
-                                                </span>
-                                            </div>
-                                            <div className='d-flex ' style={{ gap: 10 }}>
-                                                <IoIosArrowForward />
-                                                <a style={{ color: '#5494F3' }} className='font-12 blue-link text-blue text-decoration-none' href="">
-                                                    https://dashboard.jataq.tv
-                                                </a>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </Tab>
+                                    </Tab>
 
-                                <Tab eventKey="leads" title={<> {
-                                    <FaUserPlus className='me-2' />
-                                }
-                                    <span className='text m'>Leads</span> </>} >
-                                    <div>
-                                        <Card show={show} onHide={handleClose}>
-                                            <form onSubmit={formik.handleSubmit} method='post'>
-                                                <Card.Body>
-                                                    <select defaultValue='default' class="form-select" aria-label="Default select example">
-                                                        <option 
-                                                         id="c_name"
-                                                         name="c_name"
-                                                         onChange={formik.handleChange}
-                                                         value={formik.values.c_name}
-                                                       defaultValue='default'
-                                                       >Open this select menu</option>
-                                                       {companies.map(c=>{
-                                                           return  <option value={c.value}>{c.label}</option>
-                                                       })}
-                                                      
-                                                    </select>
-                                                    <div class="mb-3">
-                                                        <label for="exampleInputPassword1" class="form-label">Customer Email</label>
-                                                        <input type="email" placeholder='Customer Email' class="form-control"
-                                                            id="email"
-                                                            name="email"
-                                                            onChange={formik.handleChange}
-                                                            value={formik.values.email}
-                                                        />
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label for="exampleInputPassword1" class="form-label">Customer Mobile Number</label>
-                                                        <input type="phone" placeholder='Customer Mobile Number' class="form-control"
-                                                            id="phone"
-                                                            name="phone"
-                                                            onChange={formik.handleChange}
-                                                            value={formik.values.phone}
-                                                        />
-                                                    </div>
-                                                    <div className='mb-3'>
-                                                        <p className='mb-0'>Visitor navigated to</p>
-                                                        <a className='blue-link' href="">
-                                                            https://linke123here/chat/210402098
-                                                        </a>
-                                                    </div>
+                                    <Tab eventKey="leads" title={<> {
+                                        <FaUserPlus className='me-2' />
+                                    }
+                                        <span className='text m'>Leads</span> </>} >
+                                        <div>
+                                            <Card show={show} onHide={handleClose}>
+                                                <form onSubmit={formik.handleSubmit} method='post'>
+                                                   
+                                                    <Card.Body>
+                                                        <div class="mb-3">
+                                                            <label htmlFor="c_name" class="form-label">Company  Name</label>
+                                                            <select
+                                                                id="c_name"
+                                                                name="c_name"
+                                                                onChange={formik.handleChange}
+                                                                value={formik.values.c_name}
+                                                                defaultValue='default' class="form-select" aria-label="Default select example">
+                                                                <option
+                                                                >Open this select menu</option>
+                                                                {companies.map(c => {
+                                                                    return <option value={c.value}>{c.label}</option>
+                                                                })}
+
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="mb-3">
+                                                            <label htmlFor="exampleInputPassword1" class="form-label">Customer Name</label>
+                                                            <input type="text" placeholder='Customer Name' class="form-control"
+                                                                id="customer_name"
+                                                                name="customer_name"
+                                                                onChange={formik.handleChange}
+                                                                value={formik.values.customer_name}
+                                                            />
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label htmlFor="exampleInputPassword1" class="form-label">Customer Email</label>
+                                                            <input type="email" placeholder='Customer Email' class="form-control"
+                                                                id="email"
+                                                                name="email"
+                                                                onChange={formik.handleChange}
+                                                                value={formik.values.email}
+                                                            />
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label htmlFor="exampleInputPassword1" class="form-label">Customer Mobile Number</label>
+                                                            <input type="phone" placeholder='Customer Mobile Number' class="form-control"
+                                                                id="phone"
+                                                                name="phone"
+                                                                onChange={formik.handleChange}
+                                                                value={formik.values.phone}
+                                                            />
+                                                        </div>
+                                                        <div className='mb-3'>
+                                                            <p className='mb-0'>Visitor navigated to</p>
+                                                            <a className='blue-link' href="">
+                                                                https://linke123here/chat/210402098
+                                                            </a>
+                                                        </div>
 
 
 
-                                                </Card.Body>
-                                                <Card.Footer className='d-flex justify-content-between'>
+                                                    </Card.Body>
+                                                    <Card.Footer className='d-flex justify-content-between'>
 
 
 
-                                                    <Button style={{ border: 0 }} variant="secondary" onClick={handleClose}>
-                                                        Cancel
-                                                    </Button>
-                                                    <button type='submit' style={{ border: 0, backgroundColor: '#5BC0DE' }} className='text-decoration-none' variant="secondary" >
-                                                        Done
-                                                    </button>
+                                                        <Button style={{ border: 0 }} variant="secondary" onClick={handleClose}>
+                                                            Cancel
+                                                        </Button>
+                                                        <button type='submit' style={{ border: 0, backgroundColor: '#5BC0DE' }} className='text-decoration-none' variant="secondary" >
+                                                            Done
+                                                        </button>
 
-                                                </Card.Footer>
-                                            </form>
-                                        </Card>
-                                    </div>
-                                </Tab>
-                            </Tabs>
-                        </div>
+                                                    </Card.Footer>
+                                                </form>
+                                            </Card>
+                                        </div>
+                                    </Tab>
+                                </Tabs>
+                            </div> : null
+                        }
+
 
                     </div>
                 </div>

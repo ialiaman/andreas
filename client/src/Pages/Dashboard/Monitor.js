@@ -63,7 +63,8 @@ function Monitor() {
                 )
                 axios.post('http://localhost:3001/chats/servedby/',{
                     chatID:customer.customer_id,
-                    agentID:authState.LoggedUserData.id      
+                    agentID:authState.LoggedUserData.id,  
+                    agentName:authState.LoggedUserData.f_name+ ' '+authState.LoggedUserData.l_name    
                 })
                 localStorage.setItem('selected_customer',customer.customer_id)
                 navigate('/dashboard/activeChat')

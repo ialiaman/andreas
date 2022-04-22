@@ -26,6 +26,7 @@ const io = require("socket.io")(http, {
 const signInRouter = require("./routes/signin");
 const { get } = require("./routes/signin");
 const { json } = require("body-parser");
+const { application } = require("express");
 // constant and variables
 const port = 3001;
 // create connection to database####
@@ -49,8 +50,8 @@ const getAgents = () => {
 const usersArray = [];
 const agentsArray = [];
 // function to add agent to chat
-const ServedBy = (chat_id, agent_id) => {
-  const query = `UPDATE all_chats SET served_by = '${agent_id}' WHERE customer_id = '${chat_id}'`;
+const ServedBy = (chat_id, agent_id,agent_name) => {
+  const query = `UPDATE all_chats SET served_by = '${agent_id}',agent_name='${agent_name}' WHERE customer_id = '${chat_id}'`;
   con.query(query, (error, result) => {
     if (error) throw error;
     console.log("served added");
@@ -191,20 +192,23 @@ app.post("/chats/addmessage", (req, res) => {
   const message = req.body.message;
   const id = req.body.id;
   insertMessage(message, id, "Agent");
-  res.json("Message added successfully");
+  res.json("Message ade=d successfully");
 });
 app.post("/chats/servedby", (req, res) => {
   const chatID = req.body.chatID;
   const agentID = req.body.agentID;
-  ServedBy(chatID, agentID);
+  const agent_name = req.body.agentName;
+  ServedBy(chatID, agentID,agent_name);
   res.json("served by");
 });
 // api for get chat record for a given ID
 app.post("/chats/chat", (req, res) => {
+  console.log('chats:'+ req.body.id)
   const ID = req.body.id;
   const query = `SELECT * FROM all_chats WHERE customer_id = '${ID}'`;
   con.query(query, (error, result) => {
     if (error) throw error;
+    console.log(result)
     res.json(result);
   });
 });
@@ -229,27 +233,33 @@ app.get("/chats/companies", (req, res) => {
 const storeLead = (LeadData) => {
   const {
     customer_name,
-    cusotmer_email,
-    customer_phone,
-    agent_name,
+    email,
+    phone,
+    agent,
     company_url,
-    company_name,
+    c_name,
   } = LeadData;
-  const query = `INSERT INTO leads (lead_name,lead_email,lead_phone,agent_name,compnay_url,c_name) VALUES ('${customer_name}', '${cusotmer_email}','${customer_phone}','${agent_name}','${
-    (company_url, company_name)
-  }' )`;
+  const query = `INSERT INTO leads (lead_name,lead_email,lead_phone,agent_name,company_url,c_name) VALUES ('${customer_name}', '${email}','${phone}','${agent}','${company_url}', '${c_name}' )`;
   con.query(query, (error, result) => {
     if (error) throw error;
-    console.log("message inserted new message");
+    console.log("Lead Added");
   });
 };
 // api to store the leads in database
 app.post("/chats/addleads", (req, res) => {
   const LeadData = req.body;
   console.log(LeadData);
-  // storeLead(LeadData)
+  storeLead(LeadData)
 });
-// api to store the leads in database
+// api to get all chats from database
+app.get('/chats/getallchats',(req,res)=>{
+const query=`SELECT * from all_chats`
+con.query(query,(error,result)=>{
+  if(error) throw error;
+  res.json(result)
+
+})
+})
 // code for socket io
 let agents = [];
 io.on("connection", (socket) => {

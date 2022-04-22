@@ -1,16 +1,25 @@
-.nav-tabs .nav-link{
-    color:black
+.active-chat-tabs .nav-link{
+    color:black !important
 }
 
-.nav-link.active{
+.active-chat-tabs .nav-link.active{
     color: #000000 !important;
     background-color: #EDEDED !important;
     font-weight: 500 !important;
 }
-.nav-link .text{
+.active-chat-tabs .nav-link .text{
     display: none;
 
 }
-.nav-link.active .text{
+.active-chat-tabs .nav-link.active .text{
     display: inline-block;
+}
+@media(max-width:786px){
+    .dashboard-nav span {
+display: none;
+    }
+    .sidebar {
+        width: 100px;
+
+    }
 }

@@ -46,7 +46,7 @@ function MainDashboard() {
             <div className="container-fluid p-0 " >
                 <div className="row flex-nowrap m-0 ">
                     <div className={` ${sideNav}  text-center pt-3  text-white ${styles.sidebar} col-md-3   ${SideBar}`} >
-                        <ul className='d-flex  flex-md-column border-bottom-grey justify-content-around pb-5  list-group'>
+                        <ul className='d-flex dashboard-nav  flex-md-column border-bottom-grey justify-content-around pb-5  list-group'>
                             <NavLink
                                 end
                                 className={({ isActive }) =>
@@ -95,7 +95,7 @@ function MainDashboard() {
                             </li> */}
                         </ul>
                         <div className="grey-line mb-3"></div>
-                        <ul className='d-flex pe-3 flex-column border-bottom-grey justify-content-around pb-5 flex-grow-1 flex-row list-group'>
+                        <ul className='d-flex pe-3 flex-column border-bottom-grey dashboard-nav justify-content-around pb-5 flex-grow-1 flex-row list-group'>
                             <NavLink
                             
                             className={({ isActive }) =>
