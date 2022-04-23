@@ -75,11 +75,12 @@ function ActiveChat() {
         onSubmit: values => {
             values.agent = loggedAgent
             values.company_url = chatData.origin
-            alert('submitted')
+        
             console.log(JSON.stringify(values, null, 2));
             axios.post(`http://localhost:3001/chats/addleads`, values)
                 .then(res => {
-                    alert('stroed')
+                 
+                    
 
 
                 })
@@ -114,7 +115,7 @@ function ActiveChat() {
         })
     }
     const AgentMessageHandler = () => {
-        alert(new Date())
+       
         // setallMessages([...allMessages, { source: 'agent', message: currentAgentMessage, }])
         console.log('agent handler called');
 
@@ -162,9 +163,13 @@ function ActiveChat() {
         console.log('message loadinggggggggg')
     }, [customerID])
 
-
     useEffect(() => {
         chatarea.current.scrollTop = (chatarea.current.scrollHeight - chatarea.current.clientHeight)
+
+
+    })
+    useEffect(() => {
+      
         const companyOptions = []
         axios.get('http://localhost:3001/chats/companies').then(res => {
 
