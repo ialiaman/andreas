@@ -143,6 +143,15 @@ app.get("/chats/active", (req, res) => {
     res.json(result);
   });
 });
+// UPDATE USER AHAD
+app.post("/updateuser", (req, res) => {
+  const query = `UPDATE registered_users SET f_name='${req.body.firstname}', l_name='${req.body.lastname}', email='${req.body.email}' WHERE id = '${req.body.id}' `;
+  con.query(query, (err, result) => {
+    if (err) throw err;
+    res.json("1");
+  });
+});
+// UPDATE USER END AHAD
 // api for changing status of chat
 app.post("/chats/status1", (req, res) => {
   console.log(req.body.id);

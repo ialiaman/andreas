@@ -5,6 +5,24 @@ import styles from "./styles.module.css";
 import { Fragment } from "react";
 import axios from "axios";
 const UserEditModal = (props) => {
+  const [loading, setLoading] = useState(false);
+  // UPDATE DATA
+  const updateUser = () => {
+    setLoading(true);
+    axios
+      .post(`http://localhost:3001/updateuser`, {
+        id: props.id,
+        firstname: props.firstname,
+        lastname: props.lastname,
+        email: props.email,
+      })
+      .then((response) => {
+        setLoading(false);
+        console.log(response);
+        props.loadingHandler();
+      });
+  };
+  // UPDATE DATA END
   const modalStyle = {
     position: "absolute",
     zIndex: 1,
@@ -22,6 +40,7 @@ const UserEditModal = (props) => {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    height: "100vh",
   };
   const modalCardStyle = {
     width: "400px",
@@ -31,13 +50,10 @@ const UserEditModal = (props) => {
       <div className="container" style={modalContainerStyle}>
         <div className="card" style={modalCardStyle}>
           <div className="card-body">
-            <div
-              onClick={() => {
-                props.closeModal(false);
-              }}
-            >
-              Close
+            <div>
+              <h4>Edit User {props.firstname}</h4>
             </div>
+            <hr />
             <form>
               <div class="form-group">
                 <label for="formGroupExampleInput">First Name</label>
@@ -47,6 +63,9 @@ const UserEditModal = (props) => {
                   id="formGroupExampleInput"
                   placeholder="Example input"
                   value={props.firstname}
+                  onChange={(e) => {
+                    props.changeFirstName(e.target.value);
+                  }}
                 />
               </div>
               <br />
@@ -58,6 +77,9 @@ const UserEditModal = (props) => {
                   id="formGroupExampleInput"
                   placeholder="Example input"
                   value={props.lastname}
+                  onChange={(e) => {
+                    props.changeLastName(e.target.value);
+                  }}
                 />
               </div>
               <br />
@@ -69,7 +91,33 @@ const UserEditModal = (props) => {
                   id="formGroupExampleInput"
                   placeholder="Example input"
                   value={props.email}
+                  onChange={(e) => {
+                    props.changeEmail(e.target.value);
+                  }}
                 />
+              </div>
+              <div>
+                <br />
+                <button
+                  className="btn btn-outline-danger"
+                  style={{ marginRight: 10 }}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    props.closeModal(false);
+                  }}
+                >
+                  Close
+                </button>
+                <button
+                  className="btn btn-outline-success"
+                  disabled={loading == true ? true : false}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    updateUser();
+                  }}
+                >
+                  {loading == true ? "Please wait..." : "Update"}
+                </button>
               </div>
             </form>
           </div>
@@ -83,12 +131,28 @@ const UserManagement = () => {
   const [loading, setLoading] = useState(true);
   const [role, setRole] = useState("all");
   const [open, setOpen] = useState(false);
+  const [userId, setUserId] = useState(0);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
 
   const closeModal = (e) => {
+    // e.preventDefault();
     setOpen(!open);
+  };
+  const loadHandler = () => {
+    setLoading(!loading);
+  };
+  const changeFirstName = (e) => {
+    setFirstName(e);
+  };
+
+  const changeLastName = (e) => {
+    setLastName(e);
+  };
+
+  const changeEmail = (e) => {
+    setEmail(e);
   };
 
   const deleteUser = (id) => {
@@ -120,6 +184,11 @@ const UserManagement = () => {
         firstname={firstName}
         lastname={lastName}
         email={email}
+        changeFirstName={changeFirstName}
+        changeLastName={changeLastName}
+        changeEmail={changeEmail}
+        id={userId}
+        loadingHandler={loadHandler}
       />
       <div className="container-fluid  px-1 px-md-2 ps-lg-4 pe-lg-5 ">
         <div className="row px-1  py-2">
@@ -284,6 +353,7 @@ const UserManagement = () => {
                                     setFirstName(element.f_name);
                                     setLastName(element.l_name);
                                     setEmail(element.email);
+                                    setUserId(element.id);
                                   }}
                                 >
                                   {/* <input type="checkbox" /> */}
