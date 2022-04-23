@@ -1,0 +1,25 @@
+.active-chat-tabs .nav-link{
+    color:black !important
+}
+
+.active-chat-tabs .nav-link.active{
+    color: #000000 !important;
+    background-color: #EDEDED !important;
+    font-weight: 500 !important;
+}
+.active-chat-tabs .nav-link .text{
+    display: none;
+
+}
+.active-chat-tabs .nav-link.active .text{
+    display: inline-block;
+}
+@media(max-width:786px){
+    .dashboard-nav span {
+display: none;
+    }
+    .sidebar {
+        width: 100px;
+
+    }
+}
