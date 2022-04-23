@@ -10,7 +10,7 @@ const UserEditModal = (props) => {
   const updateUser = () => {
     setLoading(true);
     axios
-      .post(`http://localhost:3001/updateuser`, {
+      .post(`http://192.163.206.200:3001/updateuser`, {
         id: props.id,
         firstname: props.firstname,
         lastname: props.lastname,
@@ -157,7 +157,7 @@ const UserManagement = () => {
 
   const deleteUser = (id) => {
     axios
-      .post(`http://localhost:3001/deleteuser`, {
+      .post(`http://192.163.206.200:3001/deleteuser`, {
         user_id: id,
       })
       .then((response) => {
@@ -166,7 +166,7 @@ const UserManagement = () => {
   };
   useEffect(() => {
     axios
-      .post(`http://localhost:3001/userslist`, {
+      .post(`http://192.163.206.200:3001/userslist`, {
         role: role,
       })
       .then((response) => {

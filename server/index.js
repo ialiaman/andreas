@@ -15,12 +15,12 @@ app.use(cors());
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: false }));
 const io = require("socket.io")(http, {
-  cors: {
-    origin: ["http://localhost", "http://localhost:3000"],
-    methods: ["GET", "POST"],
-    allowedHeaders: ["my-custom-header"],
-    credentials: true,
-  },
+  // cors: {
+  //   origin: ["http://192.163.206.200", "http://192.163.206.200:3000"],
+  //   methods: ["GET", "POST"],
+  //   allowedHeaders: ["my-custom-header"],
+  //   credentials: true,
+  // },
 });
 // import routes
 const signInRouter = require("./routes/signin");
@@ -30,10 +30,16 @@ const { application } = require("express");
 // constant and variables
 const port = 3001;
 // create connection to database####
+// var con = mysql.createConnection({
+//   host: "192.163.206.200",
+//   user: "root",
+//   database: "chat-service",
+// });
 var con = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  database: "chat-service",
+  host: "192.163.206.200",
+  user: "chatrepl_admin",
+  password: "Hunzai1122$$",
+  database: "chatrepl_chat_service",
 });
 // get all agents from the database
 const getAgents = () => {
@@ -191,11 +197,11 @@ app.post("/getleads", (req, res) => {
 // Get All messages from the database for a given socket id
 
 app.post("/chats/messages", (req, res) => {
-  console.log('requested messages id:' +req.body.id)
+  console.log("requested messages id:" + req.body.id);
   const query = `SELECT * from all_messages WHERE sender = '${req.body.id}' `;
   con.query(query, (error, result) => {
     if (error) throw error;
-    console.log(result[0])
+    console.log(result[0]);
     res.json(result);
   });
 });
@@ -244,7 +250,7 @@ app.post("/deleteuser", (req, res) => {
 app.post("/chats/chat", (req, res) => {
   console.log("chats:" + req.body.id);
   const ID = req.body.id;
-  console.log('chat id requested:' + ID)
+  console.log("chat id requested:" + ID);
   const query = `SELECT * FROM all_chats WHERE customer_id = '${ID}'`;
   con.query(query, (error, result) => {
     if (error) throw error;
@@ -332,7 +338,7 @@ io.on("connection", (socket) => {
     console.log("room joined in server");
     console.log("data.id: " + data.id);
     socket.join(data.id);
-    console.log('data room joined'+ data)
+    console.log("data room joined" + data);
     io.to(data.id).emit("room joined", data);
   });
   socket.on("client join room", (data) => {
@@ -341,7 +347,7 @@ io.on("connection", (socket) => {
     socket.join(data.id);
     // io.to(data.id).emit("room joined", data);
   });
-  socket.on("new message", (msg,id) => {
+  socket.on("new message", (msg, id) => {
     insertMessage(msg, id);
     console.log("emitting ");
     console.log("socket id: " + socket.id);

@@ -437,7 +437,7 @@ const ClientDashboard = () => {
   useEffect(() => {
     setLeadsLoading(true);
     axios
-      .post(`http://localhost:3001/getleads`, {
+      .post(`http://192.163.206.200:3001/getleads`, {
         c_name: authState.LoggedUserData.c_name,
       })
       .then((response) => {
