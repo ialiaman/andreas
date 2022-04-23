@@ -50,7 +50,7 @@ const getAgents = () => {
 const usersArray = [];
 const agentsArray = [];
 // function to add agent to chat
-const ServedBy = (chat_id, agent_id,agent_name) => {
+const ServedBy = (chat_id, agent_id, agent_name) => {
   const query = `UPDATE all_chats SET served_by = '${agent_id}',agent_name='${agent_name}' WHERE customer_id = '${chat_id}'`;
   con.query(query, (error, result) => {
     if (error) throw error;
@@ -198,17 +198,45 @@ app.post("/chats/servedby", (req, res) => {
   const chatID = req.body.chatID;
   const agentID = req.body.agentID;
   const agent_name = req.body.agentName;
-  ServedBy(chatID, agentID,agent_name);
+  ServedBy(chatID, agentID, agent_name);
   res.json("served by");
 });
+
+// OWNER GET USER LIST AHAD
+app.post("/userslist", (req, res) => {
+  const usersListOwner = [];
+  const role = req.body.role;
+  const userslist =
+    role == "all"
+      ? `SELECT * FROM registered_users`
+      : `SELECT * FROM registered_users WHERE account_type = '${role}'`;
+  con.query(userslist, (err, result) => {
+    return Promise.all(
+      result.map((element) => {
+        usersListOwner.push(result);
+      })
+    ).then(() => res.json(result));
+  });
+});
+// OWNER GET USER LIST END
+// OWNER DELETE USER LIST AHAD
+app.post("/deleteuser", (req, res) => {
+  const id = req.body.user_id;
+  const deleteuser = `DELETE FROM registered_users WHERE id='${id}}'`;
+  con.query(deleteuser, (err, result) => {
+    res.json(result);
+    console.log(err);
+  });
+});
+// OWNER DELETE USER LIST END
 // api for get chat record for a given ID
 app.post("/chats/chat", (req, res) => {
-  console.log('chats:'+ req.body.id)
+  console.log("chats:" + req.body.id);
   const ID = req.body.id;
   const query = `SELECT * FROM all_chats WHERE customer_id = '${ID}'`;
   con.query(query, (error, result) => {
     if (error) throw error;
-    console.log(result)
+    console.log(result);
     res.json(result);
   });
 });
@@ -231,52 +259,46 @@ app.get("/chats/companies", (req, res) => {
   });
 });
 const storeLead = (LeadData) => {
-  const {
-    customer_name,
-    email,
-    phone,
-    agent,
-    company_url,
-    c_name,
-  } = LeadData;
+  const { customer_name, email, phone, agent, company_url, c_name } = LeadData;
   const query = `INSERT INTO leads (lead_name,lead_email,lead_phone,agent_name,company_url,c_name) VALUES ('${customer_name}', '${email}','${phone}','${agent}','${company_url}', '${c_name}' )`;
   con.query(query, (error, result) => {
     if (error) throw error;
     console.log("Lead Added");
   });
 };
+
 // api to store the leads in database
 app.post("/chats/addleads", (req, res) => {
   const LeadData = req.body;
   console.log(LeadData);
-  storeLead(LeadData)
+  storeLead(LeadData);
 });
-// api to get all chats from database
-app.get('/chats/getallchats',(req,res)=>{
-const query=`SELECT * from all_chats`
-con.query(query,(error,result)=>{
-  if(error) throw error;
-  res.json(result)
 
-})
-})
+// api to get all chats from database
+app.get("/chats/getallchats", (req, res) => {
+  const query = `SELECT * from all_chats`;
+  con.query(query, (error, result) => {
+    if (error) throw error;
+    res.json(result);
+  });
+});
 // code for socket io
 let agents = [];
 io.on("connection", (socket) => {
   const origin = socket.handshake.headers.origin;
   const address = socket.handshake.address;
 
-    const sql = `INSERT INTO visitors (visited_url,address) VALUES ('${origin}', '${address}')`;
-    
-    con.query(sql, function (err, result) {
-      if (err) {
-        throw err;
-        //   console.log('err block')
-      } else {
-        console.log('added')
-      }
-    });
-  
+  // const sql = `INSERT INTO visitors (visited_url,address) VALUES ('${origin}', '${address}')`;
+
+  // con.query(sql, function (err, result) {
+  //   if (err) {
+  //     throw err;
+  //     //   console.log('err block')
+  //   } else {
+  //     console.log('added')
+  //   }
+  // });
+
   socket.on("agent active", () => {
     agents.indexOf(socket.id) === -1 ? agents.push(socket.id) : null;
   });

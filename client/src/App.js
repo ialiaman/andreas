@@ -11,6 +11,7 @@ import Messaging from "./Pages/Dashboard/Messaging";
 import axios from "axios";
 import Loading from "../src/Pages/Loading/Loading";
 import Setting from "./Pages/Dashboard/Setting";
+import UserManagement from "./Pages/Dashboard/UserManagement";
 const AuthContext = createContext("");
 
 function App() {
@@ -99,6 +100,7 @@ function App() {
             <Route path="activechat" element={<ActiveChat />} />
             <Route path="messaging" element={<Messaging />} />
             <Route path="setting" element={<Setting />} />
+            <Route path="users" element={<UserManagement />} />
           </Route>
         ) : (
           <Route

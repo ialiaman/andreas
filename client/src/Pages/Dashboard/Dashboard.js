@@ -11,8 +11,215 @@ import { AuthContext } from "../../App";
 import editIcon from "../../assets/Images/edit_icon.png";
 import cancelIcon from "../../assets/Images/cancel.png";
 import axios from "axios";
-import ReactLoading from 'react-loading';
+import ReactLoading from "react-loading";
+const OwnerDashboard = () => {
+  const { authState, setAuthState } = useContext(AuthContext);
+  return (
+    <Fragment>
+      <DashboardHeader title="Dashboard" />
+      <div className="container-fluid px-1 px-md-2 px-lg-5 bg-grey ">
+        <div className="row  pb-2">
+          <div className="col-12 my-2  ">
+            <div className="d-flex br-3 bg-primary align-items-center px-2 justify-content-between">
+              <p className=" mb-0  text-white py-2">
+                Click here to resume the setup wizard.
+              </p>
+              <AiOutlineClose color="white" size={25} />
+            </div>
+          </div>
+          <div className="col-md-8">
+            <div className={`${styles.live_now} p-3`}>
+              <div className="d-flex justify-content-between">
+                <h1 className="h4 fw-bold">Live now</h1>
+                <button className={` px-2 ${styles.live_now_btn}`}>
+                  <span>
+                    {" "}
+                    <AiOutlineCalendar />{" "}
+                  </span>
+                  Live Now
+                </button>
+              </div>
+              <LiveVisitorsChart />
+            </div>
+            <div className={`${styles.live_now} mt-3 p-3`}>
+              <div className="">
+                <h1 className="h4 fw-bold">Chat History</h1>
+                <table className={`table text-center ${styles.table}`}>
+                  <thead>
+                    <tr>
+                      <th scope="col">Visitor ID</th>
+                      <th scope="col">Agent</th>
+                      <th scope="col">Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Visitor ID</td>
+                      <td>
+                        <button
+                          className="px-3 py-0"
+                          style={{
+                            backgroundColor: "#3498DB",
+                            border: "none",
+                            borderRadius: 4,
+                          }}
+                        >
+                          Ali A.
+                        </button>
+                      </td>
+                      <td>26/Feb 17:42</td>
+                    </tr>
+                    <tr>
+                      <td>Visitor ID</td>
+                      <td>
+                        <button
+                          className="px-3 py-0"
+                          style={{
+                            backgroundColor: "#3498DB",
+                            border: "none",
+                            borderRadius: 4,
+                          }}
+                        >
+                          Ali A.
+                        </button>
+                      </td>
+                      <td>26/Feb 17:42</td>
+                    </tr>{" "}
+                    <tr>
+                      <td>Visitor ID</td>
+                      <td>
+                        <button
+                          className="px-3 py-0"
+                          style={{
+                            backgroundColor: "#3498DB",
+                            border: "none",
+                            borderRadius: 4,
+                          }}
+                        >
+                          Ali A.
+                        </button>
+                      </td>
+                      <td>26/Feb 17:42</td>
+                    </tr>{" "}
+                    <tr>
+                      <td>Visitor ID</td>
+                      <td>
+                        <button
+                          className="px-3 py-0"
+                          style={{
+                            backgroundColor: "#3498DB",
+                            border: "none",
+                            borderRadius: 4,
+                          }}
+                        >
+                          Ali A.
+                        </button>
+                      </td>
+                      <td>26/Feb 17:42</td>
+                    </tr>
+                    <tr>
+                      <td>Visitor ID</td>
+                      <td>
+                        <button
+                          className="px-3 py-0"
+                          style={{
+                            backgroundColor: "#3498DB",
+                            border: "none",
+                            borderRadius: 4,
+                          }}
+                        >
+                          Ali A.
+                        </button>
+                      </td>
+                      <td>26/Feb 17:42</td>
+                    </tr>
+                    <tr>
+                      <td>Visitor ID</td>
+                      <td>
+                        <button
+                          className="px-3 py-0"
+                          style={{
+                            backgroundColor: "#3498DB",
+                            border: "none",
+                            borderRadius: 4,
+                          }}
+                        >
+                          Ali A.
+                        </button>
+                      </td>
+                      <td>26/Feb 17:42</td>
+                    </tr>
+                    <tr>
+                      <td>Visitor ID</td>
+                      <td>
+                        <button
+                          className="px-3 py-0"
+                          style={{
+                            backgroundColor: "#3498DB",
+                            border: "none",
+                            borderRadius: 4,
+                          }}
+                        >
+                          Ali A.
+                        </button>
+                      </td>
+                      <td>26/Feb 17:42</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-4">
+            <div className={`${styles.visitor} p-3 ${styles.rightBoxes}`}>
+              <div className="d-flex justify-content-between">
+                <h1 className="h4 fw-bold">Visitors</h1>
 
+                <span>
+                  {" "}
+                  <span className="me-1" style={{ fontWeight: 500 }}>
+                    128
+                  </span>{" "}
+                  <BiStats size={30} />
+                </span>
+              </div>
+
+              <VisitorsChart />
+            </div>
+            <div className={`${styles.visitor} p-3 ${styles.rightBoxes}`}>
+              <div className="d-flex justify-content-between">
+                <h1 className="h4 fw-bold">Page View</h1>
+
+                <span>
+                  {" "}
+                  <span className="me-1" style={{ fontWeight: 500 }}>
+                    140
+                  </span>{" "}
+                  <BiStats size={30} />
+                </span>
+              </div>
+              <PageViewsChart />
+            </div>
+            <div className={`${styles.visitor} p-3 ${styles.rightBoxes}`}>
+              <div className="d-flex justify-content-between">
+                <h1 className="h4 fw-bold">Chat</h1>
+
+                <span>
+                  {" "}
+                  <span className="me-1" style={{ fontWeight: 500 }}>
+                    110
+                  </span>{" "}
+                  <BiStats size={30} />
+                </span>
+              </div>
+              <ChatChart />
+            </div>
+          </div>
+        </div>
+      </div>
+    </Fragment>
+  );
+};
 const AgentDashboard = () => {
   const { authState, setAuthState } = useContext(AuthContext);
   return (
@@ -225,7 +432,7 @@ const ClientDashboard = () => {
   const { authState, setAuthState } = useContext(AuthContext);
   const [leads, setLeads] = useState([]);
   const [leadsLoading, setLeadsLoading] = useState(true);
-  const [reload, setReload] = useState(false)
+  const [reload, setReload] = useState(false);
   // GET ALL LEADS
   useEffect(() => {
     setLeadsLoading(true);
@@ -234,7 +441,7 @@ const ClientDashboard = () => {
         c_name: authState.LoggedUserData.c_name,
       })
       .then((response) => {
-        console.log(response)
+        console.log(response);
         setLeads((leads) => [...response.data]);
         setLeadsLoading(false);
         console.log(leads);
@@ -315,67 +522,62 @@ const ClientDashboard = () => {
                 </button>
               </div>
               <LiveVisitorsChart />
-
             </div>
             <div className="container-fluid my-3">
-              <div className=" d-flex justify-content-between" style={{ gap: 20 }} >
-                <div className=" p-3 card  flex-grow-1" style={{ flexBasis: 0 }}>
-                  <div className="d-flex align-items-center justify-content-between" >
+              <div
+                className=" d-flex justify-content-between"
+                style={{ gap: 20 }}
+              >
+                <div
+                  className=" p-3 card  flex-grow-1"
+                  style={{ flexBasis: 0 }}
+                >
+                  <div className="d-flex align-items-center justify-content-between">
                     <div>
-                      <h5>Total Members
-                      </h5>
-                      <h1>
-                        1200
-                      </h1>
+                      <h5>Total Members</h5>
+                      <h1>1200</h1>
                     </div>
-                    <div>
-                      imag
-                    </div>
-                  </div>
-
-                </div>
-                <div className=" p-3 card flex-grow-1" style={{ flexBasis: 0 }}>
-                <div className="d-flex align-items-center justify-content-between" >
-                    <div>
-                      <h5>Trial Accounts
-                      </h5>
-                      <h1>
-                        1200
-                      </h1>
-                    </div>
-                    <div>
-                      imag
-                    </div>
+                    <div>imag</div>
                   </div>
                 </div>
                 <div className=" p-3 card flex-grow-1" style={{ flexBasis: 0 }}>
-                <div className="d-flex align-items-center justify-content-between" >
+                  <div className="d-flex align-items-center justify-content-between">
                     <div>
-                      <h5>Pro Acconts
-                      </h5>
-                      <h1>
-                        1200
-                      </h1>
+                      <h5>Trial Accounts</h5>
+                      <h1>1200</h1>
                     </div>
+                    <div>imag</div>
+                  </div>
+                </div>
+                <div className=" p-3 card flex-grow-1" style={{ flexBasis: 0 }}>
+                  <div className="d-flex align-items-center justify-content-between">
                     <div>
-                      imag
+                      <h5>Pro Acconts</h5>
+                      <h1>1200</h1>
                     </div>
+                    <div>imag</div>
                   </div>
                 </div>
               </div>
             </div>
             <h1 className="h4 fw-bold px-4 pt-4">Leads</h1>
             <div className="d-flex align-items-center">
-              <button className="btn-primary" onClick={() => {
-                setReload(!reload)
-              }}>
+              <button
+                className="btn-primary"
+                onClick={() => {
+                  setReload(!reload);
+                }}
+              >
                 Refresh
-
               </button>
-              {
-
-                leadsLoading ? <ReactLoading type='spin' color='black' height={30} width={30} /> : null
-              }
+              {leadsLoading ? (
+                <ReactLoading
+                  type="spin"
+                  color="black"
+                  height={30}
+                  width={30}
+                />
+              ) : null}
             </div>
 
             <div className={`${styles.live_now} mt-3 p-3`}>
@@ -400,36 +602,32 @@ const ClientDashboard = () => {
                     {leadsLoading === true
                       ? "Loading"
                       : leads.map((element) => {
-                        return (
-                          <tr className="pt-2">
-                            <td>
-                              <span className="badge badge-curious-bold">
-                                ID
-                              </span>
-                            </td>
-                            <td>
-                              <p className="px-3 py-0">{element.lead_name}</p>
-                            </td>
-                            <td>{element.lead_email}</td>
-                            <td>{element.lead_phone}</td>
-                            <td>{element.agent_name}</td>
-                            <td>{element.date}</td>
-                            <td>
-                              <img src={editIcon} />
-                            </td>
-                            <td>
-                              <img src={cancelIcon} />
-                            </td>
-                            <td>
-                              <input type="checkbox" />
-                            </td>
-                          </tr>
-
-                        );
-                      })
-
-                    }
-
+                          return (
+                            <tr className="pt-2">
+                              <td>
+                                <span className="badge badge-curious-bold">
+                                  ID
+                                </span>
+                              </td>
+                              <td>
+                                <p className="px-3 py-0">{element.lead_name}</p>
+                              </td>
+                              <td>{element.lead_email}</td>
+                              <td>{element.lead_phone}</td>
+                              <td>{element.agent_name}</td>
+                              <td>{element.date}</td>
+                              <td>
+                                <img src={editIcon} />
+                              </td>
+                              <td>
+                                <img src={cancelIcon} />
+                              </td>
+                              <td>
+                                <input type="checkbox" />
+                              </td>
+                            </tr>
+                          );
+                        })}
                   </tbody>
                 </table>
               </div>
@@ -445,6 +643,8 @@ function Content() {
   const { authState, setAuthState } = useContext(AuthContext);
   return authState.LoggedUserData.account_type == "client" ? (
     <ClientDashboard />
+  ) : authState.LoggedUserData.account_type == "owner" ? (
+    <OwnerDashboard />
   ) : (
     <AgentDashboard />
   );
