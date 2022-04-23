@@ -182,9 +182,11 @@ app.post("/getleads", (req, res) => {
 // Get All messages from the database for a given socket id
 
 app.post("/chats/messages", (req, res) => {
+  console.log('requested messages id:' +req.body.id)
   const query = `SELECT * from all_messages WHERE sender = '${req.body.id}' `;
   con.query(query, (error, result) => {
     if (error) throw error;
+    console.log(result[0])
     res.json(result);
   });
 });
@@ -205,6 +207,7 @@ app.post("/chats/servedby", (req, res) => {
 app.post("/chats/chat", (req, res) => {
   console.log('chats:'+ req.body.id)
   const ID = req.body.id;
+  console.log('chat id requested:' + ID)
   const query = `SELECT * FROM all_chats WHERE customer_id = '${ID}'`;
   con.query(query, (error, result) => {
     if (error) throw error;
@@ -298,13 +301,20 @@ io.on("connection", (socket) => {
     console.log("room joined in server");
     console.log("data.id: " + data.id);
     socket.join(data.id);
+    console.log('data room joined'+ data)
     io.to(data.id).emit("room joined", data);
   });
-  socket.on("new message", (msg) => {
-    insertMessage(msg, socket.id);
+  socket.on("client join room", (data) => {
+    console.log("client room joined in server");
+    console.log("data.id: " + data.id);
+    socket.join(data.id);
+    // io.to(data.id).emit("room joined", data);
+  });
+  socket.on("new message", (msg,id) => {
+    insertMessage(msg, id);
     console.log("emitting ");
     console.log("socket id: " + socket.id);
-    io.to(socket.id).emit("NEW MESSAGE", msg);
+    io.to(id).emit("NEW MESSAGE", msg);
   });
   socket.on("NEW_MESSAGE", (data) => {
     console.log("new message from agent to server");

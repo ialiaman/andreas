@@ -2,7 +2,7 @@
 var body = document.getElementsByTagName("BODY")[0];
 var chatButton = document.createElement("BUTTON");
 var chatIcon = document.createElement('img')
-try{
+try {
     var socket = io("http://localhost:3001", {
         withCredentials: true,
         extraHeaders: {
@@ -10,19 +10,19 @@ try{
         }
     });
 }
-catch(error){
+catch (error) {
     console.log(error)
 }
 
 
 socket.on("connect_error", () => {
     // revert to classic upgrade
-   alert('Cant connect to socket io')
-   socket.disconnect()
-  });
-  socket.on('connect_failed', err => {
-      alert('hello')
-  })
+    alert('Cant connect to socket io')
+    socket.disconnect()
+});
+socket.on('connect_failed', err => {
+    alert('hello')
+})
 var chatIcon = document.createElement("img");
 var firstMessage = true;
 
@@ -125,7 +125,7 @@ css(chatButton, {
     right: "0px",
     margin: "20px",
     "border-radius": "50%",
-    zIndex: "99999",
+    zIndex: "9999900",
 });
 css(chat, {
     overflow: "hidden",
@@ -286,15 +286,119 @@ css(LeftMessageBody, {
 //     });
 //     console.log("hello");
 // }
+// fetch all messages handler
+//  const LoadMessagesHandler = () => {
+//     const LoadMessageID = { id: ID };
+//     fetch('http://localhost:3001/chats/messages', {
+//         method: 'POST', headers: {
+//             'Content-Type': 'application/json'
+//         }, body: JSON.stringify(LoadMessageID)
+//     }).then(response=>response.json()).then(data=>{
+//         console.log(data)
+//     })
+//         //
+
+//     axios.post('http://localhost:3001/chats/messages', { id: customerID }).then(response => {
+//         const messages = response.data
+//         // push all messages from database to all messages state
+//         setallMessages([...messages])
+//         console.log(allMessages)
+//     })
+// }
+var joinedID = ''
+var initialMessages = []
+const fetchChatData = (ID) => {
+    const data = { id: ID };
+    fetch('http://localhost:3001/chats/chat', {
+        method: 'POST', headers: {
+            'Content-Type': 'application/json'
+        }, body: JSON.stringify(data)
+    }).then(response => response.json())
+        .then(data => {
+
+            if (data.length) {
+                agentJoined = true
+                firstMessage = false;
+                console.log(firstMessage)
+                chatHeaderLeftName.innerHTML = data[0].agent_name
+                console.log(data[0].agent_name)
+                socket.emit('client join room', { id: data[0].customer_id, agent: data[0].agent_name })
+
+                // load all messages
+                console.log('ID:' + ID)
+                const LoadMessageID = { id: ID };
+                fetch('http://localhost:3001/chats/messages', {
+                    method: 'POST', headers: {
+                        'Content-Type': 'application/json'
+                    }, body: JSON.stringify(LoadMessageID)
+                }).then(response => {
+                    console.log(response)
+                    return response.json()
+                }).then(dataMessages => {
+                    console.log('nessages:' + JSON.stringify(dataMessages))
+                    initialMessages = JSON.parse(JSON.stringify(dataMessages))
+                    initialMessages.map(mess => {
+                        if(mess.source!=='Agent'){
+                            LeftMessageBody.innerHTML = mess.message
+                            LeftMessage.appendChild(LeftMessageBody);
+                            chatMessages.innerHTML += LeftMessage.innerHTML
+                            messageField.value = ''
+                            chatBody.scrollTop = (chatBody.scrollHeight - chatBody.clientHeight)
+                        }
+                        else{
+                            RightMessageBody.innerHTML = mess.message
+                            RightMessage.appendChild(RightMessageBody);
+                            chatMessages.innerHTML += RightMessage.innerHTML
+                            chatBody.scrollTop = (chatBody.scrollHeight - chatBody.clientHeight)
+                        }
+                        
+
+                    })
+                })
+
+            }
+
+
+            console.log('Success:', data);
+        })
+
+
+
+
+
+
+}
+
+
+// function to check customer chat history start
+
+const checkChat = () => {
+    asyncLocalStorage.getItem('joined').then(response => {
+
+
+        const join = response ?? false
+        if (join) {
+            joinedID = response
+            fetchChatData(response)
+
+        }
+
+
+    })
+}
+
+// function to check customer chat history end
 
 
 
 chatButton.addEventListener("click", () => {
-    console.log("button pressed");
+    
     if (chat.style.display == "flex") {
+        chatMessages.innerHTML =''
         chat.style.display = "none";
         // chatButton.innerHTML = 'start chat'
     } else {
+        checkChat()
         chat.style.display = "flex";
         // chatButton.innerHTML = 'close chat'
     }
@@ -302,7 +406,7 @@ chatButton.addEventListener("click", () => {
 chatHeaderRightButton.addEventListener("click", () => {
     chat.style.display = "none";
     socket.disconnect(true)
-   
+
 });
 
 // keep the scroll to bottom
@@ -311,11 +415,31 @@ chatHeaderRightButton.addEventListener("click", () => {
 // All Messages
 let Messages = []
 window.addEventListener('popstate', function (event) {
-	console.log('changed')
+    console.log('changed')
 });
-document.addEventListener("DOMContentLoaded", ()=>{
-    
+document.addEventListener("DOMContentLoaded", () => {
+
 })
+
+// socket.emit('join room', { id: 'uQcrIyHRd9VmpDhIAAAo', agent: 'anas' })
+
+// asyn localStorage
+const asyncLocalStorage = {
+    setItem: async function (key, value) {
+        await null;
+        return localStorage.setItem(key, value);
+    },
+    getItem: async function (key) {
+        await null;
+        return localStorage.getItem(key);
+    }
+};
+
+
+
+
+
+
 const sendMessageHandler = () => {
     if (!messageField.value)
         return
@@ -325,8 +449,8 @@ const sendMessageHandler = () => {
         console.log(window.location.href)
         firstMessage = false;
     } else {
-        console.log(socket.id)
-        socket.emit("new message", messageField.value);
+        console.log(messageField.value)
+        socket.emit("new message", messageField.value, joinedID);
         firstMessage = false;
 
     }
@@ -366,24 +490,25 @@ function agentbox(name) {
     chatMessages.appendChild(AgentAvaliable)
 }
 
-let agentJoined=false
+let agentJoined = false
 
 socket.on('room joined', (data) => {
-
-    if(!agentJoined){
-        agentJoined=true
+    localStorage.setItem('joined', data.id)
+    if (!agentJoined) {
+        agentJoined = true
         agentbox(data.agent)
-    chatHeaderLeftName.innerHTML = data.agent
+        console.log(data.agent)
+        chatHeaderLeftName.innerHTML = data.agent
     }
-    
-    
+
+
 
 })
 socket.on('new Message', (data) => {
-    console.log('socket id:'+ socket.id)
+    alert('new message receiove')
+    console.log('socket id:' + socket.id)
     RightMessageBody.innerHTML = data.message
     RightMessage.appendChild(RightMessageBody);
     chatMessages.innerHTML += RightMessage.innerHTML
     chatBody.scrollTop = (chatBody.scrollHeight - chatBody.clientHeight)
-
 })
