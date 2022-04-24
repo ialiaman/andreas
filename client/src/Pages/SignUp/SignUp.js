@@ -41,7 +41,7 @@ function SignUp() {
     onSubmit: (values) => {
       setserverError("");
       console.log(JSON.stringify(values, null, 2));
-      axios.post(`http://192.163.206.200:3001/signup`, values).then((res) => {
+      axios.post(`http://localhost:3001/signup`, values).then((res) => {
         // alert(res.data)
         setserverError(res.data);
       });

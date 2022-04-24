@@ -16,7 +16,7 @@ app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: false }));
 const io = require("socket.io")(http, {
   // cors: {
-  //   origin: ["http://192.163.206.200", "http://192.163.206.200:3000"],
+  //   origin: ["http://localhost", "http://localhost:3000"],
   //   methods: ["GET", "POST"],
   //   allowedHeaders: ["my-custom-header"],
   //   credentials: true,
@@ -30,17 +30,17 @@ const { application } = require("express");
 // constant and variables
 const port = 3001;
 // create connection to database####
-// var con = mysql.createConnection({
-//   host: "192.163.206.200",
-//   user: "root",
-//   database: "chat-service",
-// });
 var con = mysql.createConnection({
-  host: "192.163.206.200",
-  user: "chatrepl_admin",
-  password: "Hunzai1122$$",
-  database: "chatrepl_chat_service",
+  host: "localhost",
+  user: "root",
+  database: "chat-service",
 });
+// var con = mysql.createConnection({
+//   host: "localhost",
+//   user: "chatrepl_admin",
+//   password: "Hunzai1122$$",
+//   database: "chatrepl_chat_service",
+// });
 // get all agents from the database
 const getAgents = () => {
   const agents = `SELECT * FROM registered_users  WHERE account_type = 'agent';`;
@@ -269,6 +269,14 @@ app.post("/chats/agent", (req, res) => {
     res.json(result[0]);
   });
 });
+// OWNER GET PLANS AHAD
+app.post("/ownergetplans", (req, res) => {
+  const query = `SELECT * FROM membership`;
+  con.query(query, (err, result) => {
+    res.json(result);
+  });
+});
+// OWNER GET PLANS END AHAD
 // api for getting all the comapnies name
 app.get("/chats/companies", (req, res) => {
   const query = `SELECT DISTINCT c_name from registered_users`;

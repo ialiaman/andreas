@@ -3,7 +3,7 @@ var body = document.getElementsByTagName("BODY")[0];
 var chatButton = document.createElement("BUTTON");
 var chatIcon = document.createElement("img");
 try {
-  var socket = io("http://192.163.206.200:3001", {
+  var socket = io("http://localhost:3001", {
     withCredentials: true,
     transports: ["websocket"],
     secure: true,
@@ -284,7 +284,7 @@ css(LeftMessageBody, {
 // fetch all messages handler
 //  const LoadMessagesHandler = () => {
 //     const LoadMessageID = { id: ID };
-//     fetch('http://192.163.206.200:3001/chats/messages', {
+//     fetch('http://localhost:3001/chats/messages', {
 //         method: 'POST', headers: {
 //             'Content-Type': 'application/json'
 //         }, body: JSON.stringify(LoadMessageID)
@@ -293,7 +293,7 @@ css(LeftMessageBody, {
 //     })
 //         //
 
-//     axios.post('http://192.163.206.200:3001/chats/messages', { id: customerID }).then(response => {
+//     axios.post('http://localhost:3001/chats/messages', { id: customerID }).then(response => {
 //         const messages = response.data
 //         // push all messages from database to all messages state
 //         setallMessages([...messages])
@@ -304,7 +304,7 @@ var joinedID = "";
 var initialMessages = [];
 const fetchChatData = (ID) => {
   const data = { id: ID };
-  fetch("http://192.163.206.200:3001/chats/chat", {
+  fetch("http://localhost:3001/chats/chat", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -327,7 +327,7 @@ const fetchChatData = (ID) => {
         // load all messages
         console.log("ID:" + ID);
         const LoadMessageID = { id: ID };
-        fetch("http://192.163.206.200:3001/chats/messages", {
+        fetch("http://localhost:3001/chats/messages", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

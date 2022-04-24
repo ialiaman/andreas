@@ -9,14 +9,12 @@ function Messaging() {
   console.log(chatList);
   // GET All CHAT DATA FROM DATABASE
   useEffect(() => {
-    axios
-      .get("http://192.163.206.200:3001/chats/getallchats")
-      .then((response) => {
-        console.log(response);
-        setchatList((pre) => {
-          return [...pre, ...response.data];
-        });
+    axios.get("http://localhost:3001/chats/getallchats").then((response) => {
+      console.log(response);
+      setchatList((pre) => {
+        return [...pre, ...response.data];
       });
+    });
   }, []);
   return (
     <Fragment>

@@ -5,7 +5,7 @@ const mysql = require("mysql");
 const { sign } = require("jsonwebtoken");
 const { validateToken } = require("../Middlewares/AuthMiddleware");
 var con = mysql.createConnection({
-  host: "192.163.206.200",
+  host: "localhost",
   user: "root",
   database: "chat-service",
 });

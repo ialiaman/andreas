@@ -26,7 +26,7 @@ function SignIn() {
     validationSchema: SignupSchema,
     onSubmit: (values) => {
       axios
-        .post(`http://192.163.206.200:3001/signin`, values)
+        .post(`http://localhost:3001/signin`, values)
         .catch((error) => {
           alert(error);
         })

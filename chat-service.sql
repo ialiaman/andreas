@@ -47,12 +47,12 @@ CREATE TABLE `all_chats` (
 --
 
 INSERT INTO `all_chats` (`id`, `status`, `served_by`, `created_date`, `is_end`, `origin`, `customer_id`, `address`, `plateform`, `city`, `country`, `agent_name`) VALUES
-(4, 1, '36', '2022-04-21 23:41:25', NULL, 'http://192.163.206.200:3000', 'EfKSBvEyLClFC87jAAAe', '::1', '\"Windows\"', 'Rawalpindi', 'PK', NULL),
-(5, 2, '', '2022-04-21 23:42:45', NULL, 'http://192.163.206.200:3000', 'bvvXtLveARmHr28AAAAh', '::ffff:127.0.0.1', 'undefined', 'Rawalpindi', 'PK', NULL),
-(6, 1, '38', '2022-04-21 23:44:14', NULL, 'http://192.163.206.200:3000', 'gE3c0PyWIB1Z_Us_AAAp', '::ffff:127.0.0.1', 'undefined', 'Rawalpindi', 'PK', NULL),
-(7, 1, '', '2022-04-22 23:10:32', NULL, 'http://192.163.206.200:3000', 'uvtQyFRXhMVLt13hAAAF', '::1', '\"Windows\"', 'Rawalpindi', 'PK', NULL),
-(8, 1, '36', '2022-04-22 23:12:09', NULL, 'http://192.163.206.200:3000', 'rwKxjLkSPPYyK3czAAAG', '::1', '\"Windows\"', 'Rawalpindi', 'PK', 'hazratAnas'),
-(9, 1, '36', '2022-04-22 23:14:21', NULL, 'http://192.163.206.200:3000', 'pfCKNz_QqP52xpLfAAAJ', '::1', '\"Windows\"', 'Rawalpindi', 'PK', 'hazrat Anas');
+(4, 1, '36', '2022-04-21 23:41:25', NULL, 'http://localhost:3000', 'EfKSBvEyLClFC87jAAAe', '::1', '\"Windows\"', 'Rawalpindi', 'PK', NULL),
+(5, 2, '', '2022-04-21 23:42:45', NULL, 'http://localhost:3000', 'bvvXtLveARmHr28AAAAh', '::ffff:127.0.0.1', 'undefined', 'Rawalpindi', 'PK', NULL),
+(6, 1, '38', '2022-04-21 23:44:14', NULL, 'http://localhost:3000', 'gE3c0PyWIB1Z_Us_AAAp', '::ffff:127.0.0.1', 'undefined', 'Rawalpindi', 'PK', NULL),
+(7, 1, '', '2022-04-22 23:10:32', NULL, 'http://localhost:3000', 'uvtQyFRXhMVLt13hAAAF', '::1', '\"Windows\"', 'Rawalpindi', 'PK', NULL),
+(8, 1, '36', '2022-04-22 23:12:09', NULL, 'http://localhost:3000', 'rwKxjLkSPPYyK3czAAAG', '::1', '\"Windows\"', 'Rawalpindi', 'PK', 'hazratAnas'),
+(9, 1, '36', '2022-04-22 23:14:21', NULL, 'http://localhost:3000', 'pfCKNz_QqP52xpLfAAAJ', '::1', '\"Windows\"', 'Rawalpindi', 'PK', 'hazrat Anas');
 
 -- --------------------------------------------------------
 
@@ -148,16 +148,16 @@ CREATE TABLE `leads` (
 INSERT INTO `leads` (`id`, `lead_name`, `lead_email`, `lead_phone`, `agent_name`, `date`, `company_url`, `c_name`) VALUES
 (1, 'Ahad Aman', 'ahadaman757@gmail.com', '+923312099944', 'Ali Aman', '0000-00-00', 'https://jataq.com', 'jataq'),
 (2, 'Hazrat Anas', 'anas123@gmail.com', '+923312099944', 'Ahad Aman', '2022-04-01', 'https://google.com', 'jataq'),
-(5, 'john', 'anas92949@gmail.com', '03158914711', 'HAZRAT ANAS', '2022-04-22', 'http://192.163.206.200:3000', 'jataq'),
-(6, 'anas', 'anas92949@gmail.com', '03158914711', 'HAZRAT ANAS', '2022-04-22', 'http://192.163.206.200:3000', 'jataq1'),
-(7, 'anas', 'anas92949@gmail.com', '03158914711', 'HAZRAT ANAS', '2022-04-22', 'http://192.163.206.200:3000', 'jataq1'),
-(9, 'john', 'hassan1234@gmail.com', '03158914711', 'HAZRAT ANAS', '2022-04-23', 'http://192.163.206.200:3000', '0'),
-(10, 'inayat', 'inayat@gmail.com', '0315684654', 'HAZRAT ANAS', '2022-04-23', 'http://192.163.206.200:3000', '0'),
-(11, 'finch', '17pwcse1537@uetpeshawar.edu.pk', '546541365465', 'HAZRAT ANAS', '2022-04-23', 'http://192.163.206.200:3000', '0'),
-(12, 'sherry', 'iamanhunzai@gmail.com', '015974564', 'HAZRAT ANAS', '2022-04-23', 'http://192.163.206.200:3000', '0'),
-(13, 'sherry', 'iamanhunzai@gmail.com', '015974564', 'HAZRAT ANAS', '2022-04-23', 'http://192.163.206.200:3000', 'abc'),
-(14, 'sherry', 'iamanhunzai@gmail.com', '015974564', 'HAZRAT ANAS', '2022-04-23', 'http://192.163.206.200:3000', '0'),
-(15, 'aman', 'iamanhunzai@gmail.com', '015684541645', 'HAZRAT ANAS', '2022-04-23', 'http://192.163.206.200:3000', '0');
+(5, 'john', 'anas92949@gmail.com', '03158914711', 'HAZRAT ANAS', '2022-04-22', 'http://localhost:3000', 'jataq'),
+(6, 'anas', 'anas92949@gmail.com', '03158914711', 'HAZRAT ANAS', '2022-04-22', 'http://localhost:3000', 'jataq1'),
+(7, 'anas', 'anas92949@gmail.com', '03158914711', 'HAZRAT ANAS', '2022-04-22', 'http://localhost:3000', 'jataq1'),
+(9, 'john', 'hassan1234@gmail.com', '03158914711', 'HAZRAT ANAS', '2022-04-23', 'http://localhost:3000', '0'),
+(10, 'inayat', 'inayat@gmail.com', '0315684654', 'HAZRAT ANAS', '2022-04-23', 'http://localhost:3000', '0'),
+(11, 'finch', '17pwcse1537@uetpeshawar.edu.pk', '546541365465', 'HAZRAT ANAS', '2022-04-23', 'http://localhost:3000', '0'),
+(12, 'sherry', 'iamanhunzai@gmail.com', '015974564', 'HAZRAT ANAS', '2022-04-23', 'http://localhost:3000', '0'),
+(13, 'sherry', 'iamanhunzai@gmail.com', '015974564', 'HAZRAT ANAS', '2022-04-23', 'http://localhost:3000', 'abc'),
+(14, 'sherry', 'iamanhunzai@gmail.com', '015974564', 'HAZRAT ANAS', '2022-04-23', 'http://localhost:3000', '0'),
+(15, 'aman', 'iamanhunzai@gmail.com', '015684541645', 'HAZRAT ANAS', '2022-04-23', 'http://localhost:3000', '0');
 
 -- --------------------------------------------------------
 

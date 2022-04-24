@@ -1,9 +1,147 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { DashboardHeader } from "../../Components/UI/MiniComponents/MiniComponent";
 import { Fragment } from "react";
 import styles from "./styles.module.css";
 import Button from "../../Components/Buttons/Button";
 import { AuthContext } from "../../App";
+import axios from "axios";
+
+const EditPlans = () => {
+  const [starterPrice, setStarterPrice] = useState(0);
+  const [businessPrice, setBusinessPrice] = useState(0);
+  useEffect(() => {
+    axios
+      .post(`http://localhost:3001/ownergetplans`, {
+        id: 1,
+      })
+      .then((response) => {
+        setStarterPrice(response.data[0].price);
+        setBusinessPrice(response.data[1].price);
+      });
+  }, []);
+  const price = {
+    color: "#5CB85C",
+    fontSize: "30px",
+  };
+  return (
+    <div className="container">
+      <h3>Subscriptions</h3>
+      <p>Choose your plan</p>
+      <div className="row">
+        <div className="col-12 col-md-4">
+          <div className="card">
+            <div className="card-body">
+              <h1>
+                <b>Free Trial</b>
+              </h1>
+              <p>Best for learning and chatting with customers.</p>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <span style={price}>Free</span>
+                <span>8 days</span>
+              </div>
+              <Button title="Subscribe Now" type="primaryFullWidth" />
+              <br />
+              <br />
+              <p>Track up to 50 leads</p>
+              <p>Unlimited chat history</p>
+              <p>Customization</p>
+              <p>Analytics</p>
+            </div>
+          </div>
+          <br />
+          <div className="card">
+            <div className="card-body">
+              <h1>
+                <b>Addons</b>
+              </h1>
+              <p>Best for learning and chatting with customers.</p>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <span style={price}>10$</span>
+                <span>Per lead</span>
+              </div>
+              <Button title="Add Now" type="primaryFullWidth" />
+            </div>
+          </div>
+        </div>
+        <div className="col-12 col-md-4">
+          <div className="card">
+            <div className="card-body">
+              <h1>
+                <b>Starter</b>
+              </h1>
+              <p>Full customization, targeting, and team management.</p>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <span style={price}>
+                  <input value={starterPrice} style={{ width: "90px" }} />
+                </span>
+                <span>Monthly</span>
+              </div>
+              <Button title="Save" type="primaryFullWidth" />
+              <br />
+              <br />
+              <p>Track up to 200 Leads</p>
+              <p>Unlimited chat history</p>
+              <p>Customization</p>
+              <p>Analytics</p>
+              <p>Software engineer support</p>
+              <p>Multiple website support</p>
+              <p>LiveChat Dashboard</p>
+            </div>
+          </div>
+        </div>
+        <div className="col-12 col-md-4">
+          <div className="card">
+            <div className="card-body">
+              <h1>
+                <b>Business</b>
+              </h1>
+              <p>Key features, advanced reporting, and workflow automation.</p>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <span style={price}>$60</span>
+                <span>Monthly</span>
+              </div>
+              <Button title="Subscribe Now" type="primaryFullWidth" />
+              <br />
+              <br />
+              <p>Track up to 5000 Leads</p>
+              <p>Unlimited chat history</p>
+              <p>Customization</p>
+              <p>Analytics</p>
+              <p>Software engineer support</p>
+              <p>Multiple website support</p>
+              <p>LiveChat Dashboard</p>
+              <p>White label chat widget</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const SettingsButton = (props) => {
   return (
@@ -18,6 +156,7 @@ const SettingsButton = (props) => {
   );
 };
 const LeftSideBar = ({ changeHandler }) => {
+  const { authState, setAuthState } = useContext(AuthContext);
   return (
     <div className={`${styles.clientSetingsLeftSideContainer}`}>
       <SettingsButton value="Overview" changeHandler={changeHandler} />
@@ -114,6 +253,47 @@ const LeftSideBar = ({ changeHandler }) => {
           </div>
         </div>
       </div>
+      {authState.LoggedUserData.account_type == "owner" ? (
+        <div className={`accordion accordion-flush`} id="accordionFour">
+          <div className={`accordion-item  ${styles.settingsAccordions}`}>
+            <h2 className="accordion-header" id="flush-headingFour">
+              <button
+                className={`accordion-button collapsed`}
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#flush-collapseFour"
+                aria-expanded="false"
+                aria-controls="flush-collapseFour"
+              >
+                Membership Plans
+              </button>
+            </h2>
+            <div
+              id="flush-collapseFour"
+              class="accordion-collapse collapse"
+              aria-labelledby="flush-headingFour"
+              data-bs-parent="#accordionFour"
+            >
+              <div class="accordion-body">
+                <button
+                  style={{ border: "none", background: "none" }}
+                  onClick={() => {
+                    changeHandler("editplans");
+                  }}
+                >
+                  Subscriptions
+                </button>{" "}
+                <br />
+                <button style={{ border: "none", background: "none" }}>
+                  Membership Plan
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        ""
+      )}
     </div>
   );
 };
@@ -351,6 +531,8 @@ const RightSideBar = ({ currentPage }) => {
     <Overview />
   ) : currentPage == "Subscription" ? (
     <Subscriptions />
+  ) : currentPage == "editplans" ? (
+    <EditPlans />
   ) : null;
 };
 function Setting() {

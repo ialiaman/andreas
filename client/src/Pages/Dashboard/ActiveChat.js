@@ -79,7 +79,7 @@ function ActiveChat() {
 
       console.log(JSON.stringify(values, null, 2));
       axios
-        .post(`http://192.163.206.200:3001/chats/addleads`, values)
+        .post(`http://localhost:3001/chats/addleads`, values)
         .then((res) => {});
     },
   });
@@ -103,7 +103,7 @@ function ActiveChat() {
   // fetch all messages handler
   const LoadMessagesHandler = () => {
     axios
-      .post("http://192.163.206.200:3001/chats/messages", { id: customerID })
+      .post("http://localhost:3001/chats/messages", { id: customerID })
       .then((response) => {
         const messages = response.data;
         // push all messages from database to all messages state
@@ -120,7 +120,7 @@ function ActiveChat() {
       message: currentAgentMessage,
     });
     axios
-      .post("http://192.163.206.200:3001/chats/addmessage", {
+      .post("http://localhost:3001/chats/addmessage", {
         id: customerID,
         message: currentAgentMessage,
       })
@@ -137,7 +137,7 @@ function ActiveChat() {
       setcustomerID(value);
       // Get record for   about the chat
       axios
-        .post("http://192.163.206.200:3001/chats/chat", { id: value })
+        .post("http://localhost:3001/chats/chat", { id: value })
         .then((response) => {
           console.log(response.data[0]);
           setchatData(response.data[0]);
@@ -157,7 +157,7 @@ function ActiveChat() {
   useEffect(() => {
     chatData &&
       axios
-        .post("http://192.163.206.200:3001/chats/agent", {
+        .post("http://localhost:3001/chats/agent", {
           id: chatData.served_by,
         })
         .then((res) => {
@@ -182,7 +182,7 @@ function ActiveChat() {
   });
   useEffect(() => {
     const companyOptions = [];
-    axios.get("http://192.163.206.200:3001/chats/companies").then((res) => {
+    axios.get("http://localhost:3001/chats/companies").then((res) => {
       res.data.map((company) => {
         companyOptions.push({ value: company.c_name, label: company.c_name });
       });
