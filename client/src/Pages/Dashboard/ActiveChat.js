@@ -140,10 +140,9 @@ function ActiveChat() {
                 setchatData(response.data[0])
 
                 // get agent info for this active chat
-
             })
 
-            socket.emit('join room', { id: value, agent: (authState.LoggedUserData.f_name + ' ' + authState.LoggedUserData.l_name) })
+            socket.emit('join room', { id: value, agent: (authState.LoggedUserData.f_name + ' ' + authState.LoggedUserData.l_name),image:authState.LoggedUserData.image })
         })
 
     }, [])

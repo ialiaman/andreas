@@ -13,8 +13,6 @@ try {
 catch (error) {
     console.log(error)
 }
-
-
 socket.on("connect_error", () => {
     // revert to classic upgrade
     alert('Cant connect to socket io')
@@ -273,6 +271,11 @@ css(LeftMessageBody, {
     width: '80%',
     marginRight: "auto",
 });
+css(chatHeaderLeftImage,{
+    width:'50px',
+    height:'50px',
+    borderRadius:'50%'
+})
 
 // for (var i = 0; i < inputElements.length; i++) {
 //     css(inputElements[i], {
@@ -338,20 +341,20 @@ const fetchChatData = (ID) => {
                     console.log('nessages:' + JSON.stringify(dataMessages))
                     initialMessages = JSON.parse(JSON.stringify(dataMessages))
                     initialMessages.map(mess => {
-                        if(mess.source!=='Agent'){
+                        if (mess.source !== 'Agent') {
                             LeftMessageBody.innerHTML = mess.message
                             LeftMessage.appendChild(LeftMessageBody);
                             chatMessages.innerHTML += LeftMessage.innerHTML
                             messageField.value = ''
                             chatBody.scrollTop = (chatBody.scrollHeight - chatBody.clientHeight)
                         }
-                        else{
+                        else {
                             RightMessageBody.innerHTML = mess.message
                             RightMessage.appendChild(RightMessageBody);
                             chatMessages.innerHTML += RightMessage.innerHTML
                             chatBody.scrollTop = (chatBody.scrollHeight - chatBody.clientHeight)
                         }
-                        
+
 
                     })
                 })
@@ -374,17 +377,19 @@ const fetchChatData = (ID) => {
 
 const checkChat = () => {
     asyncLocalStorage.getItem('joined').then(response => {
-
-
         const join = response ?? false
         if (join) {
             joinedID = response
             fetchChatData(response)
-
         }
-
-
     })
+    asyncLocalStorage.getItem('image').then(response => {
+        const join = response ?? false
+        if (join) {
+            chatHeaderLeftImage.src=`http://localhost:3001/images/${response}`
+        }
+    })
+
 }
 
 // function to check customer chat history end
@@ -392,9 +397,9 @@ const checkChat = () => {
 
 
 chatButton.addEventListener("click", () => {
-    
+
     if (chat.style.display == "flex") {
-        chatMessages.innerHTML =''
+        chatMessages.innerHTML = ''
         chat.style.display = "none";
         // chatButton.innerHTML = 'start chat'
     } else {
@@ -493,8 +498,13 @@ function agentbox(name) {
 let agentJoined = false
 
 socket.on('room joined', (data) => {
+ 
     localStorage.setItem('joined', data.id)
+    
+   
     if (!agentJoined) {
+        localStorage.setItem('image',data.image)
+        chatHeaderLeftImage.src=`http://localhost:3001/images/${data.image}`
         agentJoined = true
         agentbox(data.agent)
         console.log(data.agent)

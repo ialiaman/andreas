@@ -4,7 +4,7 @@ import { Fragment } from "react";
 import styles from "./styles.module.css";
 import Button from "../../Components/Buttons/Button";
 import { AuthContext } from "../../App";
-
+import axios from 'axios'
 const SettingsButton = (props) => {
   return (
     <button
@@ -120,12 +120,55 @@ const LeftSideBar = ({ changeHandler }) => {
 const Overview = () => {
   const { authState, setAuthState } = useContext(AuthContext);
   const [editable, setEditable] = useState(0);
-  const clickEvent = () => {
-    alert();
-  };
+
+  const [isSucces, setSuccess] = useState(null);
+  const [userInfo, setuserInfo] = useState({
+    file: [],
+    filepreview: null,
+  });
+
+  const handleInputChange = (event) => {
+    setuserInfo({
+      ...userInfo,
+      file: event.target.files[0],
+      filepreview: URL.createObjectURL(event.target.files[0]),
+    });
+
+  }
+
+
+  const submit = async () => {
+    const formdata = new FormData();
+    console.log(userInfo.file)
+    formdata.append('avatar', userInfo.file);
+    formdata.append('UID',authState.LoggedUserData.id)
+    
+    
+    axios.post("http://localhost:3001/imageupload", formdata, {
+      headers: { "Content-Type": "multipart/form-data" },
+      
+     
+      
+    })
+      .then(res => { // then print response status
+        console.warn(res);
+        if (res.data.success === 1) {
+          setSuccess("Image upload successfully");
+        }
+
+      })
+  }
+
+
+    const UpdateHandler=()=>{
+      alert('sub')
+        submit()
+    }
+console.log(authState.LoggedUserData)
   return (
     <div>
       <h3>Account Details</h3>
+
       <div className="row">
         <div className="col-md-8 col-12">
           <div className="card">
@@ -135,11 +178,14 @@ const Overview = () => {
               </b>
               <div className={`${styles.accountDetailsContainer}`}>
                 <img
-                  className="align-middle m-2"
-                  src={require("../../assets/Images/dashboardimg.png")}
+
+                style={{width:50,height:50}}
+                  className="rounded-circle align-middle m-2"
+                  src={`http://localhost:3001/images/${authState.LoggedUserData.image}` }
                 />
                 <div>
                   <div>
+
                     {editable == 0 ? (
                       <span>
                         {authState.LoggedUserData.f_name +
@@ -152,27 +198,42 @@ const Overview = () => {
                         <input value={authState.LoggedUserData.l_name} />
                       </>
                     )}
-                    <i
-                      className="fas fa-pencil-alt"
-                      style={{ marginLeft: "10px" }}
-                      onClick={() => setEditable(!editable)}
-                    ></i>
+                  
                   </div>
                   {editable == 0 ? (
                     <span>({authState.LoggedUserData.email})</span>
                   ) : (
                     <input value={authState.LoggedUserData.email} />
+                    
                   )}
-                  <div style={{ display: "flex" }}>
+                  <div className="my-3" style={{ display: "flex" }}>
                     {editable == 1 ? (
-                      <Button title="Save changes" type="primary" />
+                      
+                      <button onClick={()=>UpdateHandler()} className='my-3 btn-primary'  type="primary" > Save Changes</button>
                     ) : null}
                     {editable == 1 ? (
                       <Button title="Cancel" type="nobg" />
                     ) : null}
                   </div>
                 </div>
+               
               </div>
+             {
+               editable&&<>
+                <div className="form-row">
+                  <span className="font-weight-bold">Update Image</span>
+                  
+                  <input type="file" className="form-control" name="upload_file" onChange={handleInputChange} />
+                </div>
+
+              </>
+
+             }
+               <i
+                      className="fas float-end fa-pencil-alt"
+                      style={{ marginLeft: "10px" }}
+                      onClick={() => setEditable(!editable)}
+                    ></i>
             </div>
           </div>
         </div>
@@ -188,7 +249,7 @@ const Overview = () => {
               <Button
                 type="primary"
                 title="Add Billing Details"
-                click={clickEvent}
+                // click={clickEvent}
               />
             </div>
           </div>
