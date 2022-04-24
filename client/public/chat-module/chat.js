@@ -5,8 +5,6 @@ var chatIcon = document.createElement("img");
 try {
   var socket = io("http://localhost:3001", {
     withCredentials: true,
-    transports: ["websocket"],
-    secure: true,
     extraHeaders: {
       "my-custom-header": "abcd",
     },
@@ -14,7 +12,6 @@ try {
 } catch (error) {
   console.log(error);
 }
-
 socket.on("connect_error", () => {
   // revert to classic upgrade
   alert("Cant connect to socket io");
@@ -240,7 +237,7 @@ css(LeftMessageTitle, {
 });
 css(RightMessageBody, {
   background: "#FFFFFF",
-  boxShadow: "0px 3px 15px rgba(0, 0, 0, 0.15)",
+  boxShadow: "0px 0px 3px 1px rgba(0, 0, 0, 0.15)",
   borderRadius: "10px 10px 0px 10px",
   padding: "10px",
   fontSize: "14px",
@@ -267,6 +264,11 @@ css(LeftMessageBody, {
   fontWeight: "400",
   width: "80%",
   marginRight: "auto",
+});
+css(chatHeaderLeftImage, {
+  width: "50px",
+  height: "50px",
+  borderRadius: "50%",
 });
 
 // for (var i = 0; i < inputElements.length; i++) {
@@ -374,6 +376,12 @@ const checkChat = () => {
       fetchChatData(response);
     }
   });
+  asyncLocalStorage.getItem("image").then((response) => {
+    const join = response ?? false;
+    if (join) {
+      chatHeaderLeftImage.src = `http://localhost:3001/images/${response}`;
+    }
+  });
 };
 
 // function to check customer chat history end
@@ -468,7 +476,10 @@ let agentJoined = false;
 
 socket.on("room joined", (data) => {
   localStorage.setItem("joined", data.id);
+
   if (!agentJoined) {
+    localStorage.setItem("image", data.image);
+    chatHeaderLeftImage.src = `http://localhost:3001/images/${data.image}`;
     agentJoined = true;
     agentbox(data.agent);
     console.log(data.agent);

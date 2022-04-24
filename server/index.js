@@ -5,7 +5,7 @@ const app = express();
 const http = require("http").Server(app);
 const bodyparser = require("body-parser");
 var geoip = require("geoip-lite");
-
+const multer = require("multer");
 var cors = require("cors");
 var md5 = require("md5");
 const requestIp = require("request-ip");
@@ -13,7 +13,8 @@ var geoip = require("geoip-lite");
 // middlewares
 app.use(cors());
 app.use(bodyparser.json());
-app.use(bodyparser.urlencoded({ extended: false }));
+app.use(bodyparser.urlencoded({ extended: true }));
+app.use(express.static("public"));
 const io = require("socket.io")(http, {
   // cors: {
   //   origin: ["http://localhost", "http://localhost:3000"],
@@ -22,11 +23,13 @@ const io = require("socket.io")(http, {
   //   credentials: true,
   // },
 });
+
 // import routes
 const signInRouter = require("./routes/signin");
 const { get } = require("./routes/signin");
 const { json } = require("body-parser");
 const { application } = require("express");
+
 // constant and variables
 const port = 3001;
 // create connection to database####
@@ -41,6 +44,44 @@ var con = mysql.createConnection({
 //   password: "Hunzai1122$$",
 //   database: "chatrepl_chat_service",
 // });
+// images uploads
+const storage = multer.diskStorage({
+  destination: "./public/images",
+  filename: function (req, file, cb) {
+    // null as first argument means no error
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
+app.post("/imageupload", async (req, res) => {
+  console.log(req);
+  try {
+    // 'avatar' is the name of our file input field in the HTML form
+
+    let upload = multer({ storage: storage }).single("avatar");
+
+    upload(req, res, function (err) {
+      // req.file contains information of uploaded file
+      // req.body contains information of text fields
+
+      if (!req.file) {
+        return res.send("Please select an image to upload");
+      } else if (err instanceof multer.MulterError) {
+        return res.send(err);
+      } else if (err) {
+        return res.send(err);
+      }
+      var sql = `UPDATE registered_users SET image = '${req.file.filename}' WHERE id = '${req.body.UID}'`;
+
+      con.query(sql, (err, results) => {
+        if (err) throw err;
+        res.json({ success: 1 });
+      });
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+// images upload end
 // get all agents from the database
 const getAgents = () => {
   const agents = `SELECT * FROM registered_users  WHERE account_type = 'agent';`;
