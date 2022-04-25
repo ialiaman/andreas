@@ -28,10 +28,6 @@ import './styles.css'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Select from 'react-select'
-
-
-
-
 const asyncLocalStorage = {
     setItem: async function (key, value) {
         await null;
@@ -42,10 +38,7 @@ const asyncLocalStorage = {
         return localStorage.getItem(key);
     }
 };
-
 function ActiveChat() {
-
-
     const [customerLocation, setcustomerLocation] = useState('');
     const [othersChat, setothersChat] = useState(false)
     const [customerID, setcustomerID] = useState('')
@@ -60,8 +53,8 @@ function ActiveChat() {
     const handleShow = () => setShow(true);
     const [companies, setCompanies] = useState([])
     const [loggedAgent, setloggedAgent] = useState('')
+    const [chatEnd, setchatEnd] = useState(false)
     // handle lead form
-
     const formik = useFormik({
         initialValues: {
             agent: loggedAgent,
@@ -71,18 +64,12 @@ function ActiveChat() {
             phone: '',
             company_url: ''
         },
-
         onSubmit: values => {
             values.agent = loggedAgent
             values.company_url = chatData.origin
-        
             console.log(JSON.stringify(values, null, 2));
             axios.post(`http://localhost:3001/chats/addleads`, values)
                 .then(res => {
-                 
-                    
-
-
                 })
         }
     },
@@ -90,20 +77,17 @@ function ActiveChat() {
     // match agent to show message area
     useEffect(() => {
         if (authState.LoggedUserData.f_name && authState.LoggedUserData.l_name) {
-
             const curretUser = authState.LoggedUserData.f_name.toUpperCase() + ' ' + authState.LoggedUserData.l_name.toUpperCase()
             setloggedAgent(curretUser)
             if (curretUser !== agentName) {
                 console.log('not qural')
                 setothersChat(true)
             }
-
             else {
                 console.log('equal')
                 setothersChat(false)
             }
         }
-
     })
     // fetch all messages handler
     const LoadMessagesHandler = () => {
@@ -115,10 +99,8 @@ function ActiveChat() {
         })
     }
     const AgentMessageHandler = () => {
-       
         // setallMessages([...allMessages, { source: 'agent', message: currentAgentMessage, }])
         console.log('agent handler called');
-
         socket.emit('NEW_MESSAGE', { id: customerID, message: currentAgentMessage })
         axios.post('http://localhost:3001/chats/addmessage', {
             id: customerID,
@@ -130,7 +112,6 @@ function ActiveChat() {
         console.log('current message:' + currentAgentMessage)
         setcurrentAgentMessage('')
     }
-
     useEffect(() => {
         asyncLocalStorage.getItem('selected_customer').then(value => {
             setcustomerID(value)
@@ -138,62 +119,48 @@ function ActiveChat() {
             axios.post('http://localhost:3001/chats/chat', { id: value }).then(response => {
                 console.log(response.data[0])
                 setchatData(response.data[0])
-
                 // get agent info for this active chat
             })
-
-            socket.emit('join room', { id: value, agent: (authState.LoggedUserData.f_name + ' ' + authState.LoggedUserData.l_name),image:authState.LoggedUserData.image })
+            socket.emit('join room', { id: value, agent: (authState.LoggedUserData.f_name + ' ' + authState.LoggedUserData.l_name), image: authState.LoggedUserData.image })
         })
-
     }, [])
     useEffect(() => {
         chatData && axios.post('http://localhost:3001/chats/agent', { id: chatData.served_by }).then(res => {
-
             setagentName(res.data.f_name.toUpperCase() + ' ' + res.data.l_name.toUpperCase())
-
         }).catch(error => {
             console.log("error:" + error)
         })
     }, [chatData])
-
     // get all messages from database on first render
     useEffect(() => {
         LoadMessagesHandler()
         console.log('message loadinggggggggg')
     }, [customerID])
-
     useEffect(() => {
         chatarea.current.scrollTop = (chatarea.current.scrollHeight - chatarea.current.clientHeight)
-
-
     })
     useEffect(() => {
-      
         const companyOptions = []
         axios.get('http://localhost:3001/chats/companies').then(res => {
-
             res.data.map(company => {
                 companyOptions.push({ value: company.c_name, label: company.c_name })
             })
-            setCompanies([...companies, ...companyOptions])
+            setCompanies((pre)=> [...pre,...companyOptions])
         })
-
     }, [])
     useEffect(() => {
-
         return () => {
             // Store All Messages on UnMounting
-
         }
     }, [])
     const chatarea = useRef()
-
-
     socket.on('NEW MESSAGE', (msg) => {
         LoadMessagesHandler()
     })
+    socket.on('LEAVE ROOM', () => {
+        setchatEnd(true)
+    })
     console.log(chatData)
-
     return (
         <Fragment>
             <DashboardHeader title='ActiveChat' />
@@ -204,7 +171,6 @@ function ActiveChat() {
                             <div className="d-flex  py-9 px-13 justify-content-between" >
                                 <div className='d-flex   flex-grow-1' style={{ gap: 10 }} >
                                     <span className='font-500 font-18'>{agentName}</span>
-
                                 </div>
                                 <div className='d-flex flex-grow-1'>
                                     <span className='font-18'>
@@ -225,11 +191,10 @@ function ActiveChat() {
                                             return <MessageBoxAgent key={message.id} agentName={agentName} message={message.message} />
                                         }
                                     })
-
                                 }
                             </div>
                             {
-                                !othersChat ? <div className="msg_area flex-wrap d-flex mt-3" style={{ gap: 20 }}>
+                                !othersChat && !chatEnd ? <div className="msg_area flex-wrap d-flex mt-3" style={{ gap: 20 }}>
                                     <div className="d-flex " style={{ flexGrow: 10 }} >
                                         <textarea
                                             onKeyPress={(event) => {
@@ -253,15 +218,20 @@ function ActiveChat() {
                                         <button className=' py-3 btn-grey-action'>Whisper</button>
                                     </div>
                                 </div> : null
+
                             }
 
+
+
+                            {
+                                chatEnd ? <div className='bg-secondary text-white px-3 py-2 mx-3 rounded-bottom'>Customer Has Ended this Chat</div> : null
+                            }
                         </div>
                     </div>
                     <div className="col-md-4">
                         {
                             !othersChat ? <div className="card  mt-9">
-                                <Tabs  defaultActiveKey="details" id="uncontrolled-tab-example" className="mb-3 active-chat-tabs" onSelect={(event, e) => {
-
+                                <Tabs defaultActiveKey="details" id="uncontrolled-tab-example" className="mb-3 active-chat-tabs" onSelect={(event, e) => {
                                 }}>
                                     <Tab eventKey="details" title={<> {
                                         <BsFillInfoCircleFill className='icon' size={20} />
@@ -270,7 +240,6 @@ function ActiveChat() {
                                         <div className={`${styles.details_body}`}>
                                             <div className={`${styles.details_field_card}  bg-grey`}>
                                                 <span>
-
                                                     {chatData.customer_id}
                                                 </span>
                                                 <span color={colors.colors.green}>
@@ -328,7 +297,6 @@ function ActiveChat() {
                                             </div>
                                         </div>
                                     </Tab>
-
                                     <Tab eventKey="leads" title={<> {
                                         <FaUserPlus className='me-2' />
                                     }
@@ -336,7 +304,6 @@ function ActiveChat() {
                                         <div>
                                             <Card show={show} onHide={handleClose}>
                                                 <form onSubmit={formik.handleSubmit} method='post'>
-                                                   
                                                     <Card.Body>
                                                         <div class="mb-3">
                                                             <label htmlFor="c_name" class="form-label">Company  Name</label>
@@ -351,10 +318,8 @@ function ActiveChat() {
                                                                 {companies.map(c => {
                                                                     return <option value={c.value}>{c.label}</option>
                                                                 })}
-
                                                             </select>
                                                         </div>
-
                                                         <div class="mb-3">
                                                             <label htmlFor="exampleInputPassword1" class="form-label">Customer Name</label>
                                                             <input type="text" placeholder='Customer Name' class="form-control"
@@ -388,21 +353,14 @@ function ActiveChat() {
                                                                 https://linke123here/chat/210402098
                                                             </a>
                                                         </div>
-
-
-
                                                     </Card.Body>
                                                     <Card.Footer className='d-flex justify-content-between'>
-
-
-
                                                         <Button style={{ border: 0 }} variant="secondary" onClick={handleClose}>
                                                             Cancel
                                                         </Button>
                                                         <button type='submit' style={{ border: 0, backgroundColor: '#5BC0DE' }} className='text-decoration-none' variant="secondary" >
                                                             Done
                                                         </button>
-
                                                     </Card.Footer>
                                                 </form>
                                             </Card>
@@ -411,15 +369,12 @@ function ActiveChat() {
                                 </Tabs>
                             </div> : null
                         }
-
-
                     </div>
                 </div>
             </div>
         </Fragment>
     )
 }
-
 export default ActiveChat
 const MessageBoxClient = (props) => {
     return (

@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect,useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { MdKeyboardArrowDown } from 'react-icons/md';
 
 import styles from './styles.module.css'
@@ -10,12 +10,13 @@ function Messaging() {
     // GET All CHAT DATA FROM DATABASE
     useEffect(() => {
         axios.get('http://localhost:3001/chats/getallchats').then(response => {
-            console.log(response)
-            setchatList((pre)=>{                
-                return [...pre,...response.data]
+            
+            setchatList((pre) => {
+                
+                return [...pre, ...response.data]
             })
         })
-    },[])
+    }, [])
     return (
         <Fragment>
             <DashboardHeader title='Messaging' />
@@ -110,42 +111,42 @@ function Messaging() {
                                         <tbody>
 
                                             {
-                                                chatList.map(chat => { 
+                                                chatList.map(chat => {
                                                     return <tr>
-                                                    <td>
-                                                        <span className="badge badge-curious-bold">T</span>
-                                                    </td>
-                                                    <td>
-                                                        {chat.customer_id}
-                                                    </td>
-                                                    <td>
-                                                        2messages
-                                                    </td>
-                                                    <td>
-                                                        9 min
-                                                    </td>
-                                                    <td>
-                                                        <span className="badge badge-grey-light-bold ">{chat.agent_name}</span>
-                                                    </td>
-                                                    <td>
-                                                        {chat.created_date.slice(0,10)}
-                                                    </td>
-                                                    <td>
-                                                        {chat.is_end?<span className="badge badge-grey-light-bold ">Closed</span>:<span className="badge badge-grey-light-bold ">open</span>}
-                                                        
-                                                    </td>
-                                                    <td>
-                                                        <img src={require('../../assets/Images/chatimg.png')} alt="" />
-                                                    </td>
-                                                    <td>
-                                                        <input type="checkbox" />
-                                                    </td>
-                                                </tr> 
+                                                        <td>
+                                                            <span className="badge badge-curious-bold">T</span>
+                                                        </td>
+                                                        <td>
+                                                            {chat.customer_id}
+                                                        </td>
+                                                        <td>
+                                                            2messages
+                                                        </td>
+                                                        <td>
+                                                            9 min
+                                                        </td>
+                                                        <td>
+                                                            <span className="badge badge-grey-light-bold ">{chat.agent_name}</span>
+                                                        </td>
+                                                        <td>
+                                                            {chat.created_date.slice(0, 10)}
+                                                        </td>
+                                                        <td>
+                                                            {chat.is_end ? <span className="badge badge-grey-light-bold ">Closed</span> : <span className="badge bg-success ">open</span>}
+
+                                                        </td>
+                                                        <td>
+                                                            <img src={require('../../assets/Images/chatimg.png')} alt="" />
+                                                        </td>
+                                                        <td>
+                                                            <input type="checkbox" />
+                                                        </td>
+                                                    </tr>
                                                 })
                                             }
 
-                                            
-                                           
+
+
                                         </tbody>
                                     </table>
                                 </div>

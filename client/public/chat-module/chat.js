@@ -240,7 +240,7 @@ css(LeftMessageTitle, {
 });
 css(RightMessageBody, {
     background: "#FFFFFF",
-    boxShadow: "0px 3px 15px rgba(0, 0, 0, 0.15)",
+    boxShadow: "0px 0px 3px 1px rgba(0, 0, 0, 0.15)",
     borderRadius: "10px 10px 0px 10px",
     padding: "10px",
     fontSize: "14px",
@@ -271,10 +271,10 @@ css(LeftMessageBody, {
     width: '80%',
     marginRight: "auto",
 });
-css(chatHeaderLeftImage,{
-    width:'50px',
-    height:'50px',
-    borderRadius:'50%'
+css(chatHeaderLeftImage, {
+    width: '50px',
+    height: '50px',
+    borderRadius: '50%'
 })
 
 // for (var i = 0; i < inputElements.length; i++) {
@@ -321,6 +321,7 @@ const fetchChatData = (ID) => {
 
             if (data.length) {
                 agentJoined = true
+                console.log('length')
                 firstMessage = false;
                 console.log(firstMessage)
                 chatHeaderLeftName.innerHTML = data[0].agent_name
@@ -384,18 +385,17 @@ const checkChat = () => {
         }
     })
     asyncLocalStorage.getItem('image').then(response => {
+
         const join = response ?? false
         if (join) {
-            chatHeaderLeftImage.src=`http://localhost:3001/images/${response}`
+            console.log('image exists')
+            chatHeaderLeftImage.src = `http://localhost:3001/images/${response}`
         }
     })
 
 }
 
 // function to check customer chat history end
-
-
-
 chatButton.addEventListener("click", () => {
 
     if (chat.style.display == "flex") {
@@ -409,9 +409,36 @@ chatButton.addEventListener("click", () => {
     }
 });
 chatHeaderRightButton.addEventListener("click", () => {
-    chat.style.display = "none";
-    socket.disconnect(true)
+    chatMessages.innerHTML = ''
+    asyncLocalStorage.getItem('joined').then(response => {
 
+        const join = response ?? false
+        if (join) {
+
+            socket.emit("leave room", response);
+            localStorage.removeItem('joined')
+            localStorage.removeItem('image')
+        }
+        else {
+            alert('no id found' + response)
+        }
+    })
+    chat.style.display = "none";
+    console.log(socket)
+
+
+
+    chatHeaderLeftImage.src = "https://i.ibb.co/vsQqSkr/userIcon.png";
+    chatHeaderLeftName.innerHTML = "Searching ....";
+
+    firstMessage = true
+    console.log(firstMessage)
+
+
+
+
+    // chatHeaderLeftImage.src=''
+    // socket.disconnect(true)
 });
 
 // keep the scroll to bottom
@@ -451,6 +478,7 @@ const sendMessageHandler = () => {
     if (firstMessage === true) {
         console.log(socket.id)
         socket.emit("first message", { msg: messageField.value, id: socket.id });
+
         console.log(window.location.href)
         firstMessage = false;
     } else {
@@ -459,6 +487,7 @@ const sendMessageHandler = () => {
         firstMessage = false;
 
     }
+
     LeftMessageBody.innerHTML = messageField.value
     LeftMessage.appendChild(LeftMessageBody);
     chatMessages.innerHTML += LeftMessage.innerHTML
@@ -486,7 +515,7 @@ socket.on("agent Message", (msg) => {
 });
 function agentbox(name) {
     var AgentAvaliable = document.createElement('p')
-    AgentAvaliable.innerHTML = name + ' agent joined your chat'
+    AgentAvaliable.innerHTML = name + ' joined your chat'
     css(AgentAvaliable, {
         marginTop: '10px',
         marginBottom: '10px',
@@ -498,13 +527,13 @@ function agentbox(name) {
 let agentJoined = false
 
 socket.on('room joined', (data) => {
- 
+
     localStorage.setItem('joined', data.id)
-    
-   
+
+
     if (!agentJoined) {
-        localStorage.setItem('image',data.image)
-        chatHeaderLeftImage.src=`http://localhost:3001/images/${data.image}`
+        localStorage.setItem('image', data.image)
+        chatHeaderLeftImage.src = `http://localhost:3001/images/${data.image}`
         agentJoined = true
         agentbox(data.agent)
         console.log(data.agent)

@@ -11,6 +11,9 @@
     display: none;
 
 }
+.payment-line{
+    border: 1px solid #161C2D;
+}
 .active-chat-tabs .nav-link.active .text{
     display: inline-block;
 }

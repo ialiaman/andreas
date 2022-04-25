@@ -5,6 +5,7 @@ import styles from "./styles.module.css";
 import Button from "../../Components/Buttons/Button";
 import { AuthContext } from "../../App";
 import axios from 'axios'
+import SVGS from "../../helpers/svgs";
 const SettingsButton = (props) => {
   return (
     <button
@@ -141,14 +142,14 @@ const Overview = () => {
     const formdata = new FormData();
     console.log(userInfo.file)
     formdata.append('avatar', userInfo.file);
-    formdata.append('UID',authState.LoggedUserData.id)
-    
-    
+    formdata.append('UID', authState.LoggedUserData.id)
+
+
     axios.post("http://localhost:3001/imageupload", formdata, {
       headers: { "Content-Type": "multipart/form-data" },
-      
-     
-      
+
+
+
     })
       .then(res => { // then print response status
         console.warn(res);
@@ -160,11 +161,11 @@ const Overview = () => {
   }
 
 
-    const UpdateHandler=()=>{
-      alert('sub')
-        submit()
-    }
-console.log(authState.LoggedUserData)
+  const UpdateHandler = () => {
+    alert('sub')
+    submit()
+  }
+  console.log(authState.LoggedUserData)
   return (
     <div>
       <h3>Account Details</h3>
@@ -179,9 +180,9 @@ console.log(authState.LoggedUserData)
               <div className={`${styles.accountDetailsContainer}`}>
                 <img
 
-                style={{width:50,height:50}}
+                  style={{ width: 50, height: 50 }}
                   className="rounded-circle align-middle m-2"
-                  src={`http://localhost:3001/images/${authState.LoggedUserData.image}` }
+                  src={`http://localhost:3001/images/${authState.LoggedUserData.image}`}
                 />
                 <div>
                   <div>
@@ -198,42 +199,42 @@ console.log(authState.LoggedUserData)
                         <input value={authState.LoggedUserData.l_name} />
                       </>
                     )}
-                  
+
                   </div>
                   {editable == 0 ? (
                     <span>({authState.LoggedUserData.email})</span>
                   ) : (
                     <input value={authState.LoggedUserData.email} />
-                    
+
                   )}
                   <div className="my-3" style={{ display: "flex" }}>
                     {editable == 1 ? (
-                      
-                      <button onClick={()=>UpdateHandler()} className='my-3 btn-primary'  type="primary" > Save Changes</button>
+
+                      <button onClick={() => UpdateHandler()} className='my-3 btn-primary' type="primary" > Save Changes</button>
                     ) : null}
                     {editable == 1 ? (
                       <Button title="Cancel" type="nobg" />
                     ) : null}
                   </div>
                 </div>
-               
+
               </div>
-             {
-               editable&&<>
-                <div className="form-row">
-                  <span className="font-weight-bold">Update Image</span>
-                  
-                  <input type="file" className="form-control" name="upload_file" onChange={handleInputChange} />
-                </div>
+              {
+                editable && <>
+                  <div className="form-row">
+                    <span className="font-weight-bold">Update Image</span>
 
-              </>
+                    <input type="file" className="form-control" name="upload_file" onChange={handleInputChange} />
+                  </div>
 
-             }
-               <i
-                      className="fas float-end fa-pencil-alt"
-                      style={{ marginLeft: "10px" }}
-                      onClick={() => setEditable(!editable)}
-                    ></i>
+                </>
+
+              }
+              <i
+                className="fas float-end fa-pencil-alt"
+                style={{ marginLeft: "10px" }}
+                onClick={() => setEditable(!editable)}
+              ></i>
             </div>
           </div>
         </div>
@@ -249,7 +250,7 @@ console.log(authState.LoggedUserData)
               <Button
                 type="primary"
                 title="Add Billing Details"
-                // click={clickEvent}
+              // click={clickEvent}
               />
             </div>
           </div>
@@ -407,9 +408,153 @@ const Subscriptions = () => {
     </div>
   );
 };
+
+const Payment = () => {
+  return (
+    <Fragment>
+      <div className="container-fluid">
+        <div className="row">
+          <div className={`${styles.methods_title}`}>
+            Payment Methods
+          </div>
+        </div>
+        <div className="row">
+          <div className="card p-4 align-items-center justify-content-center col-md-3">
+          <img
+                  className={`${styles.iconImg} col-4 `}
+                  src={SVGS.PaymentIcon}
+                />
+            <p className="mb-0 mt-2">
+              Pay With Master
+            </p>
+          </div>
+        </div>
+        <div className="row my-3">
+          <div className="col-md-6">
+            <h3 className={`${styles.info_type}`}>Billing Info</h3>
+            <form class="row g-3">
+              <div class="col-md-12 payment_form">
+                <label for="inputEmail4" class="form-label">Full Name</label>
+                <input type="text" class="form-control" id="inputEmail4" placeholder="none" />
+              </div>
+              <div class="col-md-12">
+                <label for="inputPassword4" class="form-label">Billing Address</label>
+                <input type="text" class="form-control" placeholder="none" id="inputPassword4" />
+              </div>
+              <div class="col-md-6">
+                <label for="inputCity" class="form-label">City</label>
+                <input type="text" class="form-control" id="inputCity" />
+              </div>
+              <div class="col-md-6">
+                <label for="inputZip" class="form-label">Zip Code</label>
+                <input type="text" class="form-control" id="inputZip" />
+              </div>
+              <div class="col-md-6">
+                <label for="inputCity" class="form-label">City</label>
+                <input type="text" class="form-control" id="inputCity" />
+              </div>
+              <div class="col-12">
+                <label for="inputState" class="form-label">Country</label>
+                <select id="inputState" class="form-select">
+                  <option selected>Choose...</option>
+                  <option>...</option>
+                </select>
+              </div>
+
+              <div class="col-12">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="gridCheck" />
+                  <label className={`form-check-label ${styles.tick_text}`} for="gridCheck">
+                    Remember Billing Info
+                  </label>
+                </div>
+              </div>
+              <h3 className={`${styles.info_type} mt-4`}>
+                Credit Card Info
+              </h3>
+              <div class="col-md-12">
+                <label for="inputEmail4" class="form-label">Card Holder Name</label>
+                <input type="text" class="form-control" id="inputEmail4" placeholder="none" />
+              </div>
+              <div class="col-md-12">
+                <label for="inputEmail4" class="form-label">Card Number 14 Digits</label>
+                <input type="text" class="form-control" id="inputEmail4" placeholder="none" />
+              </div>
+              <div class="col-md-6">
+                <label for="inputCity" class="form-label">Exp Month</label>
+                <input type="text" class="form-control" id="inputCity" />
+              </div>
+              <div class="col-md-6">
+                <label for="inputZip" class="form-label">Exp Year</label>
+                <input type="text" class="form-control" id="inputZip" />
+              </div>
+              <div class="col-12">
+                <label for="inputPassword4" class="form-label">CVC Number</label>
+                <input type="text" class="form-control" placeholder="none" id="inputPassword4" />
+              </div>
+              <div class="col-12">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="gridCheck" />
+                  <label  className={`form-check-label ${styles.tick_text}`} for="gridCheck">
+                    Remember Card Info
+                  </label>
+                </div>
+              </div>
+              <div className="d-flex" style={{ gap: 10 }}>
+                <button className={`${styles.payment_save_btn} py-2 px-3`}>
+                  Save
+                </button>
+                <span>Cancel</span>
+              </div>
+            </form>
+          </div>
+          <div className="col-md-6">
+            <div className="card p-3">
+              <h4 className={`${styles.info_type}`}>Summary Details</h4>
+              <h5>Business Plan</h5>
+
+              <div className="d-flex justify-content-between">
+                <div>
+                  <h3 className={`${styles.methods_title}`} >Starter pack</h3>
+                  <p class="fw-lighter">Free Tial Ends Apr 12 2023.</p>
+                </div>
+
+                <span className="font-500"> $60/Mo</span>
+              </div>
+              <div className="payment-line my-3">
+              </div>
+              <div className="d-flex justify-content-between">
+                <div>
+                  <h3>Monthly Total</h3>
+                  <p class="fw-lighter">Get 15% off in annual subscribtion</p>
+                </div>
+
+                <span> $60</span>
+              </div>
+              <div className="payment-line my-3">
+              </div>
+              <div className="d-flex justify-content-between">
+                  <h2 className={`${styles.big_text}`}>Total</h2>
+                  <h2 className={`${styles.big_text}`}>$60</h2>
+              </div>
+              <div className={`${styles.subscribe_btn} my-2 p-3`}>
+                Subscribe Now
+              </div>
+              <p className={`${styles.card_footer_text} px-2 mt-3 text-center`}>
+              You will be chared for indivisual produtcs at the  end of the free trials , your subscription will continue until you cancel
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Fragment>
+  )
+}
+
 const RightSideBar = ({ currentPage }) => {
   return currentPage == "Overview" ? (
-    <Overview />
+    // <Overview />
+    <Payment />
   ) : currentPage == "Subscription" ? (
     <Subscriptions />
   ) : null;

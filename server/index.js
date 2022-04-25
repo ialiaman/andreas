@@ -149,7 +149,7 @@ app.post("/signup", (req, res) => {
   let md5Pasword = md5(password);
   // check if email exists
   const search = `SELECT * FROM registered_users  WHERE email = '${email}';`;
-  con.query(search, function (err, result) {
+  con.query(`SELECT * FROM registered_users  WHERE email = ?;`,[email], function (err, result) {
     if (err) {
       throw err;
     } else {
@@ -158,18 +158,19 @@ app.post("/signup", (req, res) => {
       } else {
         const sql = `INSERT INTO registered_users (f_name, l_name,email,password,c_name) VALUES ('${fname}', '${lname}', '${email}', '${md5Pasword}','${company}')`;
         // var sql = "INSERT INTO registered_users (f_name, l_name,email,password,c_name) VALUES ?)";
-        con.query(sql, function (err, result) {
+        con.query(`INSERT INTO registered_users (f_name, l_name,email,password,c_name) VALUES (?, ?, ?, ?,?)`,[fname,lname,email,md5Pasword,company], function (err, result) {
           if (err) {
             throw err;
             //   console.log('err block')
           } else {
-            res.send("Account Created Successfully");
+            res.send({message:"Account Created Successfully",success:1});
           }
         });
       }
     }
   });
 });
+
 app.use("/signin", signInRouter);
 // APIs for chats Messages
 // api for unanswered chat
@@ -191,7 +192,7 @@ app.get("/chats/active", (req, res) => {
 // UPDATE USER AHAD
 app.post("/updateuser", (req, res) => {
   const query = `UPDATE registered_users SET f_name='${req.body.firstname}', l_name='${req.body.lastname}', email='${req.body.email}' WHERE id = '${req.body.id}' `;
-  con.query(query, (err, result) => {
+  con.query(`UPDATE registered_users SET f_name=?, l_name=?, email=? WHERE id = ? `,[req.body.firstname,req.body.lastname,req.body.email,req.body.id], (err, result) => {
     if (err) throw err;
     res.json("1");
   });
@@ -341,6 +342,16 @@ app.get("/chats/getallchats", (req, res) => {
 });
 // code for socket io
 let agents = [];
+const chatEnd=(id)=>{
+  console.log('*****************')
+  console.log(id)
+  console.log('*****************')
+  const query = `UPDATE all_chats SET is_end = '1' WHERE customer_id = '${id}' `;
+  con.query(query, (error, result) => {
+    if (error) throw error;
+    // console.log(result)
+  });
+}
 io.on("connection", (socket) => {
   const origin = socket.handshake.headers.origin;
   const address = socket.handshake.address;
@@ -392,6 +403,13 @@ io.on("connection", (socket) => {
     console.log("socket id: " + socket.id);
     io.to(id).emit("NEW MESSAGE", msg);
   });
+  socket.on('leave room',(data)=>{
+    console.log('leaving')
+    socket.leave(data)
+    console.log(data)
+    chatEnd(data)
+    io.to(data).emit("LEAVE ROOM");
+  })
   socket.on("NEW_MESSAGE", (data) => {
     console.log("new message from agent to server");
     io.to(data.id).emit("new Message", data);
@@ -400,7 +418,9 @@ io.on("connection", (socket) => {
     console.log("reason :" + reason);
     console.log("disconnected");
     if (reason == "client namespace disconnect") {
+      console.log('disconnected id:'+socket.id)
       unAnswered(socket.id);
+      // endChat()
     }
     // socket.disconnect()
     // deleteChat(socket.id)
