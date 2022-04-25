@@ -6,7 +6,7 @@ import Button from "../../Components/Buttons/Button";
 import { AuthContext } from "../../App";
 import axios from "axios";
 import StripeCheckout from "react-stripe-checkout";
-const require = require("stripe")(process.env.STRIPE_SECRET);
+// STRIPE CONFIGURATION
 
 const EditPlans = () => {
   const [planSelected, setPlanSelected] = useState(1);
@@ -457,16 +457,6 @@ const Subscriptions = () => {
       <h3>Subscriptions</h3>
       <p>Choose your plan</p>
       <div className="row">
-        <StripeCheckout
-          amount="10.00"
-          name="STRIPE_INTEGRATION"
-          // functions defined above can be used to add more information while making the API call.
-          // description={`Order of ${computeQuantity(cart)} items!`}
-          image="LINKTOIMAGE"
-          stripeKey="pk_test_51KrpCtAGfLyluyxLjKxj7EtTSmRe6bo0ecNMicW0ISmzoxff6U94mdzxiUvBXeClaUpEz1kPAkv0u2H3jWfdH8wG00fGbTa2WF"
-          currency="INR"
-          email="USER_EMAIL"
-        />
         <div className="col-12 col-md-4">
           <div className="card">
             <div className="card-body">
