@@ -5,23 +5,25 @@ import styles from "./styles.module.css";
 import { DashboardHeader } from "../../Components/UI/MiniComponents/MiniComponent";
 import axios from "axios";
 function Messaging() {
-  const [chatList, setchatList] = useState([]);
-  console.log(chatList);
-  // GET All CHAT DATA FROM DATABASE
-  useEffect(() => {
-    axios.get("http://localhost:3001/chats/getallchats").then((response) => {
-      setchatList((pre) => {
-        return [...pre, ...response.data];
-      });
-    });
-  }, []);
-  return (
-    <Fragment>
-      <DashboardHeader title="Messaging" />
-      <div className="container-fluid  px-1 px-md-2 ps-lg-4 pe-lg-5 ">
-        <div className="row px-1  py-2">
-          <div className="col-12 col-xl-11">
-            {/* <div className="contianer-fluid card">
+    const [chatList, setchatList] = useState([])
+    console.log(chatList)
+    // GET All CHAT DATA FROM DATABASE
+    useEffect(() => {
+        axios.get('http://localhost:3001/chats/getallchats').then(response => {
+            
+            setchatList((pre) => {
+               
+                return [...pre, ...response.data]
+            })
+        })
+    }, [])
+    return (
+        <Fragment>
+            <DashboardHeader title='Messaging' />
+            <div className="container-fluid  px-1 px-md-2 ps-lg-4 pe-lg-5 ">
+                <div className="row px-1  py-2">
+                    <div className="col-12 col-xl-11">
+                        {/* <div className="contianer-fluid card">
                             <div className="row  py-2">
                                 <div className="col-md-7 align-items-center ms-auto d-flex justify-content-between ">
                                     <span className='ms-1' >
@@ -127,7 +129,7 @@ function Messaging() {
                               </span>
                             </td>
                             <td>{chat.customer_id}</td>
-                            <td>2messages</td>
+                            <td>{ `${chat.count} Messages` }</td>
                             <td>9 min</td>
                             <td>
                               <span className="badge badge-grey-light-bold ">

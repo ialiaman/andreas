@@ -244,15 +244,12 @@ app.post("/getleads", (req, res) => {
   });
 });
 
-const incrementMessageCount = (id) => {
-  con.query(
-    `UPDATE all_chats SET count = count+1 WHERE customer_id = ? `,
-    [id],
-    function (error, result) {
-      console.log(result);
-    }
-  );
-};
+const incrementMessageCount=(id)=>{
+
+  con.query(`UPDATE all_chats SET count = count+1 WHERE customer_id = ? `,[id],function (error,result){
+    console.log(result)
+  })
+}
 
 // GET LEADS END - BY AHAD
 // Get All messages from the database for a given socket id
@@ -272,7 +269,10 @@ app.post("/chats/addmessage", (req, res) => {
   insertMessage(message, id, "Agent");
   res.json("Message ade=d successfully");
 
-  incrementMessageCount(id);
+  incrementMessageCount(id)
+
+
+
 });
 app.post("/chats/servedby", (req, res) => {
   const chatID = req.body.chatID;
@@ -421,10 +421,10 @@ io.on("connection", (socket) => {
     // io.to(data.id).emit("room joined", data);
   });
   socket.on("new message", (msg, id) => {
-    console.log("new message id:" + id);
+    console.log('new message id:'+id)
     insertMessage(msg, id);
     console.log("emitting ");
-    incrementMessageCount(id);
+    incrementMessageCount(id)
     console.log("socket id: " + socket.id);
     io.to(id).emit("NEW MESSAGE", msg);
   });
