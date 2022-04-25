@@ -6,7 +6,6 @@ import main from './main.module.css'
 import {RightShape} from '../../Components/UI/MiniComponents/MiniComponent'
 import Footer from '../../Components/UI/Footer/Footer'
 
-
 const Features = (props) => {
   return (
     <div className='d-flex'>

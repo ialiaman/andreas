@@ -5,6 +5,7 @@ import Messaging from '../assets/Images/dashboard-sidebar-icons/Vector (3).svg'
 import Help from '../assets/Images/dashboard-sidebar-icons/help.svg'
 import Setting from '../assets/Images/dashboard-sidebar-icons/setting.svg'
 import PaymentIcon from '../assets/Images/dashboard-sidebar-icons/payment.svg'
+import Logo from '../assets/Images/dashboard-sidebar-icons/LOGO.svg'
 
 export default {
     Dashboard,
@@ -13,5 +14,11 @@ export default {
     Messaging,
     Help,
     Setting,
-    PaymentIcon
+    PaymentIcon,
+    Logo
 }
+// import SVGS from "../../helpers/svgs";
+{/* <img
+className={`${styles.iconImg} col-4 `}
+src={SVGS.Monitor}
+/> */}

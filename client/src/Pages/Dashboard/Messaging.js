@@ -129,7 +129,7 @@ function Messaging() {
                               </span>
                             </td>
                             <td>{chat.customer_id}</td>
-                            <td>2messages</td>
+                            <td>{ `${chat.count} Messages` }</td>
                             <td>9 min</td>
                             <td>
                               <span className="badge badge-grey-light-bold ">

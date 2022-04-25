@@ -39,8 +39,8 @@ const asyncLocalStorage = {
     }
 };
 function ActiveChat() {
-    const [customerLocation, setcustomerLocation] = useState('');
-    const [othersChat, setothersChat] = useState(false)
+    const [dateChanged, setdateChanged] = useState(true)
+     const [othersChat, setothersChat] = useState(false)
     const [customerID, setcustomerID] = useState('')
     const [chatData, setchatData] = useState('')
     const [allMessages, setallMessages] = useState([])
@@ -189,7 +189,7 @@ function ActiveChat() {
                                     allMessages.map(message => {
                                         console.log(message.source)
                                         if (message.source == 'customer') {
-                                            return <MessageBoxClient key={message.id} id={customerID} message={message.message} time={message.msgTime} />
+                                            return <MessageBoxClient key={message.id} id={customerID} message={message.message} time={message.date} />
                                         }
                                         else if (message.source == 'Agent') {
                                             return <MessageBoxAgent key={message.id} agentName={agentName} message={message.message} />
@@ -282,20 +282,20 @@ function ActiveChat() {
                                                     </span>
                                                 </div>
                                                 <div className='d-flex flex-wrap align-items-center ' style={{ gap: 10 }}>
-                                                    <button className="btn-light-blue py-1">
-                                                    </button>
+                                                    {/* <button className="btn-light-blue py-1">
+                                                    </button> */}
                                                     <span className='font-12'>
                                                         Visitor navigated to <br />
-                                                        <a className='font-12 blue-link text-blue text-decoration-none' href="">
+                                                        {/* <a className='font-12 blue-link text-blue text-decoration-none' href="">
                                                             https://linke123here/chat/
                                                             210402098
-                                                        </a>
+                                                        </a> */}
                                                     </span>
                                                 </div>
                                                 <div className='d-flex ' style={{ gap: 10 }}>
                                                     <IoIosArrowForward />
                                                     <a style={{ color: '#5494F3' }} className='font-12 blue-link text-blue text-decoration-none' href="">
-                                                        https://dashboard.jataq.tv
+                                                        {chatData.origin}
                                                     </a>
                                                 </div>
                                             </div>
@@ -362,7 +362,7 @@ function ActiveChat() {
                                                         <Button style={{ border: 0 }} variant="secondary" onClick={handleClose}>
                                                             Cancel
                                                         </Button>
-                                                        <button type='submit' style={{ border: 0, backgroundColor: '#5BC0DE' }} className='text-decoration-none' variant="secondary" >
+                                                        <button type='submit'   className={`text-decoration-none ${styles.payment_save_btn}`} variant="secondary" >
                                                             Done
                                                         </button>
                                                     </Card.Footer>
@@ -381,6 +381,7 @@ function ActiveChat() {
 }
 export default ActiveChat
 const MessageBoxClient = (props) => {
+    const {time}=props
     return (
         <div className="msg mt-4 pt-15 dotted-border-top">
             <div className="d-flex justify-content-between">
@@ -388,8 +389,9 @@ const MessageBoxClient = (props) => {
                     <span ><FaUser color={colors.colors.green} /></span>
                     <span style={{ color: colors.colors.green }}>{props.id}</span>
                 </div>
-                <div className="span">
-                    {props.time}
+                <div className="span text-primary">
+                            {time.slice(12,-5)}
+                  
                 </div>
             </div>
             <p className='mt-2 font-16 fw-300'>{props.message} </p>

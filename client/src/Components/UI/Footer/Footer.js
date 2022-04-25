@@ -1,6 +1,8 @@
 import React from 'react'
 import { RightShape } from '../MiniComponents/MiniComponent'
 import main from './footer.module.css'
+import SVGS from "../../../helpers/svgs";
+import styles from './footer.module.css'
 function Footer() {
     return (
         <div className="container-fluid ps-md-0 bg-blue" style={{ position: 'relative' }}>
@@ -16,16 +18,20 @@ function Footer() {
                 <div className="col-md-10">
                     <div className="row py-md-5">
                         <div className="col-md-3 ">
-                            <h1 className='text-white'>logo</h1>
+                        
+                            <img
+                                className={`${styles.iconImg} mt-3 mt-md-0 col-4 `}
+                                src={SVGS.Logo}
+                            />
                         </div>
                         <div className=" col-6 col-md-2  d-flex align-items-around text-white h-100">
                             <ul className='d-flex flex-column justify-content-between pt-2' style={{ listStyle: 'none' }}>
-                               <a className='text-decoration-none text-white' href="">
-                                <li className='fw-bold mb-2 mb-md-3'>
-                                    Demo
-                                </li>
+                                <a className='text-decoration-none text-white' href="">
+                                    <li className='fw-bold mb-2 mb-md-3'>
+                                        Demo
+                                    </li>
 
-                               </a>
+                                </a>
 
 
                                 <a className='text-decoration-none text-white' href="">
@@ -43,12 +49,12 @@ function Footer() {
                         </div>
                         <div className="col-md-2 col-6  d-flex align-items-around text-white h-100">
                             <ul className='d-flex flex-column justify-content-between pt-2' style={{ listStyle: 'none' }}>
-                                <a className='text-decoration-none text-white'  href="">
-                                <li className=' mb-2 mb-md-3 text-blue fw-bold'>
-                                    sdfsdf
-                                </li>
+                                <a className='text-decoration-none text-white' href="">
+                                    <li className=' mb-2 mb-md-3 text-blue fw-bold'>
+                                        sdfsdf
+                                    </li>
                                 </a>
-                                
+
                                 <a className='text-decoration-none text-white' href="">
                                     <li className='mb-2 mb-md-3'>
                                         Example
@@ -74,11 +80,11 @@ function Footer() {
                     </div>
                 </div>
             </div>
-            <div className="row text-center text-white py-2" style={{borderTop:'1px solid rgba(233, 233, 233, 0.24)'}}>
+            <div className="row text-center text-white py-2" style={{ borderTop: '1px solid rgba(233, 233, 233, 0.24)' }}>
                 <p className='mb-0'>
-                © 2022 yourdomain.com
+                    © 2022 yourdomain.com
                 </p>
-                </div>
+            </div>
         </div>
     )
 }

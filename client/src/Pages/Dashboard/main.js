@@ -130,7 +130,7 @@ function MainDashboard() {
             </ul>
             <div className="grey-line mb-3"></div>
             <ul className="d-flex pe-3 flex-column border-bottom-grey dashboard-nav justify-content-around pb-5 flex-grow-1 flex-row list-group">
-              <NavLink
+              {/* <NavLink
                 className={({ isActive }) =>
                   isActive
                     ? `${styles.navLinkActive} row  pe-3  mb-2`
@@ -140,7 +140,7 @@ function MainDashboard() {
               >
                 <img className={`${styles.iconImg} col-4 `} src={SVGS.Help} />
                 <span className="col-8">Help</span>
-              </NavLink>
+              </NavLink> */}
               <NavLink
                 className={({ isActive }) =>
                   isActive

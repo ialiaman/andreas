@@ -4,7 +4,7 @@ import ChatBox from '../Chatbox/Chatbox'
 import { Scale } from '@mui/icons-material'
 function Dashboard() {
   return (
-   <div className={`conainer-fluid mt-auto  bg-blue ${styles.section}`}  >
+   <div className={`conainer-fluid pt-5 mt-auto  bg-blue ${styles.section}`}  >
         <div className="container-lg">
             <div className="row">
                 <div className="col-md-6 align-self-center ">
