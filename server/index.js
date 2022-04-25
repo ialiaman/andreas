@@ -10,7 +10,6 @@ var cors = require("cors");
 var md5 = require("md5");
 const requestIp = require("request-ip");
 var geoip = require("geoip-lite");
-
 // middlewares
 app.use(cors());
 app.use(bodyparser.json());
@@ -30,7 +29,6 @@ const signInRouter = require("./routes/signin");
 const { get } = require("./routes/signin");
 const { json } = require("body-parser");
 const { application } = require("express");
-const { rmSync } = require("fs");
 
 // constant and variables
 const port = 3001;
@@ -40,12 +38,6 @@ var con = mysql.createConnection({
   user: "root",
   database: "chat-service",
 });
-// var con = mysql.createConnection({
-//   host: "localhost",
-//   user: "chatrepl_admin",
-//   password: "Hunzai1122$$",
-//   database: "chatrepl_chat_service",
-// });
 // images uploads
 const storage = multer.diskStorage({
   destination: "./public/images",
@@ -128,22 +120,13 @@ const deleteChat = (id) => {
     console.log("removed");
   });
 };
-
 // function to add message to all messages table
 const insertMessage = (message, id, source = "customer") => {
-  const data = {
-    allmessages: message,
-    sender: id,
-    source: source,
-  };
-  con.query(
-    `INSERT INTO all_messages (message,sender,source) VALUES (?, ?, ?)`,
-    [message, id, source],
-    (error, result) => {
-      if (error) throw error;
-      console.log("message inserted new message");
-    }
-  );
+  const query = `INSERT INTO all_messages (message,sender,source) VALUES ('${message}', '${id}','${source}' )`;
+  con.query(query, (error, result) => {
+    if (error) throw error;
+    console.log("message inserted new message");
+  });
 };
 // function to store tha lead in database
 
@@ -162,27 +145,39 @@ app.post("/signup", (req, res) => {
   let md5Pasword = md5(password);
   // check if email exists
   const search = `SELECT * FROM registered_users  WHERE email = '${email}';`;
-  con.query(search, function (err, result) {
-    if (err) {
-      throw err;
-    } else {
-      if (result.length > 0) {
-        res.send("email already exists");
+  con.query(
+    `SELECT * FROM registered_users  WHERE email = ?;`,
+    [email],
+    function (err, result) {
+      if (err) {
+        throw err;
       } else {
-        const sql = `INSERT INTO registered_users (f_name, l_name,email,password,c_name) VALUES ('${fname}', '${lname}', '${email}', '${md5Pasword}','${company}')`;
-        // var sql = "INSERT INTO registered_users (f_name, l_name,email,password,c_name) VALUES ?)";
-        con.query(sql, function (err, result) {
-          if (err) {
-            throw err;
-            //   console.log('err block')
-          } else {
-            res.send("Account Created Successfully");
-          }
-        });
+        if (result.length > 0) {
+          res.send("email already exists");
+        } else {
+          const sql = `INSERT INTO registered_users (f_name, l_name,email,password,c_name) VALUES ('${fname}', '${lname}', '${email}', '${md5Pasword}','${company}')`;
+          // var sql = "INSERT INTO registered_users (f_name, l_name,email,password,c_name) VALUES ?)";
+          con.query(
+            `INSERT INTO registered_users (f_name, l_name,email,password,c_name) VALUES (?, ?, ?, ?,?)`,
+            [fname, lname, email, md5Pasword, company],
+            function (err, result) {
+              if (err) {
+                throw err;
+                //   console.log('err block')
+              } else {
+                res.send({
+                  message: "Account Created Successfully",
+                  success: 1,
+                });
+              }
+            }
+          );
+        }
       }
     }
-  });
+  );
 });
+
 app.use("/signin", signInRouter);
 // APIs for chats Messages
 // api for unanswered chat
@@ -194,24 +189,6 @@ app.get("/chats/unanswered", (req, res) => {
   });
 });
 // api for active chat
-
-// UPDATE PLAN - AHAD AMAN
-app.post("/updateplan", (req, res) => {
-  con.query(
-    `UPDATE membership_price SET price = ?, name = ?, description = ? WHERE type = ?`,
-    [req.body.price, req.body.name, req.body.description, req.body.type],
-    (err, result) => {
-      res.json(1);
-    }
-  );
-});
-// UPDATE PLAN END - AHAD AMAN
-// GET PLANS - AHAD AMAN
-// app.post("/getplans", (req, res) => {
-//   con.query(`SELECT * FROM membership_price`, (err, result) => {
-//     res.json(result);
-//   });
-// });
 app.get("/chats/active", (req, res) => {
   const query = `SELECT * FROM all_chats WHERE status = '1'`;
   con.query(query, (error, result) => {
@@ -222,10 +199,14 @@ app.get("/chats/active", (req, res) => {
 // UPDATE USER AHAD
 app.post("/updateuser", (req, res) => {
   const query = `UPDATE registered_users SET f_name='${req.body.firstname}', l_name='${req.body.lastname}', email='${req.body.email}' WHERE id = '${req.body.id}' `;
-  con.query(query, (err, result) => {
-    if (err) throw err;
-    res.json("1");
-  });
+  con.query(
+    `UPDATE registered_users SET f_name=?, l_name=?, email=? WHERE id = ? `,
+    [req.body.firstname, req.body.lastname, req.body.email, req.body.id],
+    (err, result) => {
+      if (err) throw err;
+      res.json("1");
+    }
+  );
 });
 // UPDATE USER END AHAD
 // api for changing status of chat
@@ -263,6 +244,16 @@ app.post("/getleads", (req, res) => {
   });
 });
 
+const incrementMessageCount = (id) => {
+  con.query(
+    `UPDATE all_chats SET count = count+1 WHERE customer_id = ? `,
+    [id],
+    function (error, result) {
+      console.log(result);
+    }
+  );
+};
+
 // GET LEADS END - BY AHAD
 // Get All messages from the database for a given socket id
 
@@ -280,6 +271,8 @@ app.post("/chats/addmessage", (req, res) => {
   const id = req.body.id;
   insertMessage(message, id, "Agent");
   res.json("Message ade=d successfully");
+
+  incrementMessageCount(id);
 });
 app.post("/chats/servedby", (req, res) => {
   const chatID = req.body.chatID;
@@ -339,14 +332,6 @@ app.post("/chats/agent", (req, res) => {
     res.json(result[0]);
   });
 });
-// OWNER GET PLANS AHAD
-app.post("/ownergetplans", (req, res) => {
-  const query = `SELECT * FROM membership_price WHERE type = '${req.body.type}'`;
-  con.query(query, (err, result) => {
-    res.json(result);
-  });
-});
-// OWNER GET PLANS END AHAD
 // api for getting all the comapnies name
 app.get("/chats/companies", (req, res) => {
   const query = `SELECT DISTINCT c_name from registered_users`;
@@ -380,6 +365,16 @@ app.get("/chats/getallchats", (req, res) => {
 });
 // code for socket io
 let agents = [];
+const chatEnd = (id) => {
+  console.log("*****************");
+  console.log(id);
+  console.log("*****************");
+  const query = `UPDATE all_chats SET is_end = '1' WHERE customer_id = '${id}' `;
+  con.query(query, (error, result) => {
+    if (error) throw error;
+    // console.log(result)
+  });
+};
 io.on("connection", (socket) => {
   const origin = socket.handshake.headers.origin;
   const address = socket.handshake.address;
@@ -426,10 +421,19 @@ io.on("connection", (socket) => {
     // io.to(data.id).emit("room joined", data);
   });
   socket.on("new message", (msg, id) => {
+    console.log("new message id:" + id);
     insertMessage(msg, id);
     console.log("emitting ");
+    incrementMessageCount(id);
     console.log("socket id: " + socket.id);
     io.to(id).emit("NEW MESSAGE", msg);
+  });
+  socket.on("leave room", (data) => {
+    console.log("leaving");
+    socket.leave(data);
+    console.log(data);
+    chatEnd(data);
+    io.to(data).emit("LEAVE ROOM");
   });
   socket.on("NEW_MESSAGE", (data) => {
     console.log("new message from agent to server");
@@ -439,7 +443,9 @@ io.on("connection", (socket) => {
     console.log("reason :" + reason);
     console.log("disconnected");
     if (reason == "client namespace disconnect") {
+      console.log("disconnected id:" + socket.id);
       unAnswered(socket.id);
+      // endChat()
     }
     // socket.disconnect()
     // deleteChat(socket.id)

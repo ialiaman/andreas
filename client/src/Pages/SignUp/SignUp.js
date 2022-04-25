@@ -4,6 +4,7 @@ import styles from "./main.module.css";
 import { useFormik } from "formik";
 import axios from "axios";
 import * as Yup from "yup";
+import {useNavigate} from 'react-router-dom'
 function SignUp() {
   const [serverError, setserverError] = useState("");
   const SignupSchema = Yup.object().shape({
@@ -43,7 +44,10 @@ function SignUp() {
       console.log(JSON.stringify(values, null, 2));
       axios.post(`http://localhost:3001/signup`, values).then((res) => {
         // alert(res.data)
-        setserverError(res.data);
+        setserverError(res.data.message);
+        if(res.data.success==1){
+
+        }
       });
     },
   });

@@ -317,6 +317,7 @@ const fetchChatData = (ID) => {
     .then((data) => {
       if (data.length) {
         agentJoined = true;
+        console.log("length");
         firstMessage = false;
         console.log(firstMessage);
         chatHeaderLeftName.innerHTML = data[0].agent_name;
@@ -379,13 +380,13 @@ const checkChat = () => {
   asyncLocalStorage.getItem("image").then((response) => {
     const join = response ?? false;
     if (join) {
+      console.log("image exists");
       chatHeaderLeftImage.src = `http://localhost:3001/images/${response}`;
     }
   });
 };
 
 // function to check customer chat history end
-
 chatButton.addEventListener("click", () => {
   if (chat.style.display == "flex") {
     chatMessages.innerHTML = "";
@@ -398,8 +399,28 @@ chatButton.addEventListener("click", () => {
   }
 });
 chatHeaderRightButton.addEventListener("click", () => {
+  chatMessages.innerHTML = "";
+  asyncLocalStorage.getItem("joined").then((response) => {
+    const join = response ?? false;
+    if (join) {
+      socket.emit("leave room", response);
+      localStorage.removeItem("joined");
+      localStorage.removeItem("image");
+    } else {
+      alert("no id found" + response);
+    }
+  });
   chat.style.display = "none";
-  socket.disconnect(true);
+  console.log(socket);
+
+  chatHeaderLeftImage.src = "https://i.ibb.co/vsQqSkr/userIcon.png";
+  chatHeaderLeftName.innerHTML = "Searching ....";
+
+  firstMessage = true;
+  console.log(firstMessage);
+
+  // chatHeaderLeftImage.src=''
+  // socket.disconnect(true)
 });
 
 // keep the scroll to bottom
@@ -430,13 +451,18 @@ const sendMessageHandler = () => {
   if (firstMessage === true) {
     console.log(socket.id);
     socket.emit("first message", { msg: messageField.value, id: socket.id });
+
     console.log(window.location.href);
     firstMessage = false;
   } else {
     console.log(messageField.value);
+    asyncLocalStorage.getItem("joined").then((res) => {
+      alert(res);
+    });
     socket.emit("new message", messageField.value, joinedID);
     firstMessage = false;
   }
+
   LeftMessageBody.innerHTML = messageField.value;
   LeftMessage.appendChild(LeftMessageBody);
   chatMessages.innerHTML += LeftMessage.innerHTML;
@@ -463,7 +489,7 @@ socket.on("agent Message", (msg) => {
 });
 function agentbox(name) {
   var AgentAvaliable = document.createElement("p");
-  AgentAvaliable.innerHTML = name + " agent joined your chat";
+  AgentAvaliable.innerHTML = name + " joined your chat";
   css(AgentAvaliable, {
     marginTop: "10px",
     marginBottom: "10px",

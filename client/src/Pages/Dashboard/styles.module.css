@@ -268,6 +268,78 @@ gap:10px
     font-weight: 500;
     border: none;
 }
+.subscribe_btn{
+    width: 100%;
+    background: #1BA160;
+border-radius: 3px;
+color: white;
+font-weight: 500;
+font-size: 14px;
+text-align: center;
+}
+.card_footer_text{
+    font-family: 'Poppins';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 18px;
+display: flex;
+align-items: center;
+
+color: rgba(22, 28, 45, 0.8);
+}
+.black_varient{
+    color: #161C2D;
+ 
+}
+.methods_title{
+    font-family: 'Poppins';
+font-style: normal;
+font-weight: 600;
+font-size: 18px;
+line-height: 27px;
+color: #161C2D;
+}
+.info_type{
+    font-family: 'Poppins';
+font-style: normal;
+font-weight: 600;
+font-size: 16px;
+line-height: 24px;
+color: #161C2D;
+}
+
+.payment_save_btn{
+    background: #5CB85C;
+border-radius: 3px;
+border: 0px;
+color: white;
+}
+.tick_text{
+    font-family: 'Poppins';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 18px;
+color: #161C2D;
+}
+.big_text{
+    font-family: 'Poppins';
+font-style: normal;
+font-weight: 600;
+font-size: 24px;
+line-height: 36px;
+/* identical to box height */
+
+display: flex;
+align-items: center;
+
+color: #161C2D;
+}
+
+
+
+
 
 @media(min-width:768px) {
     .sidebar {

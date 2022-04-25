@@ -256,7 +256,14 @@ background-color: var(--MountainMeadow);
   width: 16px;
   height: 16px;
 }
-
+.payment_form .form-label{
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 18px;
+  color: #161C2D;
+}
 
 /* Media Queries */
 

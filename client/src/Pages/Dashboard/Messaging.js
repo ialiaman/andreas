@@ -10,7 +10,6 @@ function Messaging() {
   // GET All CHAT DATA FROM DATABASE
   useEffect(() => {
     axios.get("http://localhost:3001/chats/getallchats").then((response) => {
-      console.log(response);
       setchatList((pre) => {
         return [...pre, ...response.data];
       });
@@ -142,9 +141,7 @@ function Messaging() {
                                   Closed
                                 </span>
                               ) : (
-                                <span className="badge badge-grey-light-bold ">
-                                  open
-                                </span>
+                                <span className="badge bg-success ">open</span>
                               )}
                             </td>
                             <td>

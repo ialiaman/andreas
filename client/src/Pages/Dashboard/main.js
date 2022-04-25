@@ -10,14 +10,9 @@ import {
   useNavigate,
 } from "react-router-dom";
 import styles from "./styles.module.css";
-import { BsChatLeftDots } from "react-icons/bs";
-import { AiOutlineArrowLeft, AiTwotoneSetting } from "react-icons/ai";
-import { MdOutlineSpaceDashboard } from "react-icons/md";
-import { BiMessageDetail } from "react-icons/bi";
-import { ImStatsDots } from "react-icons/im";
-import { BiHelpCircle } from "react-icons/bi";
+
 import { AuthContext } from "../../App";
-import { ImportantDevices } from "@mui/icons-material";
+
 const UserContext = createContext();
 function MainDashboard() {
   const { authState, setAuthState } = useContext(AuthContext);

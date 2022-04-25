@@ -4,6 +4,7 @@ import ActiveChat from '../assets/Images/dashboard-sidebar-icons/Vector (2).svg'
 import Messaging from '../assets/Images/dashboard-sidebar-icons/Vector (3).svg'
 import Help from '../assets/Images/dashboard-sidebar-icons/help.svg'
 import Setting from '../assets/Images/dashboard-sidebar-icons/setting.svg'
+import PaymentIcon from '../assets/Images/dashboard-sidebar-icons/payment.svg'
 
 export default {
     Dashboard,
@@ -11,5 +12,6 @@ export default {
     ActiveChat,
     Messaging,
     Help,
-    Setting
+    Setting,
+    PaymentIcon
 }
