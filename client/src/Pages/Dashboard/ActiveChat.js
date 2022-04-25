@@ -74,6 +74,7 @@ function ActiveChat() {
         }
     },
     );
+    
     // match agent to show message area
     useEffect(() => {
         if (authState.LoggedUserData.f_name && authState.LoggedUserData.l_name) {
@@ -119,6 +120,9 @@ function ActiveChat() {
             axios.post('http://localhost:3001/chats/chat', { id: value }).then(response => {
                 console.log(response.data[0])
                 setchatData(response.data[0])
+                if(response.data[0].is_end){
+                    setchatEnd(true)
+                }
                 // get agent info for this active chat
             })
             socket.emit('join room', { id: value, agent: (authState.LoggedUserData.f_name + ' ' + authState.LoggedUserData.l_name), image: authState.LoggedUserData.image })

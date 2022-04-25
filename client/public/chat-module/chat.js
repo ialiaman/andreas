@@ -482,8 +482,11 @@ const sendMessageHandler = () => {
         console.log(window.location.href)
         firstMessage = false;
     } else {
-        console.log(messageField.value)
-        socket.emit("new message", messageField.value, joinedID);
+        const messagebody=messageField.value
+        asyncLocalStorage.getItem('joined').then(res=>{
+            socket.emit("new message",messagebody , res);
+        })
+       
         firstMessage = false;
 
     }
