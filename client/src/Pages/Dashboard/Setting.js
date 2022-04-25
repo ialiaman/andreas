@@ -1,11 +1,121 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { DashboardHeader } from "../../Components/UI/MiniComponents/MiniComponent";
 import { Fragment } from "react";
 import styles from "./styles.module.css";
 import Button from "../../Components/Buttons/Button";
 import { AuthContext } from "../../App";
-import axios from 'axios'
-import SVGS from "../../helpers/svgs";
+import axios from "axios";
+import StripeCheckout from "react-stripe-checkout";
+// STRIPE CONFIGURATION
+
+const EditPlans = () => {
+  const [planSelected, setPlanSelected] = useState(1);
+  const [planPrice, setPlanPrice] = useState(0);
+  const [planName, setPlanName] = useState("");
+  const [planDescription, setPlanDescription] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const changePlan = (e) => {
+    setPlanSelected(e);
+  };
+
+  useEffect(() => {
+    axios
+      .post(`http://localhost:3001/ownergetplans`, {
+        type: planSelected,
+      })
+      .then((response) => {
+        setPlanPrice(response.data[0].price);
+        setPlanName(response.data[0].name);
+        setPlanDescription(response.data[0].description);
+        setLoading(false);
+      });
+  }, [planSelected, loading]);
+
+  const saveChanges = () => {
+    axios
+      .post(`http://localhost:3001/updateplan`, {
+        price: planPrice,
+        name: planName,
+        description: planDescription,
+        type: planSelected,
+      })
+      .then((response) => {
+        setLoading(true);
+      });
+  };
+
+  const price = {
+    color: "#5CB85C",
+    fontSize: "30px",
+  };
+  return (
+    <div className="container">
+      <h3>Subscriptions</h3>
+      <p>Choose your plan</p>
+      <div className="card">
+        <div className="card-body">
+          <label>Select a plan to edit</label>
+          <select
+            className="form-select"
+            onChange={(val) => {
+              changePlan(val.target.value);
+            }}
+          >
+            <option value="1">Free</option>
+            <option value="2">Starter</option>
+            <option value="3">Business</option>
+          </select>
+          <hr />
+          <div className="row">
+            <div className="col-md-6 col-12">
+              <label>Package Name</label>
+              <input
+                className="form-control"
+                value={planName}
+                onChange={(val) => {
+                  setPlanName(val.target.value);
+                }}
+              />
+            </div>
+            <div className="col-md-6 col-12">
+              <label>Package Price</label>
+              <input
+                className="form-control"
+                value={planPrice}
+                onChange={(val) => {
+                  setPlanPrice(val.target.value);
+                }}
+              />
+            </div>
+            <div className="col-md-12 col-12" style={{ marginTop: "20px" }}>
+              <label>Package Description</label>
+              <input
+                className="form-control"
+                value={planDescription}
+                onChange={(val) => {
+                  setPlanDescription(val.target.value);
+                }}
+              />
+            </div>
+          </div>
+          <br />
+          <button
+            className="btn btn-outline-primary"
+            onClick={(event) => {
+              event.preventDefault();
+              saveChanges();
+            }}
+            disabled={loading == true ? true : false}
+          >
+            {loading == true ? "Updating" : "Save"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const SettingsButton = (props) => {
   return (
     <button
@@ -19,10 +129,11 @@ const SettingsButton = (props) => {
   );
 };
 const LeftSideBar = ({ changeHandler }) => {
+  const { authState, setAuthState } = useContext(AuthContext);
   return (
     <div className={`${styles.clientSetingsLeftSideContainer}`}>
       <SettingsButton value="Overview" changeHandler={changeHandler} />
-      <div className={`accordion accordion-flush`} id="accordionFlushExample">
+      {/* <div className={`accordion accordion-flush`} id="accordionFlushExample">
         <div className={`accordion-item  ${styles.settingsAccordions}`}>
           <h2 className="accordion-header" id="flush-headingOne">
             <button
@@ -49,8 +160,8 @@ const LeftSideBar = ({ changeHandler }) => {
             </div>
           </div>
         </div>
-      </div>
-      <div className={`accordion accordion-flush`} id="accordionFlushExample">
+      </div> */}
+      {/* <div className={`accordion accordion-flush`} id="accordionFlushExample">
         <div className={`accordion-item  ${styles.settingsAccordions}`}>
           <h2 className="accordion-header" id="flush-headingOne">
             <button
@@ -77,7 +188,7 @@ const LeftSideBar = ({ changeHandler }) => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
       <div className={`accordion accordion-flush`} id="accordionThree">
         <div className={`accordion-item  ${styles.settingsAccordions}`}>
           <h2 className="accordion-header" id="flush-headingThree">
@@ -108,13 +219,54 @@ const LeftSideBar = ({ changeHandler }) => {
                 Subscriptions
               </button>{" "}
               <br />
-              <button style={{ border: "none", background: "none" }}>
+              {/* <button style={{ border: "none", background: "none" }}>
                 Account Details
-              </button>
+              </button> */}
             </div>
           </div>
         </div>
       </div>
+      {/* {authState.LoggedUserData.account_type == "owner" ? (
+        <div className={`accordion accordion-flush`} id="accordionFour">
+          <div className={`accordion-item  ${styles.settingsAccordions}`}>
+            <h2 className="accordion-header" id="flush-headingFour">
+              <button
+                className={`accordion-button collapsed`}
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#flush-collapseFour"
+                aria-expanded="false"
+                aria-controls="flush-collapseFour"
+              >
+                Membership Plans
+              </button>
+            </h2>
+            <div
+              id="flush-collapseFour"
+              class="accordion-collapse collapse"
+              aria-labelledby="flush-headingFour"
+              data-bs-parent="#accordionFour"
+            >
+              <div class="accordion-body">
+                <button
+                  style={{ border: "none", background: "none" }}
+                  onClick={() => {
+                    changeHandler("editplans");
+                  }}
+                >
+                  Subscriptions
+                </button>{" "}
+                <br />
+                <button style={{ border: "none", background: "none" }}>
+                  Membership Plan
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        ""
+      )} */}
     </div>
   );
 };
@@ -134,38 +286,32 @@ const Overview = () => {
       file: event.target.files[0],
       filepreview: URL.createObjectURL(event.target.files[0]),
     });
-
-  }
-
+  };
 
   const submit = async () => {
     const formdata = new FormData();
-    console.log(userInfo.file)
-    formdata.append('avatar', userInfo.file);
-    formdata.append('UID', authState.LoggedUserData.id)
+    console.log(userInfo.file);
+    formdata.append("avatar", userInfo.file);
+    formdata.append("UID", authState.LoggedUserData.id);
 
-
-    axios.post("http://localhost:3001/imageupload", formdata, {
-      headers: { "Content-Type": "multipart/form-data" },
-
-
-
-    })
-      .then(res => { // then print response status
+    axios
+      .post("http://localhost:3001/imageupload", formdata, {
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+      .then((res) => {
+        // then print response status
         console.warn(res);
         if (res.data.success === 1) {
           setSuccess("Image upload successfully");
         }
-
-      })
-  }
-
+      });
+  };
 
   const UpdateHandler = () => {
-    alert('sub')
-    submit()
-  }
-  console.log(authState.LoggedUserData)
+    alert("sub");
+    submit();
+  };
+  console.log(authState.LoggedUserData);
   return (
     <div>
       <h3>Account Details</h3>
@@ -179,14 +325,12 @@ const Overview = () => {
               </b>
               <div className={`${styles.accountDetailsContainer}`}>
                 <img
-
                   style={{ width: 50, height: 50 }}
                   className="rounded-circle align-middle m-2"
                   src={`http://localhost:3001/images/${authState.LoggedUserData.image}`}
                 />
                 <div>
                   <div>
-
                     {editable == 0 ? (
                       <span>
                         {authState.LoggedUserData.f_name +
@@ -199,37 +343,43 @@ const Overview = () => {
                         <input value={authState.LoggedUserData.l_name} />
                       </>
                     )}
-
                   </div>
                   {editable == 0 ? (
                     <span>({authState.LoggedUserData.email})</span>
                   ) : (
                     <input value={authState.LoggedUserData.email} />
-
                   )}
                   <div className="my-3" style={{ display: "flex" }}>
                     {editable == 1 ? (
-
-                      <button onClick={() => UpdateHandler()} className='my-3 btn-primary' type="primary" > Save Changes</button>
+                      <button
+                        onClick={() => UpdateHandler()}
+                        className="my-3 btn-primary"
+                        type="primary"
+                      >
+                        {" "}
+                        Save Changes
+                      </button>
                     ) : null}
                     {editable == 1 ? (
                       <Button title="Cancel" type="nobg" />
                     ) : null}
                   </div>
                 </div>
-
               </div>
-              {
-                editable && <>
+              {editable && (
+                <>
                   <div className="form-row">
                     <span className="font-weight-bold">Update Image</span>
 
-                    <input type="file" className="form-control" name="upload_file" onChange={handleInputChange} />
+                    <input
+                      type="file"
+                      className="form-control"
+                      name="upload_file"
+                      onChange={handleInputChange}
+                    />
                   </div>
-
                 </>
-
-              }
+              )}
               <i
                 className="fas float-end fa-pencil-alt"
                 style={{ marginLeft: "10px" }}
@@ -250,7 +400,7 @@ const Overview = () => {
               <Button
                 type="primary"
                 title="Add Billing Details"
-              // click={clickEvent}
+                // click={clickEvent}
               />
             </div>
           </div>
@@ -287,6 +437,17 @@ const Overview = () => {
   );
 };
 const Subscriptions = () => {
+  const [freePrice, setFreePrice] = useState(0);
+
+  useEffect(() => {
+    axios
+      .post(`http://localhost:3001/getplans`, {
+        id: 1,
+      })
+      .then((response) => {
+        console.log(response.data[0].price);
+      });
+  }, []);
   const price = {
     color: "#5CB85C",
     fontSize: "30px",
@@ -408,155 +569,13 @@ const Subscriptions = () => {
     </div>
   );
 };
-
-const Payment = () => {
-  return (
-    <Fragment>
-      <div className="container-fluid">
-        <div className="row">
-          <div className={`${styles.methods_title}`}>
-            Payment Methods
-          </div>
-        </div>
-        <div className="row">
-          <div className="card p-4 align-items-center justify-content-center col-md-3">
-          <img
-                  className={`${styles.iconImg} col-4 `}
-                  src={SVGS.PaymentIcon}
-                />
-            <p className="mb-0 mt-2">
-              Pay With Master
-            </p>
-          </div>
-        </div>
-        <div className="row my-3">
-          <div className="col-md-6">
-            <h3 className={`${styles.info_type}`}>Billing Info</h3>
-            <form class="row g-3">
-              <div class="col-md-12 payment_form">
-                <label for="inputEmail4" class="form-label">Full Name</label>
-                <input type="text" class="form-control" id="inputEmail4" placeholder="none" />
-              </div>
-              <div class="col-md-12">
-                <label for="inputPassword4" class="form-label">Billing Address</label>
-                <input type="text" class="form-control" placeholder="none" id="inputPassword4" />
-              </div>
-              <div class="col-md-6">
-                <label for="inputCity" class="form-label">City</label>
-                <input type="text" class="form-control" id="inputCity" />
-              </div>
-              <div class="col-md-6">
-                <label for="inputZip" class="form-label">Zip Code</label>
-                <input type="text" class="form-control" id="inputZip" />
-              </div>
-              <div class="col-md-6">
-                <label for="inputCity" class="form-label">City</label>
-                <input type="text" class="form-control" id="inputCity" />
-              </div>
-              <div class="col-12">
-                <label for="inputState" class="form-label">Country</label>
-                <select id="inputState" class="form-select">
-                  <option selected>Choose...</option>
-                  <option>...</option>
-                </select>
-              </div>
-
-              <div class="col-12">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" id="gridCheck" />
-                  <label className={`form-check-label ${styles.tick_text}`} for="gridCheck">
-                    Remember Billing Info
-                  </label>
-                </div>
-              </div>
-              <h3 className={`${styles.info_type} mt-4`}>
-                Credit Card Info
-              </h3>
-              <div class="col-md-12">
-                <label for="inputEmail4" class="form-label">Card Holder Name</label>
-                <input type="text" class="form-control" id="inputEmail4" placeholder="none" />
-              </div>
-              <div class="col-md-12">
-                <label for="inputEmail4" class="form-label">Card Number 14 Digits</label>
-                <input type="text" class="form-control" id="inputEmail4" placeholder="none" />
-              </div>
-              <div class="col-md-6">
-                <label for="inputCity" class="form-label">Exp Month</label>
-                <input type="text" class="form-control" id="inputCity" />
-              </div>
-              <div class="col-md-6">
-                <label for="inputZip" class="form-label">Exp Year</label>
-                <input type="text" class="form-control" id="inputZip" />
-              </div>
-              <div class="col-12">
-                <label for="inputPassword4" class="form-label">CVC Number</label>
-                <input type="text" class="form-control" placeholder="none" id="inputPassword4" />
-              </div>
-              <div class="col-12">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" id="gridCheck" />
-                  <label  className={`form-check-label ${styles.tick_text}`} for="gridCheck">
-                    Remember Card Info
-                  </label>
-                </div>
-              </div>
-              <div className="d-flex" style={{ gap: 10 }}>
-                <button className={`${styles.payment_save_btn} py-2 px-3`}>
-                  Save
-                </button>
-                <span>Cancel</span>
-              </div>
-            </form>
-          </div>
-          <div className="col-md-6">
-            <div className="card p-3">
-              <h4 className={`${styles.info_type}`}>Summary Details</h4>
-              <h5>Business Plan</h5>
-
-              <div className="d-flex justify-content-between">
-                <div>
-                  <h3 className={`${styles.methods_title}`} >Starter pack</h3>
-                  <p class="fw-lighter">Free Tial Ends Apr 12 2023.</p>
-                </div>
-
-                <span className="font-500"> $60/Mo</span>
-              </div>
-              <div className="payment-line my-3">
-              </div>
-              <div className="d-flex justify-content-between">
-                <div>
-                  <h3>Monthly Total</h3>
-                  <p class="fw-lighter">Get 15% off in annual subscribtion</p>
-                </div>
-
-                <span> $60</span>
-              </div>
-              <div className="payment-line my-3">
-              </div>
-              <div className="d-flex justify-content-between">
-                  <h2 className={`${styles.big_text}`}>Total</h2>
-                  <h2 className={`${styles.big_text}`}>$60</h2>
-              </div>
-              <div className={`${styles.subscribe_btn} my-2 p-3`}>
-                Subscribe Now
-              </div>
-              <p className={`${styles.card_footer_text} px-2 mt-3 text-center`}>
-              You will be chared for indivisual produtcs at the  end of the free trials , your subscription will continue until you cancel
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </Fragment>
-  )
-}
-
 const RightSideBar = ({ currentPage }) => {
   return currentPage == "Overview" ? (
-    // <Overview />
-    <Payment />
+    <Overview />
   ) : currentPage == "Subscription" ? (
     <Subscriptions />
+  ) : currentPage == "editplans" ? (
+    <EditPlans />
   ) : null;
 };
 function Setting() {
