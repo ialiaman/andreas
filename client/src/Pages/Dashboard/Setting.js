@@ -5,20 +5,46 @@ import styles from "./styles.module.css";
 import Button from "../../Components/Buttons/Button";
 import { AuthContext } from "../../App";
 import axios from "axios";
+import StripeCheckout from "react-stripe-checkout";
+const require = require("stripe")(process.env.STRIPE_SECRET);
 
 const EditPlans = () => {
-  const [starterPrice, setStarterPrice] = useState(0);
-  const [businessPrice, setBusinessPrice] = useState(0);
+  const [planSelected, setPlanSelected] = useState(1);
+  const [planPrice, setPlanPrice] = useState(0);
+  const [planName, setPlanName] = useState("");
+  const [planDescription, setPlanDescription] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const changePlan = (e) => {
+    setPlanSelected(e);
+  };
+
   useEffect(() => {
     axios
       .post(`http://localhost:3001/ownergetplans`, {
-        id: 1,
+        type: planSelected,
       })
       .then((response) => {
-        setStarterPrice(response.data[0].price);
-        setBusinessPrice(response.data[1].price);
+        setPlanPrice(response.data[0].price);
+        setPlanName(response.data[0].name);
+        setPlanDescription(response.data[0].description);
+        setLoading(false);
       });
-  }, []);
+  }, [planSelected, loading]);
+
+  const saveChanges = () => {
+    axios
+      .post(`http://localhost:3001/updateplan`, {
+        price: planPrice,
+        name: planName,
+        description: planDescription,
+        type: planSelected,
+      })
+      .then((response) => {
+        setLoading(true);
+      });
+  };
+
   const price = {
     color: "#5CB85C",
     fontSize: "30px",
@@ -27,116 +53,63 @@ const EditPlans = () => {
     <div className="container">
       <h3>Subscriptions</h3>
       <p>Choose your plan</p>
-      <div className="row">
-        <div className="col-12 col-md-4">
-          <div className="card">
-            <div className="card-body">
-              <h1>
-                <b>Free Trial</b>
-              </h1>
-              <p>Best for learning and chatting with customers.</p>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
+      <div className="card">
+        <div className="card-body">
+          <label>Select a plan to edit</label>
+          <select
+            className="form-select"
+            onChange={(val) => {
+              changePlan(val.target.value);
+            }}
+          >
+            <option value="1">Free</option>
+            <option value="2">Starter</option>
+            <option value="3">Business</option>
+          </select>
+          <hr />
+          <div className="row">
+            <div className="col-md-6 col-12">
+              <label>Package Name</label>
+              <input
+                className="form-control"
+                value={planName}
+                onChange={(val) => {
+                  setPlanName(val.target.value);
                 }}
-              >
-                <span style={price}>Free</span>
-                <span>8 days</span>
-              </div>
-              <Button title="Subscribe Now" type="primaryFullWidth" />
-              <br />
-              <br />
-              <p>Track up to 50 leads</p>
-              <p>Unlimited chat history</p>
-              <p>Customization</p>
-              <p>Analytics</p>
+              />
+            </div>
+            <div className="col-md-6 col-12">
+              <label>Package Price</label>
+              <input
+                className="form-control"
+                value={planPrice}
+                onChange={(val) => {
+                  setPlanPrice(val.target.value);
+                }}
+              />
+            </div>
+            <div className="col-md-12 col-12" style={{ marginTop: "20px" }}>
+              <label>Package Description</label>
+              <input
+                className="form-control"
+                value={planDescription}
+                onChange={(val) => {
+                  setPlanDescription(val.target.value);
+                }}
+              />
             </div>
           </div>
           <br />
-          <div className="card">
-            <div className="card-body">
-              <h1>
-                <b>Addons</b>
-              </h1>
-              <p>Best for learning and chatting with customers.</p>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <span style={price}>10$</span>
-                <span>Per lead</span>
-              </div>
-              <Button title="Add Now" type="primaryFullWidth" />
-            </div>
-          </div>
-        </div>
-        <div className="col-12 col-md-4">
-          <div className="card">
-            <div className="card-body">
-              <h1>
-                <b>Starter</b>
-              </h1>
-              <p>Full customization, targeting, and team management.</p>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <span style={price}>
-                  <input value={starterPrice} style={{ width: "90px" }} />
-                </span>
-                <span>Monthly</span>
-              </div>
-              <Button title="Save" type="primaryFullWidth" />
-              <br />
-              <br />
-              <p>Track up to 200 Leads</p>
-              <p>Unlimited chat history</p>
-              <p>Customization</p>
-              <p>Analytics</p>
-              <p>Software engineer support</p>
-              <p>Multiple website support</p>
-              <p>LiveChat Dashboard</p>
-            </div>
-          </div>
-        </div>
-        <div className="col-12 col-md-4">
-          <div className="card">
-            <div className="card-body">
-              <h1>
-                <b>Business</b>
-              </h1>
-              <p>Key features, advanced reporting, and workflow automation.</p>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <span style={price}>$60</span>
-                <span>Monthly</span>
-              </div>
-              <Button title="Subscribe Now" type="primaryFullWidth" />
-              <br />
-              <br />
-              <p>Track up to 5000 Leads</p>
-              <p>Unlimited chat history</p>
-              <p>Customization</p>
-              <p>Analytics</p>
-              <p>Software engineer support</p>
-              <p>Multiple website support</p>
-              <p>LiveChat Dashboard</p>
-              <p>White label chat widget</p>
-            </div>
-          </div>
+          <button
+            className="btn btn-outline-primary"
+            onClick={(event) => {
+              event.preventDefault();
+              saveChanges();
+            }}
+            disabled={loading == true ? true : false}
+          >
+            {loading == true ? "Updating" : "Save"}
+          </button>
         </div>
       </div>
     </div>
@@ -160,7 +133,7 @@ const LeftSideBar = ({ changeHandler }) => {
   return (
     <div className={`${styles.clientSetingsLeftSideContainer}`}>
       <SettingsButton value="Overview" changeHandler={changeHandler} />
-      <div className={`accordion accordion-flush`} id="accordionFlushExample">
+      {/* <div className={`accordion accordion-flush`} id="accordionFlushExample">
         <div className={`accordion-item  ${styles.settingsAccordions}`}>
           <h2 className="accordion-header" id="flush-headingOne">
             <button
@@ -187,8 +160,8 @@ const LeftSideBar = ({ changeHandler }) => {
             </div>
           </div>
         </div>
-      </div>
-      <div className={`accordion accordion-flush`} id="accordionFlushExample">
+      </div> */}
+      {/* <div className={`accordion accordion-flush`} id="accordionFlushExample">
         <div className={`accordion-item  ${styles.settingsAccordions}`}>
           <h2 className="accordion-header" id="flush-headingOne">
             <button
@@ -215,7 +188,7 @@ const LeftSideBar = ({ changeHandler }) => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
       <div className={`accordion accordion-flush`} id="accordionThree">
         <div className={`accordion-item  ${styles.settingsAccordions}`}>
           <h2 className="accordion-header" id="flush-headingThree">
@@ -246,14 +219,14 @@ const LeftSideBar = ({ changeHandler }) => {
                 Subscriptions
               </button>{" "}
               <br />
-              <button style={{ border: "none", background: "none" }}>
+              {/* <button style={{ border: "none", background: "none" }}>
                 Account Details
-              </button>
+              </button> */}
             </div>
           </div>
         </div>
       </div>
-      {authState.LoggedUserData.account_type == "owner" ? (
+      {/* {authState.LoggedUserData.account_type == "owner" ? (
         <div className={`accordion accordion-flush`} id="accordionFour">
           <div className={`accordion-item  ${styles.settingsAccordions}`}>
             <h2 className="accordion-header" id="flush-headingFour">
@@ -293,7 +266,7 @@ const LeftSideBar = ({ changeHandler }) => {
         </div>
       ) : (
         ""
-      )}
+      )} */}
     </div>
   );
 };
@@ -464,6 +437,17 @@ const Overview = () => {
   );
 };
 const Subscriptions = () => {
+  const [freePrice, setFreePrice] = useState(0);
+
+  useEffect(() => {
+    axios
+      .post(`http://localhost:3001/getplans`, {
+        id: 1,
+      })
+      .then((response) => {
+        console.log(response.data[0].price);
+      });
+  }, []);
   const price = {
     color: "#5CB85C",
     fontSize: "30px",
@@ -473,6 +457,16 @@ const Subscriptions = () => {
       <h3>Subscriptions</h3>
       <p>Choose your plan</p>
       <div className="row">
+        <StripeCheckout
+          amount="10.00"
+          name="STRIPE_INTEGRATION"
+          // functions defined above can be used to add more information while making the API call.
+          // description={`Order of ${computeQuantity(cart)} items!`}
+          image="LINKTOIMAGE"
+          stripeKey="pk_test_51KrpCtAGfLyluyxLjKxj7EtTSmRe6bo0ecNMicW0ISmzoxff6U94mdzxiUvBXeClaUpEz1kPAkv0u2H3jWfdH8wG00fGbTa2WF"
+          currency="INR"
+          email="USER_EMAIL"
+        />
         <div className="col-12 col-md-4">
           <div className="card">
             <div className="card-body">

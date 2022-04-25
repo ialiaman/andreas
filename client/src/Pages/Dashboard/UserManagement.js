@@ -239,7 +239,7 @@ const UserManagement = () => {
                     >
                       Customer
                     </button>
-                    <input
+                    {/* <input
                       style={{ height: 33 }}
                       type="search"
                       className="form-control   rounded"
@@ -252,8 +252,8 @@ const UserManagement = () => {
                       className="input-group-text px-4  bgMountainMeadow  border-0"
                       id="search-addon"
                     >
-                      <i className="fas text-white fa-search"></i>
-                    </span>
+                      <i className="fas text-white fa-search"></i> */}
+                    {/* </span> */}
                   </div>
                   {/* <div className="d-flex mx-auto flex-wrap" style={{ gap: 40 }} >
                                         <div className='d-flex flex-wrap align-items-center' style={{ gap: 8 }}>
@@ -274,7 +274,7 @@ const UserManagement = () => {
                   className="col-md-5 d-flex flex-grow-1 justify-content-end align-items-center"
                   style={{ gap: 15 }}
                 >
-                  <span className="text-grey me-2">
+                  {/* <span className="text-grey me-2">
                     Sort by
                     <MdKeyboardArrowDown className="ms-1" />
                   </span>
@@ -287,7 +287,7 @@ const UserManagement = () => {
                       alt=""
                     />{" "}
                     Filter Visitors
-                  </button>
+                  </button> */}
                 </div>
               </div>
               <div className={`row `}>

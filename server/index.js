@@ -10,18 +10,19 @@ var cors = require("cors");
 var md5 = require("md5");
 const requestIp = require("request-ip");
 var geoip = require("geoip-lite");
+
 // middlewares
 app.use(cors());
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 const io = require("socket.io")(http, {
-  // cors: {
-  //   origin: ["http://localhost", "http://localhost:3000"],
-  //   methods: ["GET", "POST"],
-  //   allowedHeaders: ["my-custom-header"],
-  //   credentials: true,
-  // },
+  cors: {
+    origin: ["http://localhost", "http://localhost:3000"],
+    methods: ["GET", "POST"],
+    allowedHeaders: ["my-custom-header"],
+    credentials: true,
+  },
 });
 
 // import routes
@@ -29,6 +30,7 @@ const signInRouter = require("./routes/signin");
 const { get } = require("./routes/signin");
 const { json } = require("body-parser");
 const { application } = require("express");
+const { rmSync } = require("fs");
 
 // constant and variables
 const port = 3001;
@@ -126,13 +128,22 @@ const deleteChat = (id) => {
     console.log("removed");
   });
 };
+
 // function to add message to all messages table
 const insertMessage = (message, id, source = "customer") => {
-  const query = `INSERT INTO all_messages (message,sender,source) VALUES ('${message}', '${id}','${source}' )`;
-  con.query(query, (error, result) => {
-    if (error) throw error;
-    console.log("message inserted new message");
-  });
+  const data = {
+    allmessages: message,
+    sender: id,
+    source: source,
+  };
+  con.query(
+    `INSERT INTO all_messages (message,sender,source) VALUES (?, ?, ?)`,
+    [message, id, source],
+    (error, result) => {
+      if (error) throw error;
+      console.log("message inserted new message");
+    }
+  );
 };
 // function to store tha lead in database
 
@@ -183,6 +194,24 @@ app.get("/chats/unanswered", (req, res) => {
   });
 });
 // api for active chat
+
+// UPDATE PLAN - AHAD AMAN
+app.post("/updateplan", (req, res) => {
+  con.query(
+    `UPDATE membership_price SET price = ?, name = ?, description = ? WHERE type = ?`,
+    [req.body.price, req.body.name, req.body.description, req.body.type],
+    (err, result) => {
+      res.json(1);
+    }
+  );
+});
+// UPDATE PLAN END - AHAD AMAN
+// GET PLANS - AHAD AMAN
+// app.post("/getplans", (req, res) => {
+//   con.query(`SELECT * FROM membership_price`, (err, result) => {
+//     res.json(result);
+//   });
+// });
 app.get("/chats/active", (req, res) => {
   const query = `SELECT * FROM all_chats WHERE status = '1'`;
   con.query(query, (error, result) => {
@@ -312,7 +341,7 @@ app.post("/chats/agent", (req, res) => {
 });
 // OWNER GET PLANS AHAD
 app.post("/ownergetplans", (req, res) => {
-  const query = `SELECT * FROM membership`;
+  const query = `SELECT * FROM membership_price WHERE type = '${req.body.type}'`;
   con.query(query, (err, result) => {
     res.json(result);
   });
