@@ -444,7 +444,9 @@ const Message = ({ message }) => (
 );
 const Subscriptions = () => {
   const [message, setMessage] = useState("");
+  const { authState, setAuthState } = useContext(AuthContext);
   const [freePrice, setFreePrice] = useState(0);
+  const [freeActivate, setFreeActivated] = useState(0);
 
   useEffect(() => {
     // Check to see if this is a redirect back from Checkout
@@ -462,12 +464,13 @@ const Subscriptions = () => {
   }, []);
 
   useEffect(() => {
+    // GET CURRENT PLAN
     axios
-      .post(`http://localhost:3001/getplans`, {
-        id: 1,
+      .post(`http://localhost:3001/getcurrentplan`, {
+        id: authState.LoggedUserData.id,
       })
       .then((response) => {
-        console.log(response.data[0].price);
+        setFreeActivated(response.data[0].free_activated);
       });
   }, []);
   const price = {
@@ -497,12 +500,16 @@ const Subscriptions = () => {
                 <span style={price}>Free</span>
                 <span>8 days</span>
               </div>
-              <form
-                action="http://localhost:3001/create-checkout-session1"
-                method="POST"
-              >
-                <Button title="Subscribe Now" type="primaryFullWidth" />
-              </form>
+              {freeActivate == "0" ? (
+                <Button title="Current Plan" type="primaryFullWidth" />
+              ) : (
+                <form
+                  action="http://localhost:3001/create-checkout-session1"
+                  method="POST"
+                >
+                  <Button title="Subscribe Now" type="primaryFullWidth" />
+                </form>
+              )}
               <br />
               <br />
               <p>Track up to 50 leads</p>
