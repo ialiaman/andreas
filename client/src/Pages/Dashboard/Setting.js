@@ -436,16 +436,41 @@ const Overview = () => {
     </div>
   );
 };
+const ProductDisplay = () => <section></section>;
+const Message = ({ message }) => (
+  <section>
+    <p>{message}</p>
+  </section>
+);
 const Subscriptions = () => {
+  const [message, setMessage] = useState("");
+  const { authState, setAuthState } = useContext(AuthContext);
   const [freePrice, setFreePrice] = useState(0);
+  const [freeActivate, setFreeActivated] = useState(0);
 
   useEffect(() => {
+    // Check to see if this is a redirect back from Checkout
+    const query = new URLSearchParams(window.location.search);
+
+    if (query.get("success")) {
+      setMessage("Order placed! You will receive an email confirmation.");
+    }
+
+    if (query.get("canceled")) {
+      setMessage(
+        "Order canceled -- continue to shop around and checkout when you're ready."
+      );
+    }
+  }, []);
+
+  useEffect(() => {
+    // GET CURRENT PLAN
     axios
-      .post(`http://localhost:3001/getplans`, {
-        id: 1,
+      .post(`http://localhost:3001/getcurrentplan`, {
+        id: authState.LoggedUserData.id,
       })
       .then((response) => {
-        console.log(response.data[0].price);
+        setFreeActivated(response.data[0].free_activated);
       });
   }, []);
   const price = {
@@ -454,6 +479,7 @@ const Subscriptions = () => {
   };
   return (
     <div className="container">
+      {message ? <Message message={message} /> : <ProductDisplay />}
       <h3>Subscriptions</h3>
       <p>Choose your plan</p>
       <div className="row">
@@ -474,7 +500,16 @@ const Subscriptions = () => {
                 <span style={price}>Free</span>
                 <span>8 days</span>
               </div>
-              <Button title="Subscribe Now" type="primaryFullWidth" />
+              {freeActivate == "0" ? (
+                <Button title="Current Plan" type="primaryFullWidth" />
+              ) : (
+                <form
+                  action="http://localhost:3001/create-checkout-session1"
+                  method="POST"
+                >
+                  <Button title="Subscribe Now" type="primaryFullWidth" />
+                </form>
+              )}
               <br />
               <br />
               <p>Track up to 50 leads</p>
@@ -484,25 +519,6 @@ const Subscriptions = () => {
             </div>
           </div>
           <br />
-          <div className="card">
-            <div className="card-body">
-              <h1>
-                <b>Addons</b>
-              </h1>
-              <p>Best for learning and chatting with customers.</p>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <span style={price}>10$</span>
-                <span>Per lead</span>
-              </div>
-              <Button title="Add Now" type="primaryFullWidth" />
-            </div>
-          </div>
         </div>
         <div className="col-12 col-md-4">
           <div className="card">
@@ -521,7 +537,12 @@ const Subscriptions = () => {
                 <span style={price}>$16</span>
                 <span>Monthly</span>
               </div>
-              <Button title="Subscribe Now" type="primaryFullWidth" />
+              <form
+                action="http://localhost:3001/create-checkout-session1"
+                method="POST"
+              >
+                <Button title="Subscribe Now" type="primaryFullWidth" />
+              </form>
               <br />
               <br />
               <p>Track up to 200 Leads</p>
@@ -538,9 +559,9 @@ const Subscriptions = () => {
           <div className="card">
             <div className="card-body">
               <h1>
-                <b>Business</b>
+                <b>Addons</b>
               </h1>
-              <p>Key features, advanced reporting, and workflow automation.</p>
+              <p>Best for learning and chatting with customers.</p>
               <div
                 style={{
                   display: "flex",
@@ -548,20 +569,10 @@ const Subscriptions = () => {
                   alignItems: "center",
                 }}
               >
-                <span style={price}>$60</span>
-                <span>Monthly</span>
+                <span style={price}>10$</span>
+                <span>Per lead</span>
               </div>
-              <Button title="Subscribe Now" type="primaryFullWidth" />
-              <br />
-              <br />
-              <p>Track up to 5000 Leads</p>
-              <p>Unlimited chat history</p>
-              <p>Customization</p>
-              <p>Analytics</p>
-              <p>Software engineer support</p>
-              <p>Multiple website support</p>
-              <p>LiveChat Dashboard</p>
-              <p>White label chat widget</p>
+              <Button title="Add Now" type="primaryFullWidth" />
             </div>
           </div>
         </div>
