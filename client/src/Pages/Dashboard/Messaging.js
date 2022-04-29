@@ -122,7 +122,7 @@ function Messaging() {
                     <tbody>
                       {chatList.map((chat) => {
                         return (
-                          <tr>
+                          <tr key={chat.id}>
                             <td>
                               <span className="badge badge-curious-bold">
                                 T

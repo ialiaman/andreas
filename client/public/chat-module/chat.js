@@ -2,6 +2,19 @@
 var body = document.getElementsByTagName("BODY")[0];
 var chatButton = document.createElement("BUTTON");
 var chatIcon = document.createElement('img')
+const connectSocket = () => {
+    try {
+        var socket = io("http://localhost:3001", {
+            withCredentials: true,
+            extraHeaders: {
+                "my-custom-header": "abcd"
+            }
+        });
+    }
+    catch (error) {
+        console.log(error)
+    }
+}
 try {
     var socket = io("http://localhost:3001", {
         withCredentials: true,
@@ -23,15 +36,12 @@ socket.on('connect_failed', err => {
 })
 var chatIcon = document.createElement("img");
 var firstMessage = true;
-
-
 chatIcon.src = "https://i.ibb.co/1LNw0Lf/chaticon.png";
 chatIcon.alt = "not loaded";
 chatButton.appendChild(chatIcon);
 function css(element, style) {
     for (const property in style) element.style[property] = style[property];
 }
-
 var chat = document.createElement("div");
 var chatHeader = document.createElement("div");
 var chatHeaderLeft = document.createElement("div");
@@ -45,12 +55,12 @@ chatHeaderLeft.appendChild(chatHeaderLeftName);
 chatHeaderRightButton = document.createElement("button");
 chatHeaderRightButton.innerHTML = "End chat";
 chatHeader.appendChild(chatHeaderRightButton);
-
 // body of chat Box
 var chatBody = document.createElement("div");
 var chatDateRow = document.createElement("div");
 var chatDate = document.createElement("span");
 var chatMessages = document.createElement("div");
+
 chatDate.innerHTML = "19:25 Monday";
 chatDateRow.appendChild(chatDate);
 //chat messages
@@ -69,11 +79,8 @@ var RightMessageBody = document.createElement("div");
 var LeftMessage = document.createElement("div");
 var LeftMessageTitle = document.createElement("p");
 var LeftMessageBody = document.createElement("div");
-
 LeftMessage.appendChild(LeftMessageTitle);
-
 // chatMessages.append(LeftMessage);
-
 //footer of chat box
 var chatFooter = document.createElement("div");
 var messageField = document.createElement("textarea");
@@ -89,7 +96,6 @@ var nameInput = document.createElement("input");
 var emailInput = document.createElement("input");
 var messageInput = document.createElement("textarea");
 var inputElements = document.getElementsByTagName("input");
-
 // assign values
 nameInput.placeholder = "*Name";
 emailInput.placeholder = "*Email";
@@ -102,7 +108,6 @@ chat.appendChild(chatBody);
 chatBody.appendChild(chatDateRow);
 chatBody.appendChild(chatMessages);
 chat.appendChild(chatFooter);
-
 css(chatButton, {
     background: "linear-gradient(144.72deg, #1BA160 -58.12%, #2EDB90 136.39%)",
     border: "5px solid #FFFFFF",
@@ -135,14 +140,12 @@ css(chat, {
     margin: "20px",
     "background-color": "#fff",
     "flex-direction": "column",
-
     // 'justify-content': 'space-around',
     "border-radius": "10px",
     transition: "",
     zIndex: "100000",
     // border:'1px solid red'
 });
-
 css(chatHeader, {
     padding: "15px",
     background: "#1BA160",
@@ -176,6 +179,7 @@ css(chatHeaderRightButton, {
     paddingBottom: "5px",
     color: "white",
     fontEeight: "500",
+    display:'none'
 });
 css(chatBody, {
     padding: "15px",
@@ -221,9 +225,6 @@ css(chatMessages, {
     fontFamily: "Poppins",
     // background:'red'
 });
-
-
-
 css(RightMessageTitle, {
     fontSize: '14px',
     marginBottom: "0px",
@@ -248,9 +249,6 @@ css(RightMessage, {
     marginTop: '10px'
 });
 css(LeftMessage, {
-
-
-
     marginLeft: "10px",
 });
 css(LeftMessageBody, {
@@ -270,7 +268,6 @@ css(chatHeaderLeftImage, {
     height: '50px',
     borderRadius: '50%'
 })
-
 // for (var i = 0; i < inputElements.length; i++) {
 //     css(inputElements[i], {
 //         display: "block",
@@ -294,7 +291,6 @@ css(chatHeaderLeftImage, {
 //         console.log(data)
 //     })
 //         //
-
 //     axios.post('http://localhost:3001/chats/messages', { id: customerID }).then(response => {
 //         const messages = response.data
 //         // push all messages from database to all messages state
@@ -312,7 +308,6 @@ const fetchChatData = (ID) => {
         }, body: JSON.stringify(data)
     }).then(response => response.json())
         .then(data => {
-
             if (data.length) {
                 agentJoined = true
                 console.log('length')
@@ -321,7 +316,6 @@ const fetchChatData = (ID) => {
                 chatHeaderLeftName.innerHTML = data[0].agent_name
                 console.log(data[0].agent_name)
                 socket.emit('client join room', { id: data[0].customer_id, agent: data[0].agent_name })
-
                 // load all messages
                 console.log('ID:' + ID)
                 const LoadMessageID = { id: ID };
@@ -344,32 +338,19 @@ const fetchChatData = (ID) => {
                             chatBody.scrollTop = (chatBody.scrollHeight - chatBody.clientHeight)
                         }
                         else {
+
                             RightMessageBody.innerHTML = mess.message
                             RightMessage.appendChild(RightMessageBody);
                             chatMessages.innerHTML += RightMessage.innerHTML
                             chatBody.scrollTop = (chatBody.scrollHeight - chatBody.clientHeight)
                         }
-
-
                     })
                 })
-
             }
-
-
             console.log('Success:', data);
         })
-
-
-
-
-
-
 }
-
-
 // function to check customer chat history start
-
 const checkChat = () => {
     asyncLocalStorage.getItem('joined').then(response => {
         const join = response ?? false
@@ -379,19 +360,15 @@ const checkChat = () => {
         }
     })
     asyncLocalStorage.getItem('image').then(response => {
-
         const join = response ?? false
         if (join) {
             console.log('image exists')
             chatHeaderLeftImage.src = `http://localhost:3001/images/${response}`
         }
     })
-
 }
-
 // function to check customer chat history end
 chatButton.addEventListener("click", () => {
-
     if (chat.style.display == "flex") {
         chatMessages.innerHTML = ''
         chat.style.display = "none";
@@ -405,10 +382,8 @@ chatButton.addEventListener("click", () => {
 chatHeaderRightButton.addEventListener("click", () => {
     chatMessages.innerHTML = ''
     asyncLocalStorage.getItem('joined').then(response => {
-
         const join = response ?? false
         if (join) {
-
             socket.emit("leave room", response);
             localStorage.removeItem('joined')
             localStorage.removeItem('image')
@@ -418,37 +393,24 @@ chatHeaderRightButton.addEventListener("click", () => {
         }
     })
     chat.style.display = "none";
-    console.log(socket)
-
-
-
+    // console.log(socket)
+    agentJoined = false
     chatHeaderLeftImage.src = "https://i.ibb.co/vsQqSkr/userIcon.png";
     chatHeaderLeftName.innerHTML = "Searching ....";
-
     firstMessage = true
     console.log(firstMessage)
-
-
-
-
     // chatHeaderLeftImage.src=''
     // socket.disconnect(true)
 });
-
 // keep the scroll to bottom
-
-
 // All Messages
 let Messages = []
 window.addEventListener('popstate', function (event) {
     console.log('changed')
 });
 document.addEventListener("DOMContentLoaded", () => {
-
 })
-
 // socket.emit('join room', { id: 'uQcrIyHRd9VmpDhIAAAo', agent: 'anas' })
-
 // asyn localStorage
 const asyncLocalStorage = {
     setItem: async function (key, value) {
@@ -460,43 +422,34 @@ const asyncLocalStorage = {
         return localStorage.getItem(key);
     }
 };
-
-
-
-
-
-
 const sendMessageHandler = () => {
     if (!messageField.value)
         return
     if (firstMessage === true) {
-        console.log(socket.id)
+        //socket connection
         socket.emit("first message", { msg: messageField.value, id: socket.id });
-
         console.log(window.location.href)
         firstMessage = false;
     } else {
-        const messagebody=messageField.value
-        asyncLocalStorage.getItem('joined').then(res=>{
-            socket.emit("new message",messagebody , res);
+        const messagebody = messageField.value
+        asyncLocalStorage.getItem('joined').then(res => {
+            if (res)
+                socket.emit("new message", messagebody, res);
+            else
+                socket.emit("new message", messagebody, socket.id);
         })
-       
         firstMessage = false;
-
     }
-
     LeftMessageBody.innerHTML = messageField.value
     LeftMessage.appendChild(LeftMessageBody);
     chatMessages.innerHTML += LeftMessage.innerHTML
     messageField.value = ''
     chatBody.scrollTop = (chatBody.scrollHeight - chatBody.clientHeight)
 }
-
 sendButton.addEventListener("click", () => {
     sendMessageHandler()
 });
 messageField.addEventListener('keypress', (event) => {
-
     if (event.code === 'Enter') {
         // Cancel the default action, if needed
         event.preventDefault();
@@ -508,7 +461,6 @@ socket.on("agent Message", (msg) => {
     Messages.push({
         MessageType: 'agent', Message: msg
     })
-
 });
 function agentbox(name) {
     var AgentAvaliable = document.createElement('p')
@@ -520,28 +472,22 @@ function agentbox(name) {
     })
     chatMessages.appendChild(AgentAvaliable)
 }
-
 let agentJoined = false
-
 socket.on('room joined', (data) => {
-
     localStorage.setItem('joined', data.id)
-
-
+    console.log('agent joined;' + agentJoined)
+    console.log('agent jnoined with:' + data)
     if (!agentJoined) {
         localStorage.setItem('image', data.image)
         chatHeaderLeftImage.src = `http://localhost:3001/images/${data.image}`
         agentJoined = true
+        chatHeaderRightButton.style.display='block'
         agentbox(data.agent)
         console.log(data.agent)
         chatHeaderLeftName.innerHTML = data.agent
     }
-
-
-
 })
 socket.on('new Message', (data) => {
-    alert('new message receiove')
     console.log('socket id:' + socket.id)
     RightMessageBody.innerHTML = data.message
     RightMessage.appendChild(RightMessageBody);

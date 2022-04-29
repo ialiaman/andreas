@@ -95,21 +95,23 @@ code {
 }
 .btn-blue{
   background-color:#161C2D;
-  border: 0px;
-  box-shadow: 2px 2px 2px rgb(219, 204, 204) ;
+  border: 1px solid white ;
+  
   transition: all .5s ;
   color:white;
   padding: .5rem 1rem;
 }
 .btn-blue:hover{
+  /* font-weight: 500; */
+  /* box-shadow: 0px 0px 8px 3px rgb(219, 204, 204) ; */
   background-color:white ;
   border: 0px;
   /* box-shadow: 8px 2px 8px rgb(219, 204, 204) ; */
   transition: all 1s ;
   /* transform: scale(1.05); */
   color:#161C2D;
-  outline: 1px solid #161C2D ;
-  padding: 1rem 1rem;
+  border: 1px solid #161C2D ;
+  /* padding: 1rem 1rem; */
 }
 .live_now_table th{
 border-bottom: 1px solid grey;

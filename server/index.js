@@ -123,7 +123,7 @@ const deleteChat = (id) => {
 // function to add message to all messages table
 const insertMessage = (message, id, source = "customer") => {
   const query = `INSERT INTO all_messages (message,sender,source) VALUES ('${message}', '${id}','${source}' )`;
-  con.query(query, (error, result) => {
+  con.query(`INSERT INTO all_messages (message,sender,source) VALUES (?,?,?)`,[message,id,source], (error, result) => {
     if (error) throw error;
     console.log("message inserted new message");
   });
@@ -138,6 +138,24 @@ const unAnswered = (ID) => {
     console.log("updated to 2");
   });
 };
+// api to get all leads on different dates
+app.post('/chats/leadschart',(req,res)=>{
+  const c_name=req.body.c_name
+console.log('chart:' + c_name)
+  const query=`SELECT
+  CONVERT_TZ(date,'+00:00','+05:00') AS Date,
+  COUNT(id ) AS no_of_rows 
+ FROM leads
+ WHERE c_name='${c_name}'
+ GROUP BY date  
+ ORDER BY date; `
+ con.query(query,(err,result)=>{
+   
+  console.log('date:' +result.Date)
+  res.json(result)
+ })
+})
+
 // function to  retrun all active chats
 app.post("/signup", (req, res) => {
   console.log("form received");
@@ -233,6 +251,7 @@ async function loadLeads(result) {
 }
 app.post("/getleads", (req, res) => {
   const c_name = req.body.c_name;
+console.log(c_name)
   const leadsData = [];
   const getDomains = `SELECT * FROM leads WHERE c_name='${c_name}'`;
   con.query(getDomains, function (err, result) {
@@ -255,11 +274,13 @@ const incrementMessageCount=(id)=>{
 // Get All messages from the database for a given socket id
 
 app.post("/chats/messages", (req, res) => {
+  
   console.log("requested messages id:" + req.body.id);
+  // console.log('en')
   const query = `SELECT * from all_messages WHERE sender = '${req.body.id}' `;
   con.query(query, (error, result) => {
     if (error) throw error;
-    console.log(result[0]);
+
     res.json(result);
   });
 });
@@ -398,7 +419,7 @@ io.on("connection", (socket) => {
     const origin = socket.handshake.headers.origin;
     const address = socket.handshake.address;
     const plateform = socket.handshake.headers["sec-ch-ua-platform"];
-    console.log("sdfsdf");
+   console.log('first message from customer')
     insertChat(data.id, origin, address, plateform);
     insertMessage(data.msg, data.id);
     agents.map((agent) => {
@@ -434,6 +455,7 @@ io.on("connection", (socket) => {
     console.log(data);
     chatEnd(data);
     io.to(data).emit("LEAVE ROOM");
+    socket.disconnect()
   });
   socket.on("NEW_MESSAGE", (data) => {
     console.log("new message from agent to server");

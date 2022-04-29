@@ -55,11 +55,11 @@ const UserEditModal = (props) => {
             </div>
             <hr />
             <form>
-              <div class="form-group">
-                <label for="formGroupExampleInput">First Name</label>
+              <div className="form-group">
+                <label htmlFor="formGroupExampleInput">First Name</label>
                 <input
                   type="text"
-                  class="form-control"
+                  className="form-control"
                   id="formGroupExampleInput"
                   placeholder="Example input"
                   value={props.firstname}
@@ -69,11 +69,11 @@ const UserEditModal = (props) => {
                 />
               </div>
               <br />
-              <div class="form-group">
-                <label for="formGroupExampleInput">Last Name</label>
+              <div className="form-group">
+                <label htmlFor="formGroupExampleInput">Last Name</label>
                 <input
                   type="text"
-                  class="form-control"
+                  className="form-control"
                   id="formGroupExampleInput"
                   placeholder="Example input"
                   value={props.lastname}
@@ -83,11 +83,11 @@ const UserEditModal = (props) => {
                 />
               </div>
               <br />
-              <div class="form-group">
-                <label for="formGroupExampleInput">Email</label>
+              <div className="form-group">
+                <label htmlFor="formGroupExampleInput">Email</label>
                 <input
                   type="text"
-                  class="form-control"
+                  className="form-control"
                   id="formGroupExampleInput"
                   placeholder="Example input"
                   value={props.email}

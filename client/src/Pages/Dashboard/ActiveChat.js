@@ -24,6 +24,7 @@ import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab'
 import Card from 'react-bootstrap/Card'
 import Dropdown from 'react-bootstrap/Dropdown'
+import {tConvert} from '../../helpers/helperFunctions'
 import './styles.css'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -39,18 +40,13 @@ const asyncLocalStorage = {
     }
 };
 function ActiveChat() {
-    const [dateChanged, setdateChanged] = useState(true)
-     const [othersChat, setothersChat] = useState(false)
+    const [othersChat, setothersChat] = useState(false)
     const [customerID, setcustomerID] = useState('')
     const [chatData, setchatData] = useState('')
     const [allMessages, setallMessages] = useState([])
     const { authState, setAuthState } = useContext(AuthContext);
     const [currentAgentMessage, setcurrentAgentMessage] = useState('')
     const [agentName, setagentName] = useState('')
-    const [show, setShow] = useState(false);
-    const [tabIcon, settabIcon] = useState({ details: true, leads: false })
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
     const [companies, setCompanies] = useState([])
     const [loggedAgent, setloggedAgent] = useState('')
     const [chatEnd, setchatEnd] = useState(false)
@@ -74,7 +70,6 @@ function ActiveChat() {
         }
     },
     );
-    
     // match agent to show message area
     useEffect(() => {
         if (authState.LoggedUserData.f_name && authState.LoggedUserData.l_name) {
@@ -95,8 +90,7 @@ function ActiveChat() {
         axios.post('http://localhost:3001/chats/messages', { id: customerID }).then(response => {
             const messages = response.data
             // push all messages from database to all messages state
-            setallMessages([...messages])
-            console.log(allMessages)
+            setallMessages((prev) => [...messages])
         })
     }
     const AgentMessageHandler = () => {
@@ -118,9 +112,8 @@ function ActiveChat() {
             setcustomerID(value)
             // Get record for   about the chat
             axios.post('http://localhost:3001/chats/chat', { id: value }).then(response => {
-                console.log(response.data[0])
                 setchatData(response.data[0])
-                if(response.data[0].is_end){
+                if (response.data[0].is_end) {
                     setchatEnd(true)
                 }
                 // get agent info for this active chat
@@ -149,7 +142,7 @@ function ActiveChat() {
             res.data.map(company => {
                 companyOptions.push({ value: company.c_name, label: company.c_name })
             })
-            setCompanies((pre)=> [...pre,...companyOptions])
+            setCompanies((pre) => [...pre, ...companyOptions])
         })
     }, [])
     useEffect(() => {
@@ -186,10 +179,10 @@ function ActiveChat() {
                         <div className="card pb-4 px-9 mt-0">
                             <div className={`${styles.chatarea}`} ref={chatarea} >
                                 {
-                                    allMessages.map(message => {
-                                        console.log(message.source)
+                                    allMessages.map((message, index) => {
+                                        console.log(allMessages)
                                         if (message.source == 'customer') {
-                                            return <MessageBoxClient key={message.id} id={customerID} message={message.message} time={message.date} />
+                                            return <>  <MessageBoxClient key={message.id} id={customerID} message={message.message} time={message.date} /> </>
                                         }
                                         else if (message.source == 'Agent') {
                                             return <MessageBoxAgent key={message.id} agentName={agentName} message={message.message} />
@@ -222,11 +215,7 @@ function ActiveChat() {
                                         <button className=' py-3 btn-grey-action'>Whisper</button>
                                     </div>
                                 </div> : null
-
                             }
-
-
-
                             {
                                 chatEnd ? <div className='bg-secondary text-white px-3 py-2 mx-3 rounded-bottom'>Customer Has Ended this Chat</div> : null
                             }
@@ -275,7 +264,7 @@ function ActiveChat() {
                                             <div className="d-flex flex-column" style={{ gap: 10 }}>
                                                 <div className='d-flex align-items-center ' style={{ gap: 10 }}>
                                                     <button className="btn-light-blue py-1">
-                                                        {chatData.created_date && chatData.created_date.slice(11, -5)}
+                                                        {chatData.created_date && chatData.created_date}
                                                     </button>
                                                     <span>
                                                         Chat Started
@@ -306,45 +295,45 @@ function ActiveChat() {
                                     }
                                         <span className='text m'>Leads</span> </>} >
                                         <div>
-                                            <Card show={show} onHide={handleClose}>
+                                            <Card >
                                                 <form onSubmit={formik.handleSubmit} method='post'>
                                                     <Card.Body>
-                                                        <div class="mb-3">
-                                                            <label htmlFor="c_name" class="form-label">Company  Name</label>
+                                                        <div className="mb-3">
+                                                            <label htmlFor="c_name" className="form-label">Company  Name</label>
                                                             <select
                                                                 id="c_name"
                                                                 name="c_name"
                                                                 onChange={formik.handleChange}
                                                                 value={formik.values.c_name}
-                                                                defaultValue='default' class="form-select" aria-label="Default select example">
+                                                                className="form-select" aria-label="Default select example">
                                                                 <option
                                                                 >Open this select menu</option>
                                                                 {companies.map(c => {
-                                                                    return <option value={c.value}>{c.label}</option>
+                                                                    return <option key={c.value} value={c.value}>{c.label}</option>
                                                                 })}
                                                             </select>
                                                         </div>
-                                                        <div class="mb-3">
-                                                            <label htmlFor="exampleInputPassword1" class="form-label">Customer Name</label>
-                                                            <input type="text" placeholder='Customer Name' class="form-control"
+                                                        <div className="mb-3">
+                                                            <label htmlFor="exampleInputPassword1" className="form-label">Customer Name</label>
+                                                            <input type="text" placeholder='Customer Name' className="form-control"
                                                                 id="customer_name"
                                                                 name="customer_name"
                                                                 onChange={formik.handleChange}
                                                                 value={formik.values.customer_name}
                                                             />
                                                         </div>
-                                                        <div class="mb-3">
-                                                            <label htmlFor="exampleInputPassword1" class="form-label">Customer Email</label>
-                                                            <input type="email" placeholder='Customer Email' class="form-control"
+                                                        <div className="mb-3">
+                                                            <label htmlFor="exampleInputPassword1" className="form-label">Customer Email</label>
+                                                            <input type="email" placeholder='Customer Email' className="form-control"
                                                                 id="email"
                                                                 name="email"
                                                                 onChange={formik.handleChange}
                                                                 value={formik.values.email}
                                                             />
                                                         </div>
-                                                        <div class="mb-3">
-                                                            <label htmlFor="exampleInputPassword1" class="form-label">Customer Mobile Number</label>
-                                                            <input type="phone" placeholder='Customer Mobile Number' class="form-control"
+                                                        <div className="mb-3">
+                                                            <label htmlFor="exampleInputPassword1" className="form-label">Customer Mobile Number</label>
+                                                            <input type="phone" placeholder='Customer Mobile Number' className="form-control"
                                                                 id="phone"
                                                                 name="phone"
                                                                 onChange={formik.handleChange}
@@ -359,10 +348,10 @@ function ActiveChat() {
                                                         </div>
                                                     </Card.Body>
                                                     <Card.Footer className='d-flex justify-content-between'>
-                                                        <Button style={{ border: 0 }} variant="secondary" onClick={handleClose}>
+                                                        <Button style={{ border: 0 }} variant="secondary" >
                                                             Cancel
                                                         </Button>
-                                                        <button type='submit'   className={`text-decoration-none ${styles.payment_save_btn}`} variant="secondary" >
+                                                        <button type='submit' className={`text-decoration-none ${styles.payment_save_btn}`} variant="secondary" >
                                                             Done
                                                         </button>
                                                     </Card.Footer>
@@ -381,7 +370,11 @@ function ActiveChat() {
 }
 export default ActiveChat
 const MessageBoxClient = (props) => {
-    const {time}=props
+    const { time } = props
+    const localtime = new Date(time)
+    const messageTime = localtime.getHours() + ':' + localtime.getMinutes() + ":" + localtime.getSeconds()
+    const converted=tConvert(messageTime)
+    const messageDate = localtime.getDate() + "  " + localtime.toLocaleString('default', { month: 'long' }) + " " + localtime.getFullYear();
     return (
         <div className="msg mt-4 pt-15 dotted-border-top">
             <div className="d-flex justify-content-between">
@@ -390,8 +383,9 @@ const MessageBoxClient = (props) => {
                     <span style={{ color: colors.colors.green }}>{props.id}</span>
                 </div>
                 <div className="span text-primary">
-                            {time.slice(12,-5)}
-                  
+                    {messageDate}
+                    <br />
+                    {converted}
                 </div>
             </div>
             <p className='mt-2 font-16 fw-300'>{props.message} </p>

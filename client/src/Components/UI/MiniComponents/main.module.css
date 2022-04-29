@@ -7,6 +7,11 @@
     /* transform: scale(.6); */
     /* transform: scale(.5); */
   }
+  .iconImg{
+    width: 200px;
+    height: 50px;
+}
+
   .menuBtn:hover{
 cursor: pointer;
   }
@@ -35,6 +40,10 @@ cursor: pointer;
   height: 86.6666666666667%;
     
   }
+  .iconImg{
+    width: 200px;
+    height: 50px;
+}
   @media(max-width:874px){
     .right_shape{
       width:100px;

@@ -4,6 +4,7 @@ import { UserContext } from "../../../Pages/Dashboard/main";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { AuthContext } from "../../../App";
 import styles from "./main.module.css";
+import SVGS from "../../../helpers/svgs";
 function RightShape() {
   return (
     <div
@@ -27,9 +28,10 @@ function LinksNav(props) {
             style={{ backgroundColor: bgColor }}
           >
             <div className="container-fluid">
-              <a className="navbar-brand" href="#">
-                Comapny Logo
-              </a>
+            <img
+                className={`${styles.iconImg} col-4 img-fluid  `}
+                src={SVGS.Logo}
+              />
               {/* <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon"></span>
               </button> */}
@@ -67,9 +69,10 @@ function SignUpNav(props) {
             style={{ backgroundColor: bgColor }}
           >
             <div className="container-fluid">
-              <a className="navbar-brand" href="#">
-                Comapny Logo
-              </a>
+            <img
+                className={`${styles.iconImg} col-4 img-fluid  `}
+                src={SVGS.Logo}
+              />
               {/* <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon"></span>
               </button> */}

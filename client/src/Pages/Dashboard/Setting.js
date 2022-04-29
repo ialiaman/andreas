@@ -149,13 +149,13 @@ const LeftSideBar = ({ changeHandler }) => {
           </h2>
           <div
             id="flush-collapseOne"
-            class="accordion-collapse collapse"
+            className="accordion-collapse collapse"
             aria-labelledby="flush-headingOne"
             data-bs-parent="#accordionFlushExample"
           >
-            <div class="accordion-body">
+            <div className="accordion-body">
               Placeholder content for this accordion, which is intended to
-              demonstrate the <code>.accordion-flush</code> class. This is the
+              demonstrate the <code>.accordion-flush</code> className. This is the
               first item's accordion body.
             </div>
           </div>
@@ -177,13 +177,13 @@ const LeftSideBar = ({ changeHandler }) => {
           </h2>
           <div
             id="flush-collapseOne"
-            class="accordion-collapse collapse"
+            className="accordion-collapse collapse"
             aria-labelledby="flush-headingOne"
             data-bs-parent="#accordionFlushExample"
           >
-            <div class="accordion-body">
+            <div className="accordion-body">
               Placeholder content for this accordion, which is intended to
-              demonstrate the <code>.accordion-flush</code> class. This is the
+              demonstrate the <code>.accordion-flush</code> className. This is the
               first item's accordion body.
             </div>
           </div>
@@ -205,11 +205,11 @@ const LeftSideBar = ({ changeHandler }) => {
           </h2>
           <div
             id="flush-collapseThree"
-            class="accordion-collapse collapse"
+            className="accordion-collapse collapse"
             aria-labelledby="flush-headingThree"
             data-bs-parent="#accordionThree"
           >
-            <div class="accordion-body">
+            <div className="accordion-body">
               <button
                 style={{ border: "none", background: "none" }}
                 onClick={() => {
@@ -243,11 +243,11 @@ const LeftSideBar = ({ changeHandler }) => {
             </h2>
             <div
               id="flush-collapseFour"
-              class="accordion-collapse collapse"
+              className="accordion-collapse collapse"
               aria-labelledby="flush-headingFour"
               data-bs-parent="#accordionFour"
             >
-              <div class="accordion-body">
+              <div className="accordion-body">
                 <button
                   style={{ border: "none", background: "none" }}
                   onClick={() => {

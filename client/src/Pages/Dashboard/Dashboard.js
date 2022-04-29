@@ -39,7 +39,7 @@ const OwnerDashboard = () => {
                   Live Now
                 </button>
               </div>
-              <LiveVisitorsChart />
+              <LiveVisitorsChart  />
             </div>
             <div className={`${styles.live_now} mt-3 p-3`}>
               <div className="">
@@ -447,6 +447,7 @@ const ClientDashboard = () => {
         console.log(leads);
       });
   }, [reload]);
+
   return (
     <Fragment>
       <DashboardHeader title="Dashboard" />
@@ -512,13 +513,13 @@ const ClientDashboard = () => {
           <div className="col-12">
             <div className={`${styles.live_now} p-3`}>
               <div className="d-flex justify-content-between">
-                <h1 className="h4 fw-bold">Live now</h1>
+                <h1 className="h4 fw-bold">Leads</h1>
                 <button className={` px-2 ${styles.live_now_btn}`}>
                   <span>
                     {" "}
                     <AiOutlineCalendar />{" "}
                   </span>
-                  Live Now
+                  Leads History
                 </button>
               </div>
               <LiveVisitorsChart />
@@ -602,32 +603,32 @@ const ClientDashboard = () => {
                     {leadsLoading === true
                       ? "Loading"
                       : leads.map((element) => {
-                          return (
-                            <tr className="pt-2">
-                              <td>
-                                <span className="badge badge-curious-bold">
-                                  ID
-                                </span>
-                              </td>
-                              <td>
-                                <p className="px-3 py-0">{element.lead_name}</p>
-                              </td>
-                              <td>{element.lead_email}</td>
-                              <td>{element.lead_phone}</td>
-                              <td>{element.agent_name}</td>
-                              <td>{element.date}</td>
-                              <td>
-                                <img src={editIcon} />
-                              </td>
-                              <td>
-                                <img src={cancelIcon} />
-                              </td>
-                              <td>
-                                <input type="checkbox" />
-                              </td>
-                            </tr>
-                          );
-                        })}
+                        return (
+                          <tr className="pt-2">
+                            <td>
+                              <span className="badge badge-curious-bold">
+                                ID
+                              </span>
+                            </td>
+                            <td>
+                              <p className="px-3 py-0">{element.lead_name}</p>
+                            </td>
+                            <td>{element.lead_email}</td>
+                            <td>{element.lead_phone}</td>
+                            <td>{element.agent_name}</td>
+                            <td>{element.date}</td>
+                            <td>
+                              <img src={editIcon} />
+                            </td>
+                            <td>
+                              <img src={cancelIcon} />
+                            </td>
+                            <td>
+                              <input type="checkbox" />
+                            </td>
+                          </tr>
+                        );
+                      })}
                   </tbody>
                 </table>
               </div>
