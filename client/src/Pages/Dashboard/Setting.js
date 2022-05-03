@@ -323,50 +323,13 @@ const Overview = () => {
               <b>
                 <h5>Account Owner</h5>
               </b>
-              <div className={`${styles.accountDetailsContainer}`}>
+              <div className={`${styles.accountDetailsContainer} row`}>
                 <img
-                  style={{ width: 50, height: 50 }}
-                  className="rounded-circle align-middle m-2"
+                  style={{ width: 200, height: 200 }}
+                  className="rounded img-fluid align-middle m-2"
                   src={`http://localhost:3001/images/${authState.LoggedUserData.image}`}
                 />
-                <div>
-                  <div>
-                    {editable == 0 ? (
-                      <span>
-                        {authState.LoggedUserData.f_name +
-                          " " +
-                          authState.LoggedUserData.l_name}
-                      </span>
-                    ) : (
-                      <>
-                        <input value={authState.LoggedUserData.f_name} />
-                        <input value={authState.LoggedUserData.l_name} />
-                      </>
-                    )}
-                  </div>
-                  {editable == 0 ? (
-                    <span>({authState.LoggedUserData.email})</span>
-                  ) : (
-                    <input value={authState.LoggedUserData.email} />
-                  )}
-                  <div className="my-3" style={{ display: "flex" }}>
-                    {editable == 1 ? (
-                      <button
-                        onClick={() => UpdateHandler()}
-                        className="my-3 btn-primary"
-                        type="primary"
-                      >
-                        {" "}
-                        Save Changes
-                      </button>
-                    ) : null}
-                    {editable == 1 ? (
-                      <Button title="Cancel" type="nobg" />
-                    ) : null}
-                  </div>
-                </div>
-              </div>
-              {editable && (
+                 {editable && (
                 <>
                   <div className="form-row">
                     <span className="font-weight-bold">Update Image</span>
@@ -378,19 +341,74 @@ const Overview = () => {
                       onChange={handleInputChange}
                     />
                   </div>
+                  <p className="mt-3 mb-0 text-primary">More Info</p>
+
                 </>
               )}
-              <i
-                className="fas float-end fa-pencil-alt"
-                style={{ marginLeft: "10px" }}
-                onClick={() => setEditable(!editable)}
-              ></i>
+                          <div>
+                  <div>
+                    {editable == 0 ? (
+                      <span>
+                        {authState.LoggedUserData.f_name +
+                          " " +
+                          authState.LoggedUserData.l_name}
+                      </span>
+                    ) : (
+                      <>
+                        <div className="mb-3">
+                          <label htmlFor="">First Name</label>
+                          <input className="form-control" value={authState.LoggedUserData.f_name} />
+                        </div>
+                        <div className="mb-3">
+                          <label htmlFor="">Last Name</label>
+                          <input className="form-control" value={authState.LoggedUserData.l_name} />
+                        </div>
+                      </>
+                    )}
+                  </div>
+                  {editable == 0 ? (
+                    <span>({authState.LoggedUserData.email})</span>
+                  ) : (
+                    <div className="mb-3">
+                      <label htmlFor="">Email</label>
+                      <input className="form-control " value={authState.LoggedUserData.email} />
+                    </div>
+                  )}
+                  <div className="my-3" style={{ display: "block" }}>
+                    {editable == 1 ? (
+                      <button
+                    
+                        onClick={() => UpdateHandler()}
+                        className={`my-3 p-2  ${styles.payment_save_btn}`}
+                      
+                      >
+                        {" "}
+                        Save Changes
+                      </button>
+                    ) : null}
+                    {editable == 1 ? (
+                      <button className={`${styles.cancelBtn} p-2  mx-2`} onClick={() => setEditable(!editable)}  >Cancel </button>
+                    ) : null}
+                  </div>
+                </div>
+              </div>
+             {  editable == 0 ? (
+                      <i
+                      className="fas fa-edit float-end "
+                      style={{ marginLeft: "10px" }}
+                      onClick={() => setEditable(!editable)}
+                    ></i>
+                    ) : null
+                
+             }
+
+             
             </div>
           </div>
         </div>
       </div>
       <br />
-      <div className="row">
+      {/* <div className="row">
         <div className="col-md-8 col-12">
           <div className="card">
             <div className="card-body">
@@ -400,12 +418,12 @@ const Overview = () => {
               <Button
                 type="primary"
                 title="Add Billing Details"
-                // click={clickEvent}
+              // click={clickEvent}
               />
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
       <br />
       <div className="row">
         <div className="col-md-8 col-12">

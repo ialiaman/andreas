@@ -292,6 +292,13 @@ color: rgba(22, 28, 45, 0.8);
     color: #161C2D;
  
 }
+.cancelBtn{
+    background: grey;
+    border-radius: 3px;
+    border: 0px;
+    color: #161C2D
+
+}
 .methods_title{
     font-family: 'Poppins';
 font-style: normal;
